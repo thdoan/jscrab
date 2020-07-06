@@ -1,4 +1,4 @@
-This is an implementation in pure JavaScript played against the computer with a very fast engine. To start the game, you can go directly to http://thdoan.github.io/o-chu-tieng-viet or download the code and open **index.html** in your browser.
+This is an implementation in pure JavaScript played against the computer with a very fast engine. To start the game, you can go directly to http://thdoan.github.io/o-chu-tieng-viet/build/ or download the code and open *index.html* in your browser.
 
 The code comprises an engine (engine.js) that does the game logic and a user interface (ui.js) that implements a GUI to the game engine. This design allows one to easily create alternative user interfaces. The code is also designed to be easily localized to other languages and currently supports English, Russian, Spanish, and Vietnamese (default).
 
