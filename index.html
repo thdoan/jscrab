@@ -10,7 +10,7 @@
 <script>
 var t1 = +(new Date());
 function logit(str) {
-  console.log(str);
+  window.console && console.log(str);
 }
 </script>
 <script src="src/submodal.js"></script>
@@ -45,7 +45,7 @@ function _init() {
 }
 </script>
 </head>
-<body style="-moz-user-select:none; -webkit-user-select:none;" onload="_init()" onselectstart="return false;">
+<body onload="_init()" onselectstart="return false;">
 <div id="uidiv"></div>
 <audio id="sound" src="sounds/tileonboard.mp3" preload="auto"></audio>
 </body>
