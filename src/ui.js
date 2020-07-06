@@ -622,7 +622,7 @@ function RedipsUI()
     {
         self.animTiles--;
         self.playSound();
-        logit( "animations left:"+self.animTiles);
+        logit( "animations left: "+self.animTiles);
         if (self.animTiles === 0) {
             // last opponent tile animated to its position
             // return original show/hide state of tiles set to

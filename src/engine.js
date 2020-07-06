@@ -314,7 +314,7 @@ function checkValidPlacement( placement )
     if (!g_board_empty && oscore == 0 && word.length == placement.length) {
         // No orthogonal words created and no extension to existing
         // word created - this means that the new word isn't connected
-        // to anything. 
+        // to anything.
         return { played:"", msg:t("word not connected.") };
     }
 
@@ -585,7 +585,7 @@ function onPlayerMove()
     g_opponent_has_joker = ostr.search("\\*") != -1;
     g_playlevel = g_bui.getPlayLevel();
 
-    logit( "opponent rack has:" + ostr );
+    logit( "opponent rack has: " + ostr );
 
     var play_word;
     if ( g_board_empty ) {
@@ -629,14 +629,14 @@ function onPlayerMove()
 
         // get letters from pool as number of missing letters
         var letters_left = g_bui.getOpponentRack();
-        logit( "opponent rack left with:" + letters_left);
+        logit( "opponent rack left with: " + letters_left);
         var newLetters = takeLetters(letters_left);
         if (newLetters === "") {
             // All tiles taken, nothing left in tile pool
             announceWinner();
             return;
         }
-        logit( "after taking letters, opponent rack is:" + newLetters);
+        logit( "after taking letters, opponent rack is: " + newLetters);
         g_bui.setOpponentRack( newLetters );
         g_bui.setTilesLeft( g_letpool.length );
     };
