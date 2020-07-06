@@ -63,7 +63,7 @@ function initPopUp() {
 
 	// Add onclick handlers to 'a' elements of class submodal or submodal-width-height
 	var elms = document.getElementsByTagName('a');
-	for (i = 0; i < elms.length; i++) {
+	for (var i = 0; i < elms.length; ++i) {
 		if (elms[i].className.indexOf("submodal") >= 0) {
 			elms[i].onclick = function(){
 				// default width and height
@@ -183,12 +183,12 @@ function keyDownHandler(e) {
 function disableTabIndexes() {
 	if (document.all) {
 		var i = 0;
-		for (var j = 0; j < gTabbableTags.length; j++) {
+		for (var j = 0; j < gTabbableTags.length; ++j) {
 			var tagElements = document.getElementsByTagName(gTabbableTags[j]);
-			for (var k = 0 ; k < tagElements.length; k++) {
+			for (var k = 0 ; k < tagElements.length; ++k) {
 				gTabIndexes[i] = tagElements[k].tabIndex;
 				tagElements[k].tabIndex="-1";
-				i++;
+				++i;
 			}
 		}
 	}
@@ -198,12 +198,12 @@ function disableTabIndexes() {
 function restoreTabIndexes() {
 	if (document.all) {
 		var i = 0;
-		for (var j = 0; j < gTabbableTags.length; j++) {
+		for (var j = 0; j < gTabbableTags.length; ++j) {
 			var tagElements = document.getElementsByTagName(gTabbableTags[j]);
-			for (var k = 0 ; k < tagElements.length; k++) {
+			for (var k = 0 ; k < tagElements.length; ++k) {
 				tagElements[k].tabIndex = gTabIndexes[i];
 				tagElements[k].tabEnabled = true;
-				i++;
+				++i;
 			}
 		}
 	}
@@ -215,8 +215,8 @@ function restoreTabIndexes() {
 * Thanks for the code Scott!
 */
 function hideSelectBoxes() {
-	for(var i = 0; i < document.forms.length; i++) {
-		for(var e = 0; e < document.forms[i].length; e++){
+	for(var i = 0; i < document.forms.length; ++i) {
+		for(var e = 0; e < document.forms[i].length; ++e){
 			if(document.forms[i].elements[e].tagName == "SELECT") {
 				document.forms[i].elements[e].style.visibility="hidden";
 			}
@@ -229,8 +229,8 @@ function hideSelectBoxes() {
 * IE has a problem with wanted select form tags to always be the topmost z-index or layer
 */
 function displaySelectBoxes() {
-	for(var i = 0; i < document.forms.length; i++) {
-		for(var e = 0; e < document.forms[i].length; e++){
+	for(var i = 0; i < document.forms.length; ++i) {
+		for(var e = 0; e < document.forms[i].length; ++e){
 			if(document.forms[i].elements[e].tagName == "SELECT") {
 			document.forms[i].elements[e].style.visibility="visible";
 			}

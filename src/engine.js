@@ -87,7 +87,7 @@ var g_timers = timers.create();
 function shuffle_pool()
 {
     var total = g_letpool.length;
-    for (var i=0; i<total; i++) {
+    for (var i=0; i<total; ++i) {
         var rnd = Math.floor((Math.random()*total));
         var c = g_letpool[i];
         g_letpool[i] = g_letpool[rnd];
@@ -100,13 +100,13 @@ function init( iddiv )
 {
     // Put all the letters in the pool
     var numalpha = g_letters.length;
-    for (var i=0; i<numalpha; i++) {
+    for (var i=0; i<numalpha; ++i) {
         var letinfo = g_letters[i];
         var whichlt = letinfo[0];
         var lpoints = letinfo[1];
         var numlets = letinfo[2];
         g_letscore[whichlt] = lpoints;
-        for (var j=0; j<numlets; j++)
+        for (var j=0; j<numlets; ++j)
             g_letpool.push( whichlt );
     }
 
@@ -163,7 +163,7 @@ function checkValidPlacement( placement )
 
     var x,y,xy;
 
-    for (var i=0; i<placement.length; i++) {
+    for (var i=0; i<placement.length; ++i) {
         var pl = placement[i];
         if (pl.lsc === 0)
             lplayed += "*";
@@ -233,7 +233,7 @@ function checkValidPlacement( placement )
     var ltr;
     var words = []; // array of word and orthogonal words created
 
-    for (i=0; i<numl; i++) {
+    for (var i=0; i<numl; ++i) {
         x = px+dx;
         y = py+dy;
 
@@ -356,7 +356,7 @@ function onPlayerSwapped( keep, swap )
         return;
     }
 
-    for (var i=0; i<swap.length; i++)
+    for (var i=0; i<swap.length; ++i)
         g_letpool.push( swap.charAt(i) );
 
     shuffle_pool();
@@ -388,7 +388,7 @@ function find_first_move( opponent_rack, fx, fy )
     var letters = opponent_rack.split("").sort();
     var foundv = false;
     var anchor = 0;
-    for (var i=0; i<letters.length; i++) {
+    for (var i=0; i<letters.length; ++i) {
         if (letters[i] in g_vowels) {
             foundv = true;
             anchor = i;
@@ -457,15 +457,15 @@ function find_first_move( opponent_rack, fx, fy )
 function find_best_move( opponent_rack )
 {
     var num = opponent_rack.length;
-    letters = [];
-    for (var i=0; i<num; i++)
+    var letters = [];
+    for (var i=0; i<num; ++i)
         letters[i] = opponent_rack.charAt(i);
 
     var board_best_score = -1;
     var board_best_word = null;
 
-    for ( var ax=0; ax<g_board.length; ax++) {
-        for ( var ay=0; ay<g_board[ax].length; ay++) {
+    for (var ax=0; ax<g_board.length; ++ax) {
+        for (var ay=0; ay<g_board[ax].length; ++ay) {
             if (g_board[ax][ay] !== "")
                 continue;
 
@@ -497,17 +497,17 @@ function announceWinner()
     var pleft = g_bui.getPlayerRack();
 
     var odeduct = 0;
-    for (var i=0; i<oleft.length; i++)
+    for (var i=0; i<oleft.length; ++i)
         odeduct += g_letscore[oleft.charAt(i)];
 
-    pdeduct = 0;
-    for (i=0; i<pleft.length; i++)
+    var pdeduct = 0;
+    for (var i=0; i<pleft.length; ++i)
         pdeduct += g_letscore[pleft.charAt(i)];
 
     g_oscore -= odeduct;
     g_pscore -= pdeduct;
 
-    html = t("After deducting points of unplaced tiles, score is:");
+    var html = t("After deducting points of unplaced tiles, score is:");
     html += "<br>";
     html += t("You:")+g_pscore+t("  Computer:")+g_oscore+"<br>";
     var msg = t("It's a draw !");
@@ -525,7 +525,7 @@ function onPlayerMove()
 {
     var passed = self.passed;
     if (passed) {
-        g_passes++; // increase consecutive opponent passes
+        ++g_passes; // increase consecutive opponent passes
         if (g_passes>=g_maxpasses) {
             announceWinner();
             return;
@@ -618,7 +618,7 @@ function onPlayerMove()
         var played = play_word.seq;
 
         var letters_used = "";
-        for (i=0; i<played.length; i++) {
+        for (var i=0; i<played.length; ++i) {
             var pltr = played.charAt(i);
             if (ostr.search(pltr) > -1)
                     letters_used += pltr;
@@ -648,7 +648,7 @@ function onPlayerMove()
     }
     else {
         g_bui.hideBusy();
-        g_passes++; // increase consecutive opponent passes
+        ++g_passes; // increase consecutive opponent passes
         if (g_passes >= g_maxpasses)
             announceWinner();
         else {
@@ -701,15 +701,15 @@ function getBestScore( regex, letters, ax, ay )
 {
     var rletmap = {};
     var numjokers = 0;
-    for (var i=0; i<letters.length; i++) {
+    for (var i=0; i<letters.length; ++i) {
         var ltr = letters[i];
         if (ltr == "*") // joker
-            numjokers++;
+            ++numjokers;
         else
         if (!(ltr in rletmap))
             rletmap[ltr]=1;
         else
-            rletmap[ltr]++;
+            ++rletmap[ltr];
     }
 
     var bestscore = -1;
@@ -722,7 +722,7 @@ function getBestScore( regex, letters, ax, ay )
     var match, matches;
     var req_seq, word;
 
-    for (var wlc=regex.min-2; wlc<regex.max-1; wlc++) {
+    for (var wlc=regex.min-2; wlc<regex.max-1; ++wlc) {
         var id = regex.rgx + wlc;
         if (id in g_matches_cache)
             matches = g_matches_cache[id];
@@ -733,7 +733,7 @@ function getBestScore( regex, letters, ax, ay )
                 // (g_wstr[wlc]), and save the required letters
                 req_seq = "";
                 //g_timers.begin( "req_seq using loop" );
-                for (i=1; i<match.length; i++) {
+                for (var i=1; i<match.length; ++i) {
                     if (match[i]) // ignore the groups with 'undefined'
                         req_seq += match[i];
                 }
@@ -749,7 +749,7 @@ function getBestScore( regex, letters, ax, ay )
             g_matches_cache[id] = matches;
         }
 
-        for (var j=0; j<matches.length; j++) {
+        for (var j=0; j<matches.length; ++j) {
 
             // we have a word that matches the required regular expression
             // check if we have matching letters for the sequence of missing
@@ -770,12 +770,12 @@ function getBestScore( regex, letters, ax, ay )
             var ok = true;
             var jokers = numjokers;
 
-            for (i=0; i<req_seq.length; i++) {
+            for (var i=0; i<req_seq.length; ++i) {
                 var rlet = req_seq.charAt(i);
                 //if (rlet in letmap && letmap[rlet]>0 ) {
                 // the above is not necessary due to regex optmizations
                 if ( letmap[rlet]>0 ) {
-                    letmap[rlet]--;
+                    --letmap[rlet];
                     seq_lscrs.push(g_letscore[rlet]);
                 }
                 else {
@@ -788,7 +788,7 @@ function getBestScore( regex, letters, ax, ay )
                         break;
                     }
                     // a joker is required
-                    jokers--;
+                    --jokers;
                     seq_lscrs.push(0); // no points for joker
                 }
             }
@@ -889,7 +889,7 @@ function getWordScore( wordinfo )
             oscore += ows.score;
             x += dx;
             y += dy;
-            ps++;
+            ++ps;
             if (seqc == seq.length)
                 // all letters and possibly created words
                 // have been checked
@@ -902,7 +902,7 @@ function getWordScore( wordinfo )
         while (ps<max && g_board[x][y] !== "") {
             x += dx;
             y += dy;
-            ps++;
+            ++ps;
         }
     }
 
@@ -1077,7 +1077,7 @@ function getRegex( dir, ax, ay, rack )
                 break;
             }
             else
-                empty++;
+                ++empty;
 
             if (empty > numlets)
                 // we can't get further than this point
@@ -1085,9 +1085,9 @@ function getRegex( dir, ax, ay, rack )
                 break;
 
             a_y = scy-dx;  // x line above y
-            b_y = scy+dx;  // x line below y
             l_x = scx-dy;  // y line left of x
-            r_x = scx+dy;  // y line right of x
+            var b_y = scy+dx;  // x line below y
+            var r_x = scx+dy;  // y line right of x
             if ( l_x>=0 && a_y>=0 && g_board[l_x][a_y] !== "" ||
                  r_x<max && b_y<max && g_board[r_x][b_y] !== "" ) {
                 // found a board letter to the left or
@@ -1099,7 +1099,7 @@ function getRegex( dir, ax, ay, rack )
 
             scx += dx;
             scy += dy;
-            sc++;
+            ++sc;
         }
 
     if (!ok)
@@ -1115,7 +1115,7 @@ function getRegex( dir, ax, ay, rack )
     while (ps>=0 && g_board[xs][ys]!=="") {
         xs -= dx;
         ys -= dy;
-        ps--;
+        --ps;
     }
 
     if (ps < 0) {
@@ -1128,7 +1128,7 @@ function getRegex( dir, ax, ay, rack )
     }
 
     var prev = "";
-    for (var i=ps; i<ap; i++) {
+    for (var i=ps; i<ap; ++i) {
         prev += g_board[xs][ys];
         xs += dx;
         ys += dy;
@@ -1179,13 +1179,12 @@ function getRegex( dir, ax, ay, rack )
                 // letters to minimum word length
                 countpost = false;
 
-            blanks++;
+            ++blanks;
             if (letters == numlets)
                 break;
-            letters++;
+            ++letters;
         }
         else {
-            hadletters = true;
             if (blanks > 0) {
                 regex += "(" + letrange;
                 if (blanks > 1) {
@@ -1220,12 +1219,12 @@ function getRegex( dir, ax, ay, rack )
             }
             regex += l;
             if (countpost)
-                minl++;
+                ++minl;
             minplay = 0; // letters were played
         }
         x += dx;
         y += dy;
-        p++;
+        ++p;
     }
 
     if (blanks > 0) {
@@ -1242,7 +1241,7 @@ function getRegex( dir, ax, ay, rack )
                 regex += "{"+minplay+","+blanks+"}";
             else {
                 regex += "{"+blanks+"}";
-                for (i=p+1; i<max; i++) {
+                for (var i=p+1; i<max; ++i) {
                     l = g_board[x][y];
                     if (l === "") break;
                     regex += l;

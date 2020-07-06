@@ -235,7 +235,6 @@ REDIPS.drag = (function () {
 	init = function (dc) {
 		// define local variables
 		var self = this,		// assign reference to current object to "self"
-			i,					// used in local for loops
 			imgs,				// collect images inside div=drag
 			redipsClone;		// reference to the DIV element needed for cloned elements
 		// if drag container is undefined or input parameter is not a string, then set reference to DIV element with default id="drag"
@@ -267,7 +266,7 @@ REDIPS.drag = (function () {
 		// collect images inside drag container
 		imgs = dragContainer.getElementsByTagName('img');
 		// disable onmousemove/ontouchmove event for images to prevent default action of onmousemove event (needed for IE to enable dragging on image)
-		for (i = 0; i < imgs.length; i++) {
+		for (var i = 0; i < imgs.length; ++i) {
 			REDIPS.event.add(imgs[i], 'mousemove', imgOnMouseMove);
 			REDIPS.event.add(imgs[i], 'touchmove', imgOnMouseMove);
 		}
@@ -313,8 +312,7 @@ REDIPS.drag = (function () {
 	 * @name REDIPS.drag#initTables
 	 */
 	initTables = function (selector) {
-		var	i, j, k,			// loop variables
-			tblSelector,		// table selectors
+		var	tblSelector,		// table selectors
 			element,			// used in searhing parent nodes of found tables below div id="drag"
 			level,				// (integer) 0 - ground table, 1 - nested table, 2 - nested nested table, 3 - nested nested nested table ...
 			groupIdx,			// tables group index (ground table and its nested tables will have the same group)
@@ -335,7 +333,7 @@ REDIPS.drag = (function () {
 			tableNodeList = document.querySelectorAll(selector);
 		}
 		// loop through tables and define table sort parameter
-		for (i = 0, j = 0; i < tableNodeList.length; i++) {
+		for (var i = 0, j = 0; i < tableNodeList.length; ++i) {
 			// skip table if table belongs to the "redipsClone" container (possible for cloned rows - if initTables() is called after rowClone())
 			// or table has "nolayout" className
 			if (tableNodeList[i].parentNode.id === 'redips_clone' || tableNodeList[i].className.indexOf('nolayout') > -1) {
@@ -350,7 +348,7 @@ REDIPS.drag = (function () {
 				// if "TD" found then this is nested table
 				if (element.nodeName === 'TD') {
 					// increase nested level
-					level++;
+					++level;
 				}
 				// go one level up
 				element = element.parentNode;
@@ -374,7 +372,7 @@ REDIPS.drag = (function () {
 			// prepare td nodeList of current table
 			tdNodeList = tables[j].getElementsByTagName('td');
 			// loop through nodeList and search for rowspaned cells
-			for (k = 0, rowspan = false; k < tdNodeList.length; k++) {
+			for (var k = 0, rowspan = false; k < tdNodeList.length; ++k) {
 				// if only one rowspaned cell is found set flag to "true" and break loop
 				if (tdNodeList[k].rowSpan > 1) {
 					rowspan = true;
@@ -384,7 +382,7 @@ REDIPS.drag = (function () {
 			// set redips.rowspan flag - needed in setTableRowColumn()
 			tables[j].redips.rowspan = rowspan;
 			// increment j counter
-			j++;
+			++j;
 		}
 		/*
 		 * define "redips.nestedGroup" and initial "redips.sort" parameter for each table
@@ -403,7 +401,7 @@ REDIPS.drag = (function () {
 		 * and again clicking on element in nested table sorted result will be: 401, 400, 300
 		 * and so on ...
 		 */
-		for (i = 0, groupIdx = sortIdx = 1; i < tables.length; i++) {
+		for (var i = 0, groupIdx = sortIdx = 1; i < tables.length; ++i) {
 			// if table is "ground" table (lowest level) search for nested tables
 			if (tables[i].redips.nestedLevel === 0) {
 				// set group index for ground table and initial sort index
@@ -412,7 +410,7 @@ REDIPS.drag = (function () {
 				// search for nested tables (if there is any)
 				nestedTables = tables[i].getElementsByTagName('table');
 				// open loop for every nested table
-				for (j = 0; j < nestedTables.length; j++) {
+				for (var j = 0; j < nestedTables.length; ++j) {
 					// skip table if table contains "nolayout" className
 					if (nestedTables[j].className.indexOf('nolayout') > -1) {
 						continue;
@@ -422,8 +420,8 @@ REDIPS.drag = (function () {
 					nestedTables[j].redips.sort = sortIdx * 100 + nestedTables[j].redips.nestedLevel;
 				}
 				// increase group index and sort index (sortIdx is private parameter of REDIPS.drag)
-				groupIdx++;
-				sortIdx++;
+				++groupIdx;
+				++sortIdx;
 			}
 		}
 	};
@@ -641,7 +639,6 @@ REDIPS.drag = (function () {
 	 */
 	tableTop = function (obj) {
 		var	e,		// element
-			i,		// loop variable
 			tmp,	// temporary storage (needed for exchanging array members)
 			group;	// tables group
 		// find table for clicked DIV element
@@ -649,7 +646,7 @@ REDIPS.drag = (function () {
 		// set tables group
 		group = e.redips.nestedGroup;
 		// set highest "redips.sort" parameter to the current table group
-		for (i = 0; i < tables.length; i++) {
+		for (var i = 0; i < tables.length; ++i) {
 			// "ground" table is table with lowest level hierarchy and with its nested tables creates table group
 			// nested table will be sorted before "ground" table
 			if (tables[i].redips.nestedGroup === group) {
@@ -661,7 +658,7 @@ REDIPS.drag = (function () {
 			return b.redips.sort - a.redips.sort;
 		});
 		// increase sortIdx
-		sortIdx++;
+		++sortIdx;
 	};
 
 
@@ -697,8 +694,7 @@ REDIPS.drag = (function () {
 			last_idx,			// last row index in cloned table
 			emptyRow,			// (boolean) flag indicates if dragged row is last row and should be marked as "empty row"
 			cr,					// current row (needed for searc if dragged row is last row)
-			div,				// reference to the <DIV class="drag row"> element
-			i, j;				// loop variables
+			div;				// reference to the <DIV class="drag row"> element
 		// 1) rowClone call in onmousedown will return reference of TR element (input parameter is HTMLElement <div class="drag row">)
 		if (el.nodeName === 'DIV') {
 			// remember reference to the <DIV class="drag row">
@@ -756,7 +752,7 @@ REDIPS.drag = (function () {
 		    // test if dragged row is the last row and delete all rows but current row
 			// the trick is to find rowhandler in cells except current cell and that's fine for user interface
 			// if rows are animated, then "rowhandler" cells don't have to exsist and user should take care about marking last row as "empty row"
-			for (i = last_idx; i >= 0; i--) {
+			for (var i = last_idx; i >= 0; --i) {
 				// if row is not the current row
 				if (i !== rowObj.rowIndex) {
 					// search for "rowhandler cell" in table row if row mode is not "animated" (user drags row)
@@ -765,7 +761,7 @@ REDIPS.drag = (function () {
 						// set current row
 						cr = tableMini.rows[i];
 						// open loop to go through each cell
-						for (j = 0; j < cr.cells.length; j++) {
+						for (var j = 0; j < cr.cells.length; ++j) {
 							// if table cell contains "rowhandler" class name then dragged row is not the last row in table
 							if (cr.cells[j].className.indexOf('rowhandler') > -1) {
 								emptyRow = false;
@@ -994,7 +990,7 @@ REDIPS.drag = (function () {
 	 */
 	formElements = function (str, ctr) {
 		// local variables
-		var i, j, k, type,
+		var type,
 			src = [],	// collection of form elements from source row
 			cld = [];	// collection of form elements from cloned row
 		// collect form elements from source row
@@ -1006,8 +1002,8 @@ REDIPS.drag = (function () {
 		cld[1] = ctr.getElementsByTagName('textarea');
 		cld[2] = ctr.getElementsByTagName('select');
 		// loop through found form elements in source row
-		for (i = 0; i < src.length; i++) {
-			for (j = 0; j < src[i].length; j++) {
+		for (var i = 0; i < src.length; ++i) {
+			for (var j = 0; j < src[i].length; ++j) {
 				// define element type
 				type = src[i][j].type;
 				switch (type) {
@@ -1024,7 +1020,7 @@ REDIPS.drag = (function () {
 					cld[i][j].selectedIndex = src[i][j].selectedIndex;
 					break;
 				case 'select-multiple':
-					for (k = 0; k < src[i][j].options.length; k++) {
+					for (var k = 0; k < src[i][j].options.length; ++k) {
 						cld[i][j].options[k].selected = src[i][j].options[k].selected;
 					}
 					break;
@@ -1049,7 +1045,6 @@ REDIPS.drag = (function () {
 			r_table, r_row,				// needed for mode="row"
 			mt_tr,						// needed for returning color to the table cell (mt_tr - "mini table" "table_row")
 			X, Y,						// X and Y position of mouse pointer
-			i,							// used in local loop
 			drop,						// if false then dropped DIV element (in case of dropMode="switch") will be canceled
 			// define target elements and target elements length needed for switching table cells
 			// target_elements_length is needed because nodeList objects in the DOM are live
@@ -1140,7 +1135,7 @@ REDIPS.drag = (function () {
 						// color of the source row can be changed in event.rowMoved() (when user wants to mark source row)
 						objOld.style.backgroundColor = mt_tr.style.backgroundColor;
 						// return color to the each table cell
-						for (i = 0; i < mt_tr.cells.length; i++) {
+						for (var i = 0; i < mt_tr.cells.length; ++i) {
 							objOld.cells[i].style.backgroundColor = mt_tr.cells[i].style.backgroundColor;
 						}
 						// remove cloned mini table
@@ -1230,7 +1225,7 @@ REDIPS.drag = (function () {
 					// move object from the destination to the source cell
 					target_elements = td.target.getElementsByTagName('div');
 					target_elements_length = target_elements.length;
-					for (i = 0; i < target_elements_length; i++) {
+					for (var i = 0; i < target_elements_length; ++i) {
 						// sourceCell is defined in onmouseup
 						if (target_elements[0] !== undefined) { //fixes issue with nested DIVS
 							// save reference of switched element in REDIPS.drag.objOld property
@@ -1306,8 +1301,7 @@ REDIPS.drag = (function () {
 	 */
 	elementDrop = function (drop) {
 		var cloneSourceDiv = null,	// clone source element (needed if clone.sendBack is set to true)
-			div,					// nodeList of DIV elements in target cell (needed if clone.sendBack is set to true)
-			i;						// local variables
+			div;					// nodeList of DIV elements in target cell (needed if clone.sendBack is set to true)
 		// if input parameter is not "false" then DIV element will be dropped to the table cell
 		if (drop !== false) {
 			// if clone.sendBack is set to true then try to find source element in target cell
@@ -1315,7 +1309,7 @@ REDIPS.drag = (function () {
 				// search all DIV elements in target cell
 				div = td.target.getElementsByTagName('DIV');
 				// loop through all DIV elements in target cell
-				for (i = 0; i < div.length; i++) {
+				for (var i = 0; i < div.length; ++i) {
 					// if DIV in target cell is source of dropped DIV element (dropped DIV id and id of DIV in target cell has the same name beginning like "d12c2" and "d12")
 					// of course, the case where source DIV element is dropped to the cell with cloned DIV element should be excluded (possible in climit1 type)
 					if (obj !== div[i] && obj.id.indexOf(div[i].id) === 0) {
@@ -1458,7 +1452,6 @@ REDIPS.drag = (function () {
 			sca,								// current scrollable container area
 			X, Y,								// X and Y position of mouse pointer
 			deltaX, deltaY,						// delta from initial position
-			i,									// needed for local loop
 			scrollPosition;						// scroll position variable needed for autoscroll call
 		// define X and Y position (pointer.x and pointer.y are needed in setTableRowColumn() and autoscroll methods) for touchscreen devices
 		if (evt.touches) {
@@ -1634,7 +1627,7 @@ REDIPS.drag = (function () {
 			}
 			// test if dragged object is in scrollable container
 			// this code will be executed only if scrollable container (DIV with overflow other than 'visible) exists on page
-			for (i = 0; i < scrollData.container.length; i++) {
+			for (var i = 0; i < scrollData.container.length; ++i) {
 				// set current scrollable container area
 				sca = scrollData.container[i];
 				// if dragged object is inside scrollable container and scrollable container has enabled autoscroll option
@@ -1789,8 +1782,7 @@ REDIPS.drag = (function () {
 			only_found,		// (boolean) found "only" class name
 			single_cell,	// table cell can be defined as single
 			tos = [],		// table offset
-			X, Y,			// X and Y position of mouse pointer
-			i;				// used in local loop
+			X, Y;			// X and Y position of mouse pointer
 		// set previous position (current cell will not be highlighted)
 		previous = function () {
 			if (table_old !== null && row_old !== null && cell_old !== null) {
@@ -1803,7 +1795,7 @@ REDIPS.drag = (function () {
 		X = pointer.x;
 		Y = pointer.y;
 		// find table below draggable object
-		for (table = 0; table < tables.length; table++) {
+		for (table = 0; table < tables.length; ++table) {
 			// if table is not enabled then skip table
 			// by default tables don't have set redips.enabled property (undefined !== false)
 			if (tables[table].redips.enabled === false) {
@@ -1827,7 +1819,7 @@ REDIPS.drag = (function () {
 				// define row offsets for the selected table (row box bounds)
 				row_offset = tables[table].redips.row_offset;
 				// find the current row (loop skips hidden rows)
-				for (row = 0; row < row_offset.length - 1; row++) {
+				for (row = 0; row < row_offset.length - 1; ++row) {
 					// if row doesn't exist (in case of hidden row) - skip it
 					if (row_offset[row] === undefined) {
 						continue;
@@ -1841,7 +1833,7 @@ REDIPS.drag = (function () {
 					// hidden row (like style.display === 'none')
 					else {
 						// search for next visible row
-						for (i = row + 2; i < row_offset.length; i++) {
+						for (var i = row + 2; i < row_offset.length; ++i) {
 							// visible row found
 							if (row_offset[i] !== undefined) {
 								currentCell[2] = row_offset[i][0];
@@ -1866,7 +1858,7 @@ REDIPS.drag = (function () {
 					// set the number of cells in the selected row
 					cells = tables[table].rows[row].cells.length - 1;
 					// find current cell (X mouse position between cell offset left and right)
-					for (cell = cells; cell >= 0; cell--) {
+					for (cell = cells; cell >= 0; --cell) {
 						// row left offset + cell left offset
 						currentCell[3] = row_offset[row][3] + tables[table].rows[row].cells[cell].offsetLeft;
 						// cell right offset is left offset + cell width
@@ -1949,7 +1941,7 @@ REDIPS.drag = (function () {
 						// intialize "empty" flag to true
 						empty = true;
 						// open loop for each child node and jump out if 'drag' className found
-						for (i = cell_current.childNodes.length - 1; i >= 0; i--) {
+						for (var i = cell_current.childNodes.length - 1; i >= 0; --i) {
 							if (cell_current.childNodes[i].className && cell_current.childNodes[i].className.indexOf('drag') > -1) {
 								empty = false;
 								break;
@@ -2020,8 +2012,8 @@ REDIPS.drag = (function () {
 	 * @memberOf REDIPS.drag#
 	 */
 	setTdStyle = function (ti, ri, ci, t) {
-		// reference to the table row, loop variable and td.style
-		var tr, i, s;
+		// reference to the table row and td.style
+		var tr, s;
 		// if drag mode is "cell" and threshold distance is prevailed
 		if (mode === 'cell' && threshold.flag) {
 			// set TD style reference
@@ -2056,7 +2048,7 @@ REDIPS.drag = (function () {
 			// set reference to the current table row
 			tr = tables[ti].rows[ri];
 			// set colors to table cells (respectively) or first color to all cells (in case of settings hover to the row)
-			for (i = 0; i < tr.cells.length; i++) {
+			for (var i = 0; i < tr.cells.length; ++i) {
 				// set reference to current TD style
 				s = tr.cells[i].style;
 				// TR background color - tdStyle is undefined then highlight TD otherwise return previous background color
@@ -2115,7 +2107,7 @@ REDIPS.drag = (function () {
 	 * @memberOf REDIPS.drag#
 	 */
 	getTdStyle = function (ti, ri, ci) {
-		var tr, i, c, // reference to the table row, loop variable and td reference
+		var tr, c, // reference to the table row and td reference
 			// define TD style object with background color and border styles: top, right, bottom and left
 			t = {color: [], top: [], right: [], bottom: [], left: []},
 			// private method gets border styles: top, right, bottom, left
@@ -2144,7 +2136,7 @@ REDIPS.drag = (function () {
 			// set reference to the current table row
 			tr = tables[ti].rows[ri];
 			// remember styles for each table cell
-			for (i = 0; i < tr.cells.length; i++) {
+			for (var i = 0; i < tr.cells.length; ++i) {
 				// set TD reference
 				c = tr.cells[i];
 				// remember background color
@@ -2222,12 +2214,11 @@ REDIPS.drag = (function () {
 	 * @memberOf REDIPS.drag#
 	 */
 	calculateCells = function () {
-		var i, j,		// local variables used in loops
-			row_offset,	// row box
+		var row_offset,	// row box
 			position,	// if element (table or table container) has position:fixed then "page scroll" offset should not be added
 			cb;			// box offset for container box (cb)
 		// open loop for each HTML table inside id=drag (table array is initialized in init() function)
-		for (i = 0; i < tables.length; i++) {
+		for (var i = 0; i < tables.length; ++i) {
 			// initialize row_offset array
 			row_offset = [];
 			// set table style position (to exclude "page scroll" offset from calculation if needed)
@@ -2237,7 +2228,7 @@ REDIPS.drag = (function () {
 				position = getStyle(tables[i].parentNode, 'position');
 			}
 			// backward loop has better perfomance
-			for (j = tables[i].rows.length - 1; j >= 0; j--) {
+			for (var j = tables[i].rows.length - 1; j >= 0; --j) {
 				// add rows to the offset array if row is not hidden
 				if (tables[i].rows[j].style.display !== 'none') {
 					row_offset[j] = boxOffset(tables[i].rows[j], position);
@@ -2250,7 +2241,7 @@ REDIPS.drag = (function () {
 		// calculate box offset for the div id=drag
 		divBox = boxOffset(dragContainer);
 		// update scrollable container areas if needed
-		for (i = 0; i < scrollData.container.length; i++) {
+		for (var i = 0; i < scrollData.container.length; ++i) {
 			// set container box style position (to exclude page scroll offset from calculation if needed)
 			position = getStyle(scrollData.container[i].div, 'position');
 			// get DIV container offset with or without "page scroll" and excluded scroll position of the content
@@ -2547,14 +2538,13 @@ REDIPS.drag = (function () {
 		// define method to copy properties for child elements (input parameter is element index 0 - DIV, 1 - TR)
 		childs = function (e) {
 			var	el1, el2,			// collection of DIV/TR elements in source and cloned element
-				i,					// loop variable
 				tn = ['DIV', 'TR'];	// tag name
 			// collect child DIV/TR elements from the source element (possible if div element contains table)
 			el1 = src.getElementsByTagName(tn[e]);
 			// collect child DIV/TR elements from cloned element
 			el2 = cln.getElementsByTagName(tn[e]);
 			// copy custom properties (redips.enabled,  redips.container ...) and set event handlers to child DIV elements
-			for (i = 0; i < el2.length; i++) {
+			for (var i = 0; i < el2.length; ++i) {
 				copy[e](el1[i], el2[i]);
 			}
 		};
@@ -2718,8 +2708,7 @@ REDIPS.drag = (function () {
 	 */
 	enableDrag = function (enable_flag, el) {
 		// define local variables
-		var i, j, k,		// local variables used in loop
-			div = [],		// collection of div elements contained in tables or one div element
+		var div = [],		// collection of div elements contained in tables or one div element
 			tbls = [],		// collection of tables inside scrollable container
 			borderStyle,	// border style (solid or dotted)
 			opacity,		// (integer) set opacity for enabled / disabled elements
@@ -2765,7 +2754,7 @@ REDIPS.drag = (function () {
 		//
 		// main loop that goes through all DIV elements
 		//
-		for (i = 0, j = 0; i < div.length; i++) {
+		for (var i = 0, j = 0; i < div.length; ++i) {
 			// if DIV element contains "drag" class name
 			if (regexDrag.test(div[i].className)) {
 				// add reference to the DIV container (initialization or newly added element to the table)
@@ -2824,12 +2813,12 @@ REDIPS.drag = (function () {
 					// search for tables inside scrollable container
 					tbls = div[i].getElementsByTagName('table');
 					// loop goes through found tables inside scrollable area
-					for (k = 0; k < tbls.length; k++) {
+					for (var k = 0; k < tbls.length; ++k) {
 						// add a reference to the corresponding scrollable area
 						tbls[k].sca = scrollData.container[j];
 					}
 					// increase scrollable container counter
-					j++;
+					++j;
 				}
 			}
 		}
@@ -2885,7 +2874,6 @@ REDIPS.drag = (function () {
 	 * @see <a href="#enableDrag">enableDrag</a>
 	 */
 	enableTable = function (enable_flag, el) {
-		var i;
 		// if "el" is table reference then set enable/disable to the table
 		if (typeof(el) === 'object' && el.nodeName === 'TABLE') {
 			el.redips.enabled = enable_flag;
@@ -2893,7 +2881,7 @@ REDIPS.drag = (function () {
 		// else "el" is table class name
 		else {
 			// loop through tables array
-			for (i = 0; i < tables.length; i++) {
+			for (var i = 0; i < tables.length; ++i) {
 				// if class name is found then set redips.enabled property to the table (redips_enabled is tested inside setTableRowColumn() method)
 				if (tables[i].className.indexOf(el) > -1) {
 					tables[i].redips.enabled = enable_flag;
@@ -2954,7 +2942,7 @@ REDIPS.drag = (function () {
 			el = el.parentNode;
 			// if node is found and needs to be skipped then decrease skip counter and move pointer to the parent node again
 			if (el && el.nodeName === tag_name && skip > 0) {
-				skip--;
+				--skip;
 				el = el.parentNode;
 			}
 	    }
@@ -3060,7 +3048,7 @@ REDIPS.drag = (function () {
 			cells,							// number of cells in the current row
 			tbl_cell,						// reference to the table cell
 			cn,								// reference to the child node
-			id, r, c, d,					// variables used in for loops
+			id, 			    		// variables used in for loops
 			JSONobj = [],					// prepare JSON object
 			pname = REDIPS.drag.saveParamName;	// set parameter name (default is 'p')
 		// if input parameter is string, then set reference to the table
@@ -3072,17 +3060,17 @@ REDIPS.drag = (function () {
 			// define number of table rows
 			tbl_rows = tbl.rows.length;
 			// iterate through each table row
-			for (r = 0; r < tbl_rows; r++) {
+			for (var r = 0; r < tbl_rows; ++r) {
 				// set the number of cells in the current row
 				cells = tbl.rows[r].cells.length;
 				// iterate through each table cell
-				for (c = 0; c < cells; c++) {
+				for (var c = 0; c < cells; ++c) {
 					// set reference to the table cell
 					tbl_cell = tbl.rows[r].cells[c];
 					// if cells isn't empty (no matter is it allowed or denied table cell)
 					if (tbl_cell.childNodes.length > 0) {
 						// cell can contain many DIV elements
-						for (d = 0; d < tbl_cell.childNodes.length; d++) {
+						for (var d = 0; d < tbl_cell.childNodes.length; ++d) {
 							// set reference to the child node
 							cn = tbl_cell.childNodes[d];
 							// childNode should be DIV with containing "drag" class name
@@ -3125,8 +3113,7 @@ REDIPS.drag = (function () {
 	 * @name REDIPS.drag#relocate
 	 */
 	relocate = function (from, to, mode) {
-		var i, j,	// loop variables
-			tbl2,	// target table
+		var tbl2,	// target table
 			idx2,	// target table index
 			cn,		// number of child nodes
 			div,	// DIV element (needed in for loop)
@@ -3148,7 +3135,7 @@ REDIPS.drag = (function () {
 					// call relocateAfter event handler for this div element
 					REDIPS.drag.event.relocateAfter(div, to);
 					// decrease animation counter per table
-					animationCounter[idx]--;
+					--animationCounter[idx];
 					// after last element is placed the table then table should be enabled
 					if (animationCounter[idx] === 0) {
 						// call event handler after relocation is finished
@@ -3179,11 +3166,11 @@ REDIPS.drag = (function () {
 				// disable target table
 				REDIPS.drag.enableTable(false, tbl2);
 				// loop through all child nodes in table cell
-				for (i = 0; i < cn; i++) {
+				for (var i = 0; i < cn; ++i) {
 					// relocate (with animation) only DIV elements
 					if (from.childNodes[i].nodeType === 1 && from.childNodes[i].nodeName === 'DIV') {
 						// increase animated counter (counter is initially set to 0)
-						animationCounter[idx2]++;
+						++animationCounter[idx2];
 						// move DIV element to the target cell
 						move(from.childNodes[i], to);
 					}
@@ -3194,7 +3181,7 @@ REDIPS.drag = (function () {
 		else {
 			// loop through all child nodes in table cell
 			// 'j', not 'i' because NodeList objects in the DOM are live
-			for (i = 0, j = 0; i < cn; i++) {
+			for (var i = 0, j = 0; i < cn; ++i) {
 				// relocate only DIV elements
 				if (from.childNodes[j].nodeType === 1 && from.childNodes[j].nodeName === 'DIV') {
 					// set DIV element
@@ -3212,7 +3199,7 @@ REDIPS.drag = (function () {
 				}
 				// skip text nodes, attribute nodes ...
 				else {
-					j++;
+					++j;
 				}
 			}
 		}
@@ -3241,8 +3228,7 @@ REDIPS.drag = (function () {
 	emptyCell = function (tdElement, mode) {
 		var cn,			// number of child nodes
 			el = [],	// removed elements will be saved in array
-			flag,		// empty cell flag
-			i;			// loop variable
+			flag;		// empty cell flag
 		// td should be table cell element
 		if (tdElement.nodeName !== 'TD') {
 			return;
@@ -3268,7 +3254,7 @@ REDIPS.drag = (function () {
 		}
 		// otherwise delete all child nodes from td
 		else {
-			for (i = 0; i < cn; i++) {
+			for (var i = 0; i < cn; ++i) {
 				// save node reference
 				el.push(tdElement.childNodes[0]);
 				// delete node
@@ -3421,12 +3407,12 @@ REDIPS.drag = (function () {
 			// if row is highest row
 			if (pos[x] < 0) {
 				pos[x] = max;
-				pos[y]--;
+				--pos[y];
 			}
 			// if cellIndex was most right column
 			else if (pos[x] > max) {
 				pos[x] = 0;
-				pos[y]++;
+				++pos[y];
 			}
 			// define temp source cell
 			t1 = cl[pos[0] + '-' + pos[1]];
@@ -3494,14 +3480,13 @@ REDIPS.drag = (function () {
 			rowspan,
 			colspan,
 			firstAvailCol,
-			tr,			// TR collection
-			i, j, k, l;	// loop variables
+			tr;			// TR collection
 		// set HTML collection of table rows
 		tr = table.rows;
 		// open loop for each TR element
-		for (i = 0; i < tr.length; i++) {
+		for (var i = 0; i < tr.length; ++i) {
 			// open loop for each cell within current row
-			for (j = 0; j < tr[i].cells.length; j++) {
+			for (var j = 0; j < tr[i].cells.length; ++j) {
 				// define current cell
 				c = tr[i].cells[j];
 				// set row index
@@ -3512,7 +3497,7 @@ REDIPS.drag = (function () {
 				// if matrix for row index is not defined then initialize array
 				matrix[ri] = matrix[ri] || [];
 				// find first available column in the first row
-				for (k = 0; k < matrix[ri].length + 1; k++) {
+				for (var k = 0; k < matrix[ri].length + 1; ++k) {
 					if (typeof(matrix[ri][k]) === 'undefined') {
 						firstAvailCol = k;
 						break;
@@ -3527,10 +3512,10 @@ REDIPS.drag = (function () {
 				// save row and cell index to the cell
 				c.redips.rowIndex = ri;
 				c.redips.cellIndex = firstAvailCol;
-				for (k = ri; k < ri + rowspan; k++) {
+				for (var k = ri; k < ri + rowspan; ++k) {
 					matrix[k] = matrix[k] || [];
 					matrixrow = matrix[k];
-					for (l = firstAvailCol; l < firstAvailCol + colspan; l++) {
+					for (var l = firstAvailCol; l < firstAvailCol + colspan; ++l) {
 						matrixrow[l] = 'x';
 					}
 				}
@@ -3549,18 +3534,17 @@ REDIPS.drag = (function () {
 	maxCols = function (table) {
 		var	tr = table.rows,	// define number of rows in current table
 			span,				// sum of colSpan values
-			max = 0,			// maximum number of columns
-			i, j;				// loop variable
+			max = 0;			// maximum number of columns
 		// if input parameter is string then overwrite it with table reference
 		if (typeof(table) === 'string') {
 			table = document.getElementById(table);
 		}
 		// open loop for each TR within table
-		for (i = 0; i < tr.length; i++) {
+		for (var i = 0; i < tr.length; ++i) {
 			// reset span value
 			span = 0;
 			// sum colspan value for each table cell
-			for (j = 0; j < tr[i].cells.length; j++) {
+			for (var j = 0; j < tr[i].cells.length; ++j) {
 				span += tr[i].cells[j].colSpan || 1;
 			}
 			// set maximum value
@@ -4003,8 +3987,7 @@ REDIPS.drag = (function () {
 	 * @memberOf REDIPS.drag#
 	 */
 	getTableIndex = function (idx) {
-		var i;
-		for (i = 0; i < tables.length; i++) {
+		for (var i = 0; i < tables.length; ++i) {
 			if (tables[i].redips.idx === idx) {
 				break;
 			}
@@ -4039,10 +4022,8 @@ REDIPS.drag = (function () {
 	 * @memberOf REDIPS.drag#
 	 */
 	hasChilds = function (el) {
-		// local variable
-		var i;
 		// loop goes through all child nodes and search for node with nodeType === 1
-		for (i = 0; i < el.childNodes.length; i++) {
+		for (var i = 0; i < el.childNodes.length; ++i) {
 			if (el.childNodes[i].nodeType === 1) {
 				return true;
 			}
@@ -4071,8 +4052,7 @@ REDIPS.drag = (function () {
 	 * @name REDIPS.drag#rowOpacity
 	 */
 	rowOpacity = function (el, opacity, color) {
-		var	tdNodeList,	// table cells
-			i, j;		// loop variables
+		var	tdNodeList;	// table cells
 		// if input parameter is string (this should be element id), then set element reference
 		if (typeof(el) === 'string') {
 			el = document.getElementById(el);
@@ -4084,7 +4064,7 @@ REDIPS.drag = (function () {
 			// collect table cell from the row
 			tdNodeList = el.getElementsByTagName('td');
 			// set opacity for DIV element
-			for (i = 0; i < tdNodeList.length; i++) {
+			for (var i = 0; i < tdNodeList.length; ++i) {
 				// set background color to table cell if needed
 				tdNodeList[i].style.backgroundColor = color ? color : '';
 				// if opacity is set to "empty" then delete cell content
@@ -4094,7 +4074,7 @@ REDIPS.drag = (function () {
 				// otherwise set opacity to every child node in table cell
 				else {
 					// loop through child nodes of every table cell
-					for (j = 0; j < tdNodeList[i].childNodes.length; j++) {
+					for (var j = 0; j < tdNodeList[i].childNodes.length; ++j) {
 						// apply styles only to Element nodes (not text nodes, attributes ...)
 						// http://code.stephenmorley.org/javascript/dom-nodetype-constants/
 						if (tdNodeList[i].childNodes[j].nodeType === 1) {

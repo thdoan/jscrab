@@ -50,7 +50,7 @@ var i,
 	indexOf = arr.indexOf || function( elem ) {
 		var i = 0,
 			len = this.length;
-		for ( ; i < len; i++ ) {
+		for ( ; i < len; ++i ) {
 			if ( this[i] === elem ) {
 				return i;
 			}
@@ -675,7 +675,7 @@ setDocument = Sizzle.setDocument = function( node ) {
 
 		// Walk down the tree looking for a discrepancy
 		while ( ap[i] === bp[i] ) {
-			i++;
+			++i;
 		}
 
 		return i ?
@@ -776,7 +776,7 @@ Sizzle.uniqueSort = function( results ) {
 	results.sort( sortOrder );
 
 	if ( hasDuplicate ) {
-		for ( ; (elem = results[i]); i++ ) {
+		for ( ; (elem = results[i]); ++i ) {
 			if ( elem === results[ i - 1 ] ) {
 				j = duplicates.push( i );
 			}
@@ -863,7 +863,7 @@ getText = Sizzle.getText = function( elem ) {
 
 	if ( !nodeType ) {
 		// If no nodeType, this is expected to be an array
-		for ( ; (node = elem[i]); i++ ) {
+		for ( ; (node = elem[i]); ++i ) {
 			// Do not traverse comment nodes
 			ret += getText( node );
 		}
@@ -1431,7 +1431,7 @@ function toSelector( tokens ) {
 	var i = 0,
 		len = tokens.length,
 		selector = "";
-	for ( ; i < len; i++ ) {
+	for ( ; i < len; ++i ) {
 		selector += tokens[i].value;
 	}
 	return selector;
@@ -1508,7 +1508,7 @@ function condense( unmatched, map, filter, context, xml ) {
 		len = unmatched.length,
 		mapped = map != null;
 
-	for ( ; i < len; i++ ) {
+	for ( ; i < len; ++i ) {
 		if ( (elem = unmatched[i]) ) {
 			if ( !filter || filter( elem, context, xml ) ) {
 				newUnmatched.push( elem );
@@ -1636,7 +1636,7 @@ function matcherFromTokens( tokens ) {
 					matchAnyContext( elem, context, xml ) );
 		} ];
 
-	for ( ; i < len; i++ ) {
+	for ( ; i < len; ++i ) {
 		if ( (matcher = Expr.relative[ tokens[i].type ]) ) {
 			matchers = [ addCombinator(elementMatcher( matchers ), matcher) ];
 		} else {
@@ -1646,7 +1646,7 @@ function matcherFromTokens( tokens ) {
 			if ( matcher[ expando ] ) {
 				// Find the next relative operator (if any) for proper handling
 				j = ++i;
-				for ( ; j < len; j++ ) {
+				for ( ; j < len; ++j ) {
 					if ( Expr.relative[ tokens[j].type ] ) {
 						break;
 					}
@@ -1692,7 +1692,7 @@ function matcherFromGroupMatchers( elementMatchers, setMatchers ) {
 
 			// Add elements passing elementMatchers directly to results
 			// Keep `i` a string if there are no elements so `matchedCount` will be "00" below
-			for ( ; (elem = elems[i]) != null; i++ ) {
+			for ( ; (elem = elems[i]) != null; ++i ) {
 				if ( byElement && elem ) {
 					j = 0;
 					while ( (matcher = elementMatchers[j++]) ) {
@@ -1711,7 +1711,7 @@ function matcherFromGroupMatchers( elementMatchers, setMatchers ) {
 				if ( bySet ) {
 					// They will have gone through all possible matchers
 					if ( (elem = !matcher && elem) ) {
-						matchedCount--;
+						--matchedCount;
 					}
 
 					// Lengthen the array for every element, matched or not
@@ -1798,7 +1798,7 @@ compile = Sizzle.compile = function( selector, group /* Internal Use Only */ ) {
 function multipleContexts( selector, contexts, results ) {
 	var i = 0,
 		len = contexts.length;
-	for ( ; i < len; i++ ) {
+	for ( ; i < len; ++i ) {
 		Sizzle( selector, contexts[i], results );
 	}
 	return results;
