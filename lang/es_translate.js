@@ -94,4 +94,3 @@ function t( str )
 
     return translation_map[ str ];
 }
-

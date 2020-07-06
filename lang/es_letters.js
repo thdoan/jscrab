@@ -1,4 +1,4 @@
-﻿// [letter (* is Joker),points for letter,number of tiles]
+// [letter (* is Joker),points for letter,number of tiles]
 var g_letters = [["a",1,12], ["e",1,12], ["o",1,9], ["i",1,6], ["s",1,6],
                  ["n",1,5], ["l",1,6], ["r",1,6], ["u",1,5], ["t",1,4],
                  ["d",2,5], ["g",2,2], ["c",3,5], ["b",3,2], ["m",3,2],
