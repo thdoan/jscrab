@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<title></title>
+<link rel="stylesheet" href="css/style.css" media="screen">
+<link rel="stylesheet" href="css/submodal.css">
+<script>
+var t1 = +(new Date());
+function logit(str) {
+  console.log(str);
+}
+</script>
+<script src="src/submodal.js"></script>
+
+<script src="lang/vi_wordlist.js"></script>
+<script src="lang/vi_letters.js"></script>
+<script src="lang/vi_translate.js"></script>
+<!--
+<script src="lang/en_wordlist.js"></script>
+<script src="lang/en_defs.js"></script>
+<script src="lang/en_letters.js"></script>
+<script src="lang/en_translate.js"></script>
+
+<script src="lang/es_wordlist.js"></script>
+<script src="lang/es_letters.js"></script>
+<script src="lang/es_translate.js"></script>
+
+<script src="lang/ru_wordlist.js"></script>
+<script src="lang/ru_letters.js"></script>
+<script src="lang/ru_translate.js"></script>
+-->
+
+<script src="src/sizzle.js"></script>
+<script src="src/redipsdrag.js"></script>
+<script src="src/bonuses.js"></script>
+<script src="src/ui.js"></script>
+<script src="src/engine.js"></script>
+<script>
+function _init() {
+  if (!document.querySelectorAll) document.querySelectorAll = Sizzle;
+  init('idBoard');
+}
+</script>
+</head>
+<body style="-moz-user-select:none; -webkit-user-select:none;" onload="_init()" onselectstart="return false;">
+<div id="uidiv"></div>
+</body>
+</html>

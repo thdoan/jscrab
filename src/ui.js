@@ -33,7 +33,7 @@ function RedipsUI()
     self.wordInfo = function( word )
     {
         if (!g_defs) {
-            alert( t("word definitions not enabled") );
+            alert( t("Word definitions not enabled.") );
             return;
         }
 
@@ -49,7 +49,7 @@ function RedipsUI()
             lword = mj[1];
             if (!(lword in g_defs)) {
                 // shouldn't happen
-                alert( "dictionary inconsistency.");
+                alert( t("Dictionary inconsistency.") );
                 return;
             }
         }
@@ -58,9 +58,9 @@ function RedipsUI()
         var ml = html.match(link);
         if (ml !== null) {
             var hword = ml[1];
-            var hyperlink = "<span class='link' onClick='g_bui.wordInfo(\"";
-            hyperlink += hword + "\")'";
-            hyperlink += "style='text-decoration:underline'>" + hword + '</span>';
+            var hyperlink = '<span class="link" onclick="g_bui.wordInfo(\'';
+            hyperlink += hword + '\')"';
+            hyperlink += 'style="text-decoration:underline">' + hword + '</span>';
             html = html.replace(link, hyperlink);
         }
         html = word.toUpperCase()+": " + html;
@@ -74,16 +74,16 @@ function RedipsUI()
 
         player = player - 1;
         self.hcount++;
-        html = "<table>";
+        html = '<table>';
         for (var i=0; i<words.length; i++) {
             var word = words[i];
-            html += "<tr bgcolor='"+self.hcolors[player];
-            html += "'><td width='170px'>";
-            html += word.toUpperCase()+"</td><td>";
-            html += "<span class='link' onClick='g_bui.wordInfo(\""+word+"\")'>";
-            html += "<img src='../pics/info.png' /></span></td></tr>";
+            html += '<tr bgcolor="'+self.hcolors[player];
+            html += '"><td width="170px">';
+            html += word.toUpperCase()+'</td><td>';
+            html += '<span class="link" onclick="g_bui.wordInfo(\''+word+'\')">';
+            html += '<img src="pics/info.png" alt="Definition"></span></td></tr>';
         }
-        html += "</table>";
+        html += '</table>';
         self.hlines += html;
         var div = dget("history");
         div.innerHTML = self.hlines;
@@ -136,10 +136,10 @@ function RedipsUI()
 
         html += '<tr><td>'+t('Playing at level:')+'</td><td>';
         html += '<span style="font-size:28px;" id="idlevel">1</span>';
-        html += '<span class="link" onClick="g_bui.levelUp()">';
-        html += '<img src="../pics/up.png" /></span>';
-        html += '<span class="link" onClick="g_bui.levelDn()">';
-        html += '<img src="../pics/dn.png" /></span>';
+        html += '<span class="link" onclick="g_bui.levelUp()">';
+        html += '<img src="pics/up.png" alt="Up"></span>';
+        html += '<span class="link" onclick="g_bui.levelDn()">';
+        html += '<img src="pics/dn.png" alt="Down"></span>';
         html += hr;
 
         html += '<tr><td>'+t('Computer last score:')+'</td><td id="loscore">0</td></tr>';
@@ -173,7 +173,7 @@ function RedipsUI()
 
         html += "<table><tr><td bgcolor='"+self.rackbg+"'>";
         html += "<span id='togglebtn' class='obutton' ";
-        html += "onClick='g_bui.toggleORV()'></span></td>";
+        html += "onclick='g_bui.toggleORV()'></span></td>";
 
         for (i=0; i<racksize; i++) {
             html += "<td id='"+self.oppRackId+i;
@@ -219,19 +219,19 @@ function RedipsUI()
 
         html += '<td class="marked" bgcolor="'+self.rackbg+'" >';
         html += '<span class="button" ';
-        html += 'onClick="onPlayerMoved(false)">'+t('Play')+'</span></td>';
+        html += 'onclick="onPlayerMoved(false)">'+t('Play')+'</span></td>';
 
         html += '<td class="marked" bgcolor="'+self.rackbg+'" >';
         html += '<span class="obutton" ';
-        html += 'onClick="onPlayerMoved(true)">'+t('Pass')+'</span></td>';
+        html += 'onclick="onPlayerMoved(true)">'+t('Pass')+'</span></td>';
 
         html += '<td class="marked" bgcolor="'+self.rackbg+'" >';
         html += '<span class="obutton" ';
-        html += 'onClick="onPlayerClear()">'+t('Clear')+'</span></td>';
+        html += 'onclick="onPlayerClear()">'+t('Clear')+'</span></td>';
 
         html += '<td class="marked" bgcolor="'+self.rackbg+'" >';
         html += '<span class="obutton" ';
-        html += 'onClick="onPlayerSwap()">'+t('Swap')+'</span></td>';
+        html += 'onclick="onPlayerSwap()">'+t('Swap')+'</span></td>';
 
         html += '</tr></table></center>';
 
@@ -385,7 +385,7 @@ function RedipsUI()
             html += "<td class='swapit' id='swap"+i+"'></td>";
         }
         html += "</tr></table>";
-        html += "</div><span class='button' onClick='g_bui.onSwap()''>";
+        html += "</div><span class='button' onclick='g_bui.onSwap()''>";
         html += t("OK")+"</span></center>";
         // display the html in the modal window
         showPopWin(html, 300, 160 );
@@ -413,7 +413,7 @@ function RedipsUI()
                 if (html !== "" && i%rlen===0)
                     html += "</tr><tr>";
                 html += "<td><span class='obutton' style='width:14; padding:13px;'";
-                html += " href='#' onClick='g_bui.onSelLetter(\""+ltr+"\")'>";
+                html += " href='#' onclick='g_bui.onSelLetter(\""+ltr+"\")'>";
                 html += ltr.toUpperCase()+"</span></td>";
             }
         }
@@ -868,7 +868,7 @@ function RedipsUI()
         var html = "";
         html += msg+"<br><center><span class='button'";
         if (typeof(button)=="undefined")
-            html += " onClick='hidePopWin(false)'>"+t("OK")+"</span></center>";
+            html += " onclick='hidePopWin(false)'>"+t("OK")+"</span></center>";
         //html += "</center>";
         showPopWin(html, 300, 200 );
     };
