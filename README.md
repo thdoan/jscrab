@@ -1,4 +1,4 @@
-# Ô Chữ Tiếng Việt - Vietnamese Scrabble(TM) type game in JavaScript
+# Ô Chữ Tiếng Việt - Vietnamese Scrabble(TM) Type Game
 
 This is an implementation in pure JavaScript played against the computer with a very fast engine. To start the game, you can go directly to http://thdoan.github.io/o-chu-tieng-viet or download the code and open *index.html* in your browser.
 
