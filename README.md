@@ -7,3 +7,8 @@ The code comprises an engine (engine.js) that does the game logic and a user int
 The fast game play is made possible by leveraging Regular Expressions to conduct searches. The current GUI makes use of the excellent [REDIPS.drag](https://github.com/dbunic/REDIPS_drag) drag-and-drop library. Other credits go to [Sizzle](https://github.com/jquery/sizzle) and [subModal](https://code.google.com/archive/p/submodal/).
 
 Corrections and comments are welcomed.
+
+## Dependencies for local build
+
+- [Microsoft Ajax Minifier](https://github.com/microsoft/ajaxmin)
+- [Find And Replace Text](https://github.com/lionello/fart-it)
