@@ -1,0 +1,4 @@
+GNU General Public License
+https://github.com/duyetdev/vietnamese-wordlist/blob/master/LICENSE
+
+Ho Ngoc Duc: http://www.informatik.uni-leipzig.de/~duc/software/misc/wordlist.html
