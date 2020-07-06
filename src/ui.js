@@ -111,6 +111,7 @@ function RedipsUI()
 
     self.playSound = function(soundfile)
     {
+        dget("sound").play();
     };
 
     self.create = function( iddiv, bx, by, scores, racksize )
@@ -445,7 +446,7 @@ function RedipsUI()
                     return;
                 }
                 self.newplays[id] = self.hcopy( holds );
-                self.playSound("sounds/tileonboard.mp3");
+                self.playSound();
             }
             else
             if (id.charAt(0)=="p") {
@@ -620,7 +621,7 @@ function RedipsUI()
     self.animDone = function()
     {
         self.animTiles--;
-        self.playSound("sounds/tileonboard.mp3");
+        self.playSound();
         logit( "animations left:"+self.animTiles);
         if (self.animTiles === 0) {
             // last opponent tile animated to its position
