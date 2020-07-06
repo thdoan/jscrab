@@ -85,7 +85,7 @@ var translation_map = {
 
   "Hide computer's rack":
   "Ocultar bastidor del ordenador"
-}
+};
 
 function t( str )
 {
