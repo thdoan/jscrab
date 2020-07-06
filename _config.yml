@@ -1,8 +1,7 @@
-title: Jscrab
-description: Scrabble Game in JavaScript
+title: Ô Chữ Tiếng Việt
+description: Vietnamese Scrabble Type Game
 google_analytics: UA-8879489-5
 show_downloads: true
 theme: jekyll-theme-architect
-
 gems:
   - jekyll-mentions
