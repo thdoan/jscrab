@@ -41,6 +41,8 @@ var g_allLettersBonus = 50;
 var g_playlevel;                         // computer play level
 var g_maxwpoints = [30,60,125,250,500];  // maximum word score for each level
 
+var g_wstr = [];
+
 //---------------------------------------------------------------------------
 
 /*
@@ -123,6 +125,26 @@ function init( iddiv )
     g_bui.setPlayerRack( my_letters );
     g_bui.setOpponentRack( comp_letters );
     g_bui.setTilesLeft( g_letpool.length );
+
+    // Build g_wstr list
+    var g_wstr_arr = [
+      [], // 2-letter words
+      [], // 3-letter words
+      [], // 4-letter words
+      [], // 5-letter words
+      [], // 6-letter words
+      [], // 7-letter words
+      [], // 8-letter words
+      [], // 9-letter words
+      [] // 10-letter words
+    ];
+    for (var i in g_wordmap) {
+      if (i.length>10 || i.length<2) continue;
+      g_wstr_arr[i.length-2].push(i);
+    }
+    for (var i=0; i<g_wstr_arr.length; ++i) {
+      g_wstr.push('_' + g_wstr_arr[i].join('_') + '_');
+    }
 }
 
 //---------------------------------------------------------------------------
