@@ -38,8 +38,8 @@ var gCloneFunc = typeof(Object.create)=="function" ? Object.create :
                  };
 
 var g_allLettersBonus = 50;
-var g_playlevel;                       // computer play level
-var g_maxwpoints = [15,30,45,50,450];  // maximum word score for each level
+var g_playlevel;                         // computer play level
+var g_maxwpoints = [30,60,125,250,500];  // maximum word score for each level
 
 //---------------------------------------------------------------------------
 
