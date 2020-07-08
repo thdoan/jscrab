@@ -1,4 +1,4 @@
-// [letter (* is Blank), points for letter, number of tiles]
+// [letter (* is Blank/joker), points for letter, number of tiles]
 var g_letters = [
   ['a', 1, 10],
   ['b', 1, 10],

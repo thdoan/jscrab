@@ -1,4 +1,4 @@
-// [letter (* is Blank), points for letter, number of tiles]
+// [letter (* is Blank/joker), points for letter, number of tiles]
 var g_letters = [["о",1,10], ["а",1,8],  ["е",1,8],  ["и",1,5], ["н",1,5],
                  ["р",1,5],  ["с",1,5],  ["т",1,5],  ["в",1,5],
                  ["д",2,4],  ["к",2,4],  ["л",2,4],  ["п",2,4], ["у",2,4], ["м",2,3],

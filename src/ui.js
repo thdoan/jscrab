@@ -542,7 +542,7 @@ function RedipsUI()
             }
         }
 
-        logit( "dlet:");
+        logit( "dictionary of letter arrays:" );
         logit( dlet );
 
         // Go over each letter in the current opponent rack
