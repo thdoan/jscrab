@@ -1,4 +1,4 @@
-/**
+/*!
  * This derivative version of subModal can be downloaded from http://gabrito.com/files/subModal/
  * Original By Seth Banks (webmaster at subimage dot com)  http://www.subimage.com/
  * Contributions by Eric Angel (tab index code), Scott (hiding/showing selects for IE users), Todd Huss (submodal class on hrefs, moving div containers into javascript, phark method for putting close.gif into CSS), Thomas Risberg (safari fixes for scroll amount), Dave Campbell (improved parsing of submodal-width-height class)
