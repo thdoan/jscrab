@@ -18,13 +18,13 @@ var g_boardpoints;          // points on board
 var g_boardmults;           // board bonus multipliers (DL, TL, DW, TW)
 var g_letpool       = [];   // letter pool
 var g_letscore      = {};   // score for each letter
-var g_racksize      = 7;    // max number of letters on racks
+var g_racksize      = 8;    // max number of letters on racks
 var g_matches_cache = {};   // to speed up regex matches
 var g_pscore        = 0;    // player score
 var g_oscore        = 0;    // opponent (computer) score
 var g_board_empty   = true; // first move flag
 var g_passes        = 0;    // number of consecutive passes
-var g_maxpasses     = 2;    // maximum number of consecutive passes
+var g_maxpasses     = 99;   // maximum number of consecutive passes
 var g_lmults = [1,2,3,1,1]; // letter multipliers by index
 var g_wmults = [1,1,1,2,3]; // word multipliers by index
 
