@@ -361,7 +361,7 @@ function onPlayerSwap()
     // put them back on the rack
     var tilesLeft = g_letpool.length;
     if (tilesLeft === 0) {
-        g_bui.prompt( t("Sorry - no tiles left to swap") );
+        g_bui.prompt( t("Sorry, no tiles left to swap.") );
         return;
     }
     g_bui.cancelPlayerPlacement();
@@ -497,7 +497,7 @@ function find_best_move( opponent_rack )
             // the current set of letters
             var word = findBestWord( opponent_rack, letters, ax, ay );
             if (word.score > -1)
-                logit( "found word:"+word.word+" ("+letters+")" );
+                logit( "Found word: "+word.word+" ("+letters+")" );
 
             if (board_best_score < word.score) {
                 // If this is better than all the board placements
@@ -529,17 +529,17 @@ function announceWinner()
     g_oscore -= odeduct;
     g_pscore -= pdeduct;
 
-    var html = t("After deducting points of unplaced tiles, score is:");
-    html += "<br>";
-    html += t("You:")+g_pscore+t("  Computer:")+g_oscore+"<br>";
-    var msg = t("It's a draw !");
+    var html = t('After deducting points of unplaced tiles, the score is...');
+    html += '<ul><li>';
+    html += t('You: ') + g_pscore + '</li><li>' + t('Computer: ') + g_oscore + '</li></ul>';
+    var msg = t('It\'s a draw!');
     if (g_oscore > g_pscore)
-        msg = t("Computer wins.");
+        msg = t('Computer wins.');
     else
     if (g_oscore < g_pscore)
-        msg = t("You win !");
-    html += "<font size='+2'>" + msg + "</font>";
-    g_bui.prompt( html, "" );
+        msg = t('You win!');
+    html += '<font size="+2">' + msg + '</font>';
+    g_bui.prompt( html, '' );
 }
 
 //---------------------------------------------------------------------------
@@ -607,7 +607,7 @@ function onPlayerMove()
     g_opponent_has_joker = ostr.search("\\*") != -1;
     g_playlevel = g_bui.getPlayLevel();
 
-    logit( "opponent rack has: " + ostr );
+    logit( "Opponent rack has: " + ostr );
 
     var play_word;
     if ( g_board_empty ) {
@@ -651,14 +651,14 @@ function onPlayerMove()
 
         // get letters from pool as number of missing letters
         var letters_left = g_bui.getOpponentRack();
-        logit( "opponent rack left with: " + letters_left);
+        logit( "Opponent rack left with: " + letters_left);
         var newLetters = takeLetters(letters_left);
         if (newLetters === "") {
             // All tiles taken, nothing left in tile pool
             announceWinner();
             return;
         }
-        logit( "after taking letters, opponent rack is: " + newLetters);
+        logit( "After taking letters, opponent rack is: " + newLetters);
         g_bui.setOpponentRack( newLetters );
         g_bui.setTilesLeft( g_letpool.length );
     };

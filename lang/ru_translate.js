@@ -15,19 +15,19 @@ var translation_map = {
   "пробелов в слове",
 
   " not found in dictionary.":
-  " отсутствует в словаре." ,
+  " отсутствует в словаре.",
 
-  "Sorry - no tiles left to swap":
-  "К сожалению у вас не осталось букв для обмена",
+  "Sorry, no tiles left to swap.":
+  "К сожалению у вас не осталось букв для обмена.",
 
   "I pass, your turn.":
   "У меня нет ходов, ваша  очередь",
 
-  "After deducting points of unplaced tiles, score is:":
-  "Ваш балл после вычета оставшихся букв" ,
+  "After deducting points of unplaced tiles, the score is...":
+  "Ваш балл после вычета оставшихся букв...",
 
-  "  Computer:":
-  " компьютер:",
+  "Computer: ":
+  "компьютер: ",
 
   "It's a draw!":
   "Это ничья!",
@@ -39,10 +39,10 @@ var translation_map = {
   "Вы выиграли!",
 
   "Sorry, ":
-  "Извините, " ,
+  "Извините, ",
 
-  "Computer thinking, please wait ...":
-  "Компьютер думает, подождите пожалуйста ...",
+  "Computer thinking, please wait...":
+  "Компьютер думает, подождите пожалуйста...",
 
   "OK":
   "Ладно",

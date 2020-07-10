@@ -508,7 +508,7 @@ function RedipsUI()
         // of the joker tiles has been determined.
         var newrack = orack;
         var dlet = {};
-        logit( "placements:" );
+        logit( "Placements:" );
         logit( placements );
         for (var i=0; i<placements.length; ++i) {
             var placement = placements[i];
@@ -542,7 +542,7 @@ function RedipsUI()
             }
         }
 
-        logit( "dictionary of letter arrays:" );
+        logit( "Dictionary of letter arrays:" );
         logit( dlet );
 
         // Go over each letter in the current opponent rack
@@ -622,7 +622,7 @@ function RedipsUI()
     {
         --self.animTiles;
         self.playSound();
-        logit( "animations left: "+self.animTiles);
+        logit( "Animations left: "+self.animTiles);
         if (self.animTiles === 0) {
             // last opponent tile animated to its position
             // return original show/hide state of tiles set to

@@ -15,19 +15,19 @@ var translation_map = {
   "espacios de palabra.",
 
   " not found in dictionary.":
-  " no encontrado en el diccionario." ,
+  " no encontrado en el diccionario.",
 
-  "Sorry - no tiles left to swap":
-  "Lo siento - no hay baldosas de izquierda a cambiar",
+  "Sorry, no tiles left to swap.":
+  "Lo siento, no hay baldosas de izquierda a cambiar.",
 
   "I pass, your turn.":
   "Yo paso, tu turno.",
 
-  "After deducting points of unplaced tiles, score is:":
-  "Después de deducir los puntos de baldosas sin colocar, el resultado es:" ,
+  "After deducting points of unplaced tiles, the score is...":
+  "Después de deducir los puntos de baldosas sin colocar, el resultado es...",
 
-  " Computer:":
-  " Computer:",
+  "Computer: ":
+  "Computer: ",
 
   "It's a draw!":
   "Es un empate!",
@@ -39,10 +39,10 @@ var translation_map = {
   "Tú ganas!",
 
   "Sorry, ":
-  "Lo siento, " ,
+  "Lo siento, ",
 
-  "Computer thinking, please wait ...":
-  "El pensamiento computadora, por favor espere ...",
+  "Computer thinking, please wait...":
+  "El pensamiento computadora, por favor espere...",
 
   "OK":
   "OK",
