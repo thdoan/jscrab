@@ -59,3 +59,10 @@
   text-indent: -9000px;
   background: url('close.gif') no-repeat;
 }
+
+#popupContent {
+  padding: 1rem;
+}
+#popupContent .button {
+  margin-top: 1rem;
+}
