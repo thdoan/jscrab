@@ -66,3 +66,53 @@
 #popupContent .button {
   margin-top: 1rem;
 }
+
+/* VDict */
+#suggestresult,
+#wordresult {
+  font-size: 95%;
+  margin-bottom: -20px;
+}
+#suggestresult #suggestionlist {
+  list-style: none;
+  padding: 0;
+}
+#wordresult a {
+  cursor: pointer;
+}
+#wordresult h1 {
+  display: inline-block;
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+#wordresult ul {
+  padding-left: 1rem;
+}
+#wordresult ul.list2 {
+  margin-top: 4px;
+}
+#wordresult .example-original {
+  font-style: italic;
+}
+#wordresult .phanloai {
+  background: #e6e6e6;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  display: block;
+  font-weight: bold;
+  margin: 6px 0;
+  padding: 6px;
+}
+#wordresult #play {
+  width: 25px;
+  height: 24px;
+  background: url('../pics/btn_play.png') no-repeat;
+  display: inline-block;
+  margin-left: 2px;
+  outline: none;
+  vertical-align: text-bottom;
+}
+#wordresult #play span {
+  display: none;
+}

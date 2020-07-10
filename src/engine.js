@@ -43,6 +43,9 @@ var g_maxwpoints = [30,60,125,250,500];  // maximum word score for each level
 
 var g_wstr = [];
 
+// Used to store word definition retrieved from the internet
+var g_def;
+
 //---------------------------------------------------------------------------
 
 /*

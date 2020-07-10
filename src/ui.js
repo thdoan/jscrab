@@ -3,9 +3,41 @@
 // 2. g_boardm exists and it's init method returns the bonus layout
 //    (defined in bonuses.js)
 
-function dget( id )
-{
-    return document.getElementById( id );
+function dget(id) {
+  return document.getElementById(id) || document.querySelector(id);
+}
+
+// VDict callback function
+function cb(data) {
+  g_def = data.result;
+}
+
+// Native JavaScript JSONP implementation
+function getJsonp(sUrl, callback) {
+  // Insert script tag to load external JS containing padded JSON
+  var oJson,
+    nTimestamp = Date.now(),
+    sCallback = 'handleJsonp' + nTimestamp,
+    sId = 'getjson-' + nTimestamp,
+    cleanUp = function() {
+      dget(sId).remove();
+      delete window[sCallback];
+    },
+    js = document.createElement('script');
+  js.id = sId;
+  js.src = sUrl.replace(/=\?/, '=' + sCallback);
+  js.onload = function() {
+    if (typeof callback==='function') callback(oJson);
+    cleanUp();
+  };
+  js.onerror = function() {
+    console.warn('Error retrieving data from ' + sUrl);
+    cleanUp();
+  };
+  window[sCallback] = function(o) {
+    oJson = o;
+  };
+  document.head.appendChild(js);
 }
 
 function RedipsUI()
@@ -32,7 +64,7 @@ function RedipsUI()
 
     self.wordInfo = function( word )
     {
-        if (!g_defs) {
+        if (!window.g_defs) {
             alert( t("Word definitions not enabled.") );
             return;
         }
@@ -41,30 +73,39 @@ function RedipsUI()
         var jump = new RegExp("<([a-z]+)=.+>");
         var lword = word;
 
-        if (!(word in g_defs))
-            return;
+        // Try to get definition locally first
+        if (word in g_defs) {
 
-        var mj;
-        while ((mj = g_defs[lword].match(jump)) !== null) {
-            lword = mj[1];
-            if (!(lword in g_defs)) {
-                // shouldn't happen
-                alert( t("Dictionary inconsistency.") );
-                return;
-            }
-        }
+          var mj;
+          while ((mj = g_defs[lword].match(jump)) !== null) {
+              lword = mj[1];
+              if (!(lword in g_defs)) {
+                  // shouldn't happen
+                  alert( t("Dictionary inconsistency detected.") );
+                  return;
+              }
+          }
+          var html = g_defs[lword];
+          var ml = html.match(link);
+          if (ml !== null) {
+              var hword = ml[1];
+              var hyperlink = '<span class="link" onclick="g_bui.wordInfo(\'';
+              hyperlink += hword + '\')"';
+              hyperlink += 'style="text-decoration:underline">' + hword + '</span>';
+              html = html.replace(link, hyperlink);
+          }
+          html = word.toUpperCase()+": " + html;
+          self.prompt( html );
 
-        var html = g_defs[lword];
-        var ml = html.match(link);
-        if (ml !== null) {
-            var hword = ml[1];
-            var hyperlink = '<span class="link" onclick="g_bui.wordInfo(\'';
-            hyperlink += hword + '\')"';
-            hyperlink += 'style="text-decoration:underline">' + hword + '</span>';
-            html = html.replace(link, hyperlink);
+        // If it doesn't exist, look it up online
+        } else {
+          getJsonp('https://m.vdict.com/mobile/dictjson?fromapp=1&word=' + encodeURIComponent(word) + '&dict=2', function() {
+            g_def = g_def.replace('href="#"', 'onclick="dget(\'audio\').play()" title="' + t('Listen to pronunciation') + '"');
+            g_def = g_def.replace(' Suggestions:', '');
+            g_def = g_def.replace(/">(.+?) not found/, '"><b>$1</b> not found');
+            self.prompt( g_def );
+          });
         }
-        html = word.toUpperCase()+": " + html;
-        self.prompt( html );
     };
 
     self.addToHistory = function( words, player )
@@ -79,7 +120,7 @@ function RedipsUI()
             var word = words[i];
             html += '<tr bgcolor="' + self.hcolors[player] + '">';
             html += '<td>' + word.toUpperCase() + '</td><td>';
-            if (g_defs[word]) html += '<span class="link" onclick="g_bui.wordInfo(\'' + word + '\')"><img src="pics/info.png" alt="Definition"></span>';
+            html += '<span class="link" title="' + t('Show definition') + '" onclick="g_bui.wordInfo(\'' + word + '\')"><img src="pics/info.png" alt=""></span>';
             html += '</td></tr>';
         }
         html += '</table>';
