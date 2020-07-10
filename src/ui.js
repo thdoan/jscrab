@@ -77,11 +77,10 @@ function RedipsUI()
         var html = '<table>';
         for (var i=0; i<words.length; ++i) {
             var word = words[i];
-            html += '<tr bgcolor="'+self.hcolors[player];
-            html += '"><td width="170px">';
-            html += word.toUpperCase()+'</td><td>';
-            html += '<span class="link" onclick="g_bui.wordInfo(\''+word+'\')">';
-            html += '<img src="pics/info.png" alt="Definition"></span></td></tr>';
+            html += '<tr bgcolor="' + self.hcolors[player] + '">';
+            html += '<td>' + word.toUpperCase() + '</td><td>';
+            if (g_defs[word]) html += '<span class="link" onclick="g_bui.wordInfo(\'' + word + '\')"><img src="pics/info.png" alt="Definition"></span>';
+            html += '</td></tr>';
         }
         html += '</table>';
         self.hlines += html;
@@ -295,9 +294,7 @@ function RedipsUI()
 
     self.showBusy = function()
     {
-        var html = "<center>"+t("Computer thinking, please wait...");
-        html += "</center>";
-        showPopWin( html, 250, 100 );
+        showPopWin('<center>' + t('Computer thinking, please wait...') + '</center>', 250, 100);
     };
 
     self.hideBusy = function()

@@ -203,3 +203,14 @@ td.swapit {
   background-image:url(../pics/trash.png);
   background-repeat:no-repeat;
 }
+
+#history table {
+  width: 100%;
+  border-collapse: collapse;
+}
+#history td {
+  height: 32px;
+}
+#history td:first-child {
+  width: 99%;
+}
