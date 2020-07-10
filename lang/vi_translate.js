@@ -16,6 +16,7 @@ var translation_map = {
   'no letters were placed.': 'no letters were placed.',
   'OK': 'OK',
   'Pass': 'Pass',
+  'Play Again': 'Play Again',
   'Play': 'Play',
   'Playing at level:': 'Playing at level:',
   'Show computer\'s rack': 'Show computer\'s rack',

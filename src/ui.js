@@ -862,13 +862,10 @@ function RedipsUI()
 
     self.prompt = function( msg, button )
     {
-        //var html = "center>";
-        var html = "";
-        html += msg+"<br><center><span class='button'";
-        if (typeof(button)=="undefined")
-            html += " onclick='hidePopWin(false)'>"+t("OK")+"</span></center>";
-        //html += "</center>";
-        showPopWin(html, 300, 200 );
+        var html = msg + '<br><center>';
+        html += button || '<span class="button" onclick="hidePopWin(false)">' + t('OK') + '</span>';
+        html += '</center>';
+        showPopWin(html, 300, 200);
     };
 }
 

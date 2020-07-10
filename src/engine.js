@@ -539,7 +539,7 @@ function announceWinner()
     if (g_oscore < g_pscore)
         msg = t('You win!');
     html += '<font size="+2">' + msg + '</font>';
-    g_bui.prompt( html, '' );
+    g_bui.prompt(html, '<span class="button" onclick="location.reload()">' + t('Play Again') + '</span>');
 }
 
 //---------------------------------------------------------------------------
