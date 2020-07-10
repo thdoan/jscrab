@@ -134,6 +134,7 @@ function init( iddiv )
       g_wstr_arr[i.length-2].push(i);
     }
     for (var i=0; i<g_wstr_arr.length; ++i) {
+      if (!g_wstr_arr[i]) continue;
       g_wstr.push('_' + g_wstr_arr[i].join('_') + '_');
     }
 }
