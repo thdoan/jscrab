@@ -226,7 +226,11 @@ td.swapit {
 }
 
 #idlevel {
+  width: 31px;
   cursor: help;
+  display: inline-block;
+  font-size: 28px;
+  text-align: left;
 }
 
 #footer {

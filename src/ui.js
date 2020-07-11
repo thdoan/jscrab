@@ -147,7 +147,7 @@ function RedipsUI()
 
     self.levelUp = function()
     {
-        if (self.level < 5) ++self.level;
+        if (self.level < g_maxwpoints.length) ++self.level;
         dget('idlevel').innerHTML = self.level;
         dget('idlevel').title = t('Computer can score up to ') + g_maxwpoints[self.level-1] + t(' points per turn');
         setStorage('level', self.level);
@@ -192,7 +192,7 @@ function RedipsUI()
         html += hr;
 
         html += '<tr><td>'+t('Playing at level:')+'</td><td>';
-        html += '<span style="font-size:28px;" id="idlevel" title="' + t('Computer can score up to ') + g_maxwpoints[g_playlevel] + t(' points per turn') + '">' + (g_playlevel+1) + '</span>';
+        html += '<span id="idlevel" title="' + t('Computer can score up to ') + g_maxwpoints[g_playlevel] + t(' points per turn') + '">' + (g_playlevel+1) + '</span>';
         html += '&nbsp;<span class="link" title="' + t('Increase difficulty') + '" onclick="g_bui.levelUp()">';
         html += '<img src="pics/up.png" alt="Up"></span>';
         html += '<span class="link" title="' + t('Decrease difficulty') + '" onclick="g_bui.levelDn()">';

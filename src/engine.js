@@ -41,7 +41,7 @@ var gCloneFunc = typeof(Object.create)=="function" ? Object.create :
 
 var g_allLettersBonus = 50;
 var g_playlevel = g_bui.getPlayLevel(); // computer play level
-var g_maxwpoints = [30,60,125,250,500]; // maximum word score for each level
+var g_maxwpoints = [10,20,30,40,50,75,100,125,250,500]; // maximum word score for each level
 
 var g_wstr = [];
 
