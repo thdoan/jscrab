@@ -912,6 +912,18 @@ function RedipsUI()
 
 var g_bui = new RedipsUI();
 
+/**
+ * EVENTS
+ */
+
+// Handle keyboard shortcuts
+function handleKeyDown(e) {
+  // Close modal on Escape
+  if (e.key==='Escape') g_bui.hideBusy();
+}
+
+document.addEventListener('keydown', handleKeyDown);
+
 // for Closure compiler:
 //-----------------------------
 // evals in strings:
