@@ -198,7 +198,7 @@ function RedipsUI()
 
         html += '</table>';
         html += '</td></tr></table>';
-        dget("uidiv").innerHTML = html;
+        dget('uidiv').innerHTML = html;
 
         self.scores = scores;
 
@@ -208,53 +208,52 @@ function RedipsUI()
         self.bx = bx;
         self.by = by;
 
-        html = "<div id='drag'>";
+        html = '<div id="drag">';
         //---------------------------
         // Opponents rack
 
-        html += "<table><tr><td bgcolor='"+self.rackbg+"'>";
-        html += "<span id='togglebtn' class='obutton' ";
-        html += "onclick='g_bui.toggleORV()'></span></td>";
+        html += '<table><tr><td bgcolor="'+self.rackbg+'">';
+        html += '<span id="togglebtn" class="obutton" ';
+        html += 'onclick="g_bui.toggleORV()"></span></td>';
 
         for (var i=0; i<racksize; ++i) {
-            html += "<td id='"+self.oppRackId+i;
-            html += "' bgcolor='"+self.rackbg+"' holds=''></td>";
+            html += '<td id="'+self.oppRackId+i;
+            html += '" bgcolor="'+self.rackbg+'" holds=""></td>';
         }
-        html += "</tr></table>";
+        html += '</tr></table>';
         //html += "<br>";
 
         //---------------------------
         // Playing board
         var st = self.getStartXY();
-        var mults = ["", "DL", "TL", "DW", "TW"];
+        var mults = ['', 'DL', 'TL', 'DW', 'TW'];
         var mult;
 
-        html += "<table class='board'>";
+        html += '<table class="board">';
         for (var i=0; i<by; ++i) {
-            html += "<tr>";
+            html += '<tr>';
             for (var j=0; j<bx; ++j) {
-                html += "<td bgcolor='"+self.cellbg+"' id='c"+j+"_"+i+"' ";
-                mult = "";
+                html += '<td bgcolor="'+self.cellbg+'" id="c'+j+'_'+i+'" ';
+                mult = '';
                 if ( j==st.x && i==st.y )
-                    mult = "ST";
+                    mult = 'ST';
                 else
                     mult = mults[ self.boardm[j][i] ];
-                if (mult !== "")
-                    mult = "class='"+mult+"'";
-                html += mult + "></td>";
+                if (mult !== '')
+                    mult = 'class="'+mult+'"';
+                html += mult + '></td>';
             }
-            html += "</tr>";
+            html += '</tr>';
         }
-        html += "</table>";
-
+        html += '</table>';
         //html += "<br>";
 
         //---------------------------
         // Players rack
-        html += "<br><center><table><tr>";
+        html += '<br><center><table><tr>';
         for (var i=0; i<racksize; ++i) {
-            html += "<td id='"+self.plrRackId+i;
-            html += "' bgcolor='"+self.rackbg+"' holds=''></td>";
+            html += '<td id="'+self.plrRackId+i;
+            html += '" bgcolor="'+self.rackbg+'" holds=""></td>';
         }
         //---------------------------
 
@@ -276,7 +275,7 @@ function RedipsUI()
 
         html += '</tr></table></center>';
 
-        html += "</div>";
+        html += '</div>';
         dget( iddiv ).innerHTML = html;
 
 
@@ -335,7 +334,7 @@ function RedipsUI()
 
     self.showBusy = function()
     {
-        showPopWin('<center>' + t('Computer thinking, please wait...') + '</center>', 250, 100);
+        showPopWin('<center>' + t('Computer thinking, please wait...') + '</center>');
     };
 
     self.hideBusy = function()
@@ -388,10 +387,10 @@ function RedipsUI()
         self.newplays[self.bdropCellId] = holds;
         var cell = dget( self.bdropCellId );
         cell.holds = self.hcopy(holds);
-        var html = "";
+        var html = '';
         //html += "<div class='drag t1'>";
-        html += ltr.toUpperCase()+"<sup><font size='-3'>";
-        html += "&nbsp;</font></sup>";
+        html += ltr.toUpperCase()+'<sup><font size="-3">';
+        html += '&nbsp;</font></sup>';
         //html += "</div>";
         //cell.innerHTML = html;
         var div = cell.firstChild;
@@ -404,40 +403,40 @@ function RedipsUI()
     {
         var divs = [];
         var id;
-        var html = "<center><div id='drags'>";
-        html += "<table id='swaptable'><tr bgcolor='#beffbe'>";
+        var html = '<center><div id="drags">';
+        html += '<table id="swaptable"><tr bgcolor="#beffbe">';
         for (var i=0; i<self.racksize; ++i) {
             id = self.plrRackId+i;
             var rcell = dget(id);
-            if (rcell.holds === "")
+            if (rcell.holds === '')
                 continue;
             divs.push(rcell.firstChild);
-            html += "<td class='swapc' id='swap_candidate"+i+"'></td>";
+            html += '<td class="swapc" id="swap_candidate'+i+'"></td>';
         }
-        html += "</tr></table>";
+        html += '</tr></table>';
 
         var rackplen = self.getPlayerRack().length;
         var maxswap = rackplen < tilesLeft ? rackplen : tilesLeft;
         //alert( rackplen +" "+ tilesLeft + " " + maxswap)
-        html += "<table><tr bgcolor='#ffbebe'>";
+        html += '<table><tr bgcolor="#ffbebe">';
         for (var i=0; i<maxswap; ++i) {
-            html += "<td class='swapit' id='swap"+i+"'></td>";
+            html += '<td class="swapit" id="swap'+i+'"></td>';
         }
-        html += "</tr></table>";
-        html += "</div><span class='button' onclick='g_bui.onSwap()''>";
-        html += t("OK")+"</span></center>";
+        html += '</tr></table>';
+        html += '</div><span class="button" onclick="g_bui.onSwap()">';
+        html += t('OK')+'</span></center>';
         // display the html in the modal window
-        showPopWin(html, 300, 160 );
+        showPopWin(html);
         // and then fill the DOM in the modal window with the
         // existing letter divs from the players rack
 
         for (var i=0; i<divs.length; ++i) {
-            id = "swap_candidate"+i;
+            id = 'swap_candidate'+i;
             var swapc = dget(id);
             swapc.appendChild( divs[i] );
         }
 
-        self.rd.init("drags");
+        self.rd.init('drags');
     };
 
     self.showLettersModal = function( bdropCellId )
@@ -445,21 +444,20 @@ function RedipsUI()
         self.bdropCellId = bdropCellId;
         var rlen = 6;
         var llen = g_letters.length;
-        var html = "";
+        var html = '';
         for (var i=0; i<llen; ++i) {
             var ltr = g_letters[i][0];
-            if (ltr != "*") {
-                if (html !== "" && i%rlen===0)
-                    html += "</tr><tr>";
-                html += "<td><span class='obutton' style='width:14; padding:13px;'";
-                html += " href='#' onclick='g_bui.onSelLetter(\""+ltr+"\")'>";
-                html += ltr.toUpperCase()+"</span></td>";
+            if (ltr !== '*') {
+                if (html !== '' && i%rlen===0) html += '</tr><tr>'
+                html += '<td><span class="obutton" onclick="g_bui.onSelLetter(\''+ltr+'\')">';
+                html += (ltr===' '?'&nbsp;':ltr.toUpperCase())+'</span></td>';
             }
         }
-        for (var i=llen; (i-1)%rlen!==0; ++i)
-            html += "<td></td>";
-        html = "<center><table><tr>"+html+"</tr></table><center>";
-        showPopWin(html, 300, 200 );
+        for (var i=llen; (i-1)%rlen!==0; ++i) {
+            html += '<td></td>';
+        }
+        html = '<table id="letters"><tr>'+html+'</tr></table>';
+        showPopWin(html);
     };
 
     self.initRedips = function()
@@ -906,7 +904,7 @@ function RedipsUI()
         var html = msg + '<br><center>';
         html += button || '<span class="button" onclick="hidePopWin(false)">' + t('OK') + '</span>';
         html += '</center>';
-        showPopWin(html, 300, 200);
+        showPopWin(html);
     };
 }
 

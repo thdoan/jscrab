@@ -67,8 +67,8 @@ function initPopUp() {
 		if (elms[i].className.indexOf("submodal") >= 0) {
 			elms[i].onclick = function(){
 				// default width and height
-				var width = 400;
-				var height = 200;
+				var width = 320;
+				//var height = 200;
 				// Parse out optional width and height from className
 				var startIndex = this.className.indexOf("submodal");
 				var endIndex = this.className.indexOf(" ", startIndex);
@@ -79,9 +79,10 @@ function initPopUp() {
 				params = clazz.split('-');
 				if (params.length == 3) {
 					width = parseInt(params[1],10);
-					height = parseInt(params[2],10);
+					//height = parseInt(params[2],10);
 				}
-				showPopWin(this.href,width,height,null); return false;
+				showPopWin(this.href,width);
+				return false;
 			};
 		}
 	}
@@ -91,28 +92,31 @@ addEvent(window, "load", initPopUp);
  /**
 	* @argument width - int in pixels
 	* @argument height - int in pixels
-	* @argument url - url to display
 	* @argument returnFunc - function to call when returning true from the window.
 	*/
 
-function showPopWin(html, width, height, returnFunc) {
-	document.getElementById("popupContent").innerHTML = html;
+function showPopWin(html, width, returnFunc) {
+	document.getElementById('popupContent').innerHTML = html;
 	gPopupIsShown = true;
 	disableTabIndexes();
-	gPopupMask.style.display = "block";
-	gPopupContainer.style.display = "block";
-	centerPopWin(width, height);
-	var titleBarHeight = parseInt(document.getElementById("popupTitleBar").offsetHeight, 10);
-	gPopupContainer.style.width = width + "px";
-	gPopupContainer.style.height = (height+titleBarHeight) + "px";
-	gReturnFunc = returnFunc;
+	gPopupMask.style.display = 'block';
+	gPopupContainer.style.display = 'block';
+	setTimeout(function() {
+    gPopupMask.classList.add('open');
+    gPopupContainer.classList.add('open');
+  }, 0);
+	//centerPopWin(width, height);
+	var titleBarHeight = parseInt(document.getElementById('popupTitleBar').offsetHeight, 10);
+	gPopupContainer.style.width = width + 'px';
+	//gPopupContainer.style.height = (height+titleBarHeight) + "px";
+	if (typeof returnFunc==='function') gReturnFunc = returnFunc;
 	// for IE
 	if (gHideSelects === true) {
 		hideSelectBoxes();
 	}
 }
 
-//
+/*
 var gi = 0;
 function centerPopWin(width, height) {
 	if (gPopupIsShown === true) {
@@ -151,6 +155,7 @@ function centerPopWin(width, height) {
 addEvent(window, "resize", centerPopWin);
 //addEvent(window, "scroll", centerPopWin);
 window.onscroll = centerPopWin;
+*/
 
 /**
  * @argument callReturnFunc - bool - determines if we call the return function specified
@@ -162,10 +167,14 @@ function hidePopWin(callReturnFunc) {
 	if (gPopupMask === null) {
 		return;
 	}
-	gPopupMask.style.display = "none";
-	gPopupContainer.style.display = "none";
+	gPopupMask.classList.remove('open');
+	gPopupContainer.classList.remove('open');
+	setTimeout(function() {
+    gPopupMask.style.display = 'none';
+    gPopupContainer.style.display = 'none';
+	}, 300);
 	if (callReturnFunc === true && gReturnFunc !== null) {
-		gReturnFunc(window.frames["popupFrame"].returnVal);
+		gReturnFunc(window.frames['popupFrame'].returnVal);
 	}
 	// display all select boxes
 	if (gHideSelects === true) {

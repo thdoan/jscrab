@@ -35,6 +35,15 @@ span.obutton {
   text-decoration:none;
   text-shadow:1px 1px 0px #ffee66;
 }
+
+#letters span.obutton {
+  width: 32px;
+  height: 32px;
+  line-height: 32px;
+  padding: 0;
+  text-align: center;
+}
+
 span.obutton:hover {
   background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #ffab23), color-stop(1, #ffec64) );
   background:-moz-linear-gradient( center top, #ffab23 5%, #ffec64 100% );
