@@ -223,3 +223,7 @@ td.swapit {
 #history td:first-child {
   width: 99%;
 }
+
+#idlevel {
+  cursor: help;
+}

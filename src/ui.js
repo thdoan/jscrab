@@ -134,16 +134,16 @@ function RedipsUI()
 
     self.levelUp = function()
     {
-        if (self.level < 5)
-            ++self.level;
-        dget("idlevel").innerHTML = self.level;
+        if (self.level < 5) ++self.level;
+        dget('idlevel').innerHTML = self.level;
+        dget('idlevel').title = t('Computer can score up to ') + g_maxwpoints[self.level-1] + t(' points per turn');
     };
 
     self.levelDn = function()
     {
-        if (self.level > 1)
-            --self.level;
-        dget("idlevel").innerHTML = self.level;
+        if (self.level > 1) --self.level;
+        dget('idlevel').innerHTML = self.level;
+        dget('idlevel').title = t('Computer can score up to ') + g_maxwpoints[self.level-1] + t(' points per turn');
     };
 
     self.getPlayLevel = function()
@@ -178,10 +178,10 @@ function RedipsUI()
         html += hr;
 
         html += '<tr><td>'+t('Playing at level:')+'</td><td>';
-        html += '<span style="font-size:28px;" id="idlevel">1</span>';
-        html += '<span class="link" onclick="g_bui.levelUp()">';
+        html += '<span style="font-size:28px;" id="idlevel" title="' + t('Computer can score up to ') + g_maxwpoints[0] + t(' points per turn') + '">1</span>';
+        html += '&nbsp;<span class="link" title="' + t('Increase difficulty') + '" onclick="g_bui.levelUp()">';
         html += '<img src="pics/up.png" alt="Up"></span>';
-        html += '<span class="link" onclick="g_bui.levelDn()">';
+        html += '<span class="link" title="' + t('Decrease difficulty') + '" onclick="g_bui.levelDn()">';
         html += '<img src="pics/dn.png" alt="Down"></span>';
         html += hr;
 
