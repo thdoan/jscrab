@@ -102,12 +102,11 @@ function showPopWin(html, width, returnFunc) {
 	gPopupMask.style.display = 'block';
 	gPopupContainer.style.display = 'block';
 	setTimeout(function() {
-    gPopupMask.classList.add('open');
-    gPopupContainer.classList.add('open');
+    gPopupMask.classList.add('on');
   }, 0);
 	//centerPopWin(width, height);
 	var titleBarHeight = parseInt(document.getElementById('popupTitleBar').offsetHeight, 10);
-	gPopupContainer.style.width = width + 'px';
+	if (parseFloat(width)) gPopupContainer.style.width = width + 'px';
 	//gPopupContainer.style.height = (height+titleBarHeight) + "px";
 	if (typeof returnFunc==='function') gReturnFunc = returnFunc;
 	// for IE
@@ -167,11 +166,10 @@ function hidePopWin(callReturnFunc) {
 	if (gPopupMask === null) {
 		return;
 	}
-	gPopupMask.classList.remove('open');
-	gPopupContainer.classList.remove('open');
+	gPopupMask.classList.remove('on');
+	gPopupContainer.style.display = 'none';
 	setTimeout(function() {
     gPopupMask.style.display = 'none';
-    gPopupContainer.style.display = 'none';
 	}, 300);
 	if (callReturnFunc === true && gReturnFunc !== null) {
 		gReturnFunc(window.frames['popupFrame'].returnVal);

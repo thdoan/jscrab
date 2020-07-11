@@ -666,7 +666,7 @@ function onPlayerMove()
         g_passes = 0; // reset consecutive opponeny passes
     }
     else {
-        g_bui.hideBusy();
+        //g_bui.hideBusy();
         ++g_passes; // increase consecutive opponent passes
         if (g_passes >= g_maxpasses)
             announceWinner();

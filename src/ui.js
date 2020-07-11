@@ -341,7 +341,7 @@ function RedipsUI()
 
     self.hideBusy = function()
     {
-        hidePopWin(false);
+        hidePopWin();
     };
 
 
@@ -379,7 +379,7 @@ function RedipsUI()
         dget("swaptable").innerHTML="";
         self.initRedips();
 
-        hidePopWin(false);
+        hidePopWin();
         onPlayerSwapped( keep, swap );
     };
 
@@ -398,7 +398,7 @@ function RedipsUI()
         var div = cell.firstChild;
         div.holds = self.hcopy(holds);
         div.innerHTML = html;
-        hidePopWin(false);
+        hidePopWin();
     };
 
     self.showSwapModal = function( tilesLeft )
@@ -904,7 +904,7 @@ function RedipsUI()
     self.prompt = function( msg, button )
     {
         var html = msg + '<br><center>';
-        html += button || '<span class="button" onclick="hidePopWin(false)">' + t('OK') + '</span>';
+        html += button || '<span class="button" onclick="hidePopWin()">' + t('OK') + '</span>';
         html += '</center>';
         showPopWin(html);
     };
