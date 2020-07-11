@@ -12,6 +12,7 @@ var translation_map = {
   'Computer: ': 'Computer: ',
   'Decrease difficulty': 'Decrease difficulty',
   'Dictionary inconsistency detected.': 'Dictionary inconsistency detected.',
+  'Feedback?': 'Feedback?',
   'first word must be on the star.': 'first word must be on the star.',
   'Hide computer\'s rack': 'Hide computer\'s rack',
   'I pass, your turn.': 'I pass, your turn.',

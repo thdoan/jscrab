@@ -181,7 +181,6 @@ function RedipsUI()
         var html = '<table><tr><td><div id="idBoard"></div>';
 
         html += '</td><td class="score" valign="top">';
-        html += '<div id="soundholder"></div>';
         html += '<table class="gameinfo">';
 
         html += hr;
@@ -214,6 +213,7 @@ function RedipsUI()
         html += hr;
 
         html += '</table>';
+        html += '<div id="footer">' + t('Feedback?') + ' <a href="mailto:winter1977@gmail.com?subject=Ô Chữ Tiếng Việt">winter1977@gmail.com</a></div>';
         html += '</td></tr></table>';
         dget('uidiv').innerHTML = html;
 

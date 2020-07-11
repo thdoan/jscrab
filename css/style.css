@@ -121,6 +121,7 @@ td.ST {
 }
 
 td.score {
+  position: relative;
   background-image:url(../pics/scorebg.png);
   background-repeat:repeat;
 }
@@ -226,4 +227,14 @@ td.swapit {
 
 #idlevel {
   cursor: help;
+}
+
+#footer {
+  position: absolute;
+  bottom: 0;
+  box-sizing: border-box;
+  font-size: 12px;
+  padding: 0.5rem;
+  text-align: center;
+  width: 100%;
 }
