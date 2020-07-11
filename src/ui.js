@@ -99,12 +99,14 @@ function RedipsUI()
 
         // If it doesn't exist, look it up online
         } else {
+
           getJsonp('https://m.vdict.com/mobile/dictjson?fromapp=1&word=' + encodeURIComponent(word) + '&dict=2', function() {
             g_def = g_def.replace('href="#"', 'onclick="dget(\'audio\').play()" title="' + t('Listen to pronunciation') + '"');
             g_def = g_def.replace(' Suggestions:', '');
             g_def = g_def.replace(/">(.+?) not found/, '"><b>$1</b> not found');
             self.prompt( g_def );
           });
+
         }
     };
 
@@ -646,7 +648,7 @@ function RedipsUI()
         for (var i=0; i<totalanims; ++i) {
             // Set the the time to wait before animating this letter
             // to its position on the board
-            var wait = 10+1000*i;
+            var wait = g_wait*i;
             // create a separate instance of the letter info local to the function
             // and set the timer to move the letter by activating this function
             moveletter( lettermoves[i].info, wait );

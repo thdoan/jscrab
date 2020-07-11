@@ -27,7 +27,8 @@ var g_passes        = 0;    // number of consecutive passes
 var g_maxpasses     = 2;    // maximum number of consecutive passes
 var g_lmults = [1,2,3,1,1]; // letter multipliers by index
 var g_wmults = [1,1,1,2,3]; // word multipliers by index
-var g_animation     = 20;   // animation speed (lower = faster)
+var g_animation     = 0;    // animation speed (lower = faster)
+var g_wait          = 500;  // wait time in between moves (in ms)
 
 var g_opponent_has_joker;   // Optimization flag if computer has joker tile
 
