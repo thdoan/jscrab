@@ -3,7 +3,8 @@
 // 2. g_boardm exists and it's init method returns the bonus layout
 //    (defined in bonuses.js)
 
-function dget(id) {
+function dget(id)
+{
   return document.getElementById(id) || document.querySelector(id);
 }
 
@@ -40,6 +41,18 @@ function getJsonp(sUrl, callback) {
   document.head.appendChild(js);
 }
 
+function getStorage(key) {
+  if (window.localStorage) return localStorage[key];
+  else return undefined;
+}
+
+function setStorage(key, value) {
+  if (window.localStorage) {
+    localStorage[key] = value;
+    return true;
+  } else return false;
+}
+
 function RedipsUI()
 {
     var self = this;
@@ -56,9 +69,9 @@ function RedipsUI()
     self.firstrack  = true;
     self.cellbg     = "#e0e0b0";
     self.rackbg     = "#e0f0d0";
-    self.level      = 1;         // Playing level
-    self.hlines     = "";        // play hisory lines
-    self.hcount     = 0;         // play history count
+    self.level      = getStorage('level') || 1; // Playing level
+    self.hlines     = ""; // play hisory lines
+    self.hcount     = 0;  // play history count
     self.hcolors    = ["#f1fefe","#fefef1"];
     self.showOpRack = 1;  // 0=not visible, 1=visible
 
@@ -137,6 +150,7 @@ function RedipsUI()
         if (self.level < 5) ++self.level;
         dget('idlevel').innerHTML = self.level;
         dget('idlevel').title = t('Computer can score up to ') + g_maxwpoints[self.level-1] + t(' points per turn');
+        setStorage('level', self.level);
     };
 
     self.levelDn = function()
@@ -144,6 +158,7 @@ function RedipsUI()
         if (self.level > 1) --self.level;
         dget('idlevel').innerHTML = self.level;
         dget('idlevel').title = t('Computer can score up to ') + g_maxwpoints[self.level-1] + t(' points per turn');
+        setStorage('level', self.level);
     };
 
     self.getPlayLevel = function()
@@ -178,7 +193,7 @@ function RedipsUI()
         html += hr;
 
         html += '<tr><td>'+t('Playing at level:')+'</td><td>';
-        html += '<span style="font-size:28px;" id="idlevel" title="' + t('Computer can score up to ') + g_maxwpoints[0] + t(' points per turn') + '">1</span>';
+        html += '<span style="font-size:28px;" id="idlevel" title="' + t('Computer can score up to ') + g_maxwpoints[g_playlevel] + t(' points per turn') + '">' + (g_playlevel+1) + '</span>';
         html += '&nbsp;<span class="link" title="' + t('Increase difficulty') + '" onclick="g_bui.levelUp()">';
         html += '<img src="pics/up.png" alt="Up"></span>';
         html += '<span class="link" title="' + t('Decrease difficulty') + '" onclick="g_bui.levelDn()">';
