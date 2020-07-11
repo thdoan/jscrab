@@ -465,7 +465,7 @@ function RedipsUI()
         self.rd.init();
         self.rd.dropMode = 'single';
         // self.rd.style.borderDisabled = 'solid';  // border style for disabled element unchanged
-        self.rd.animation.pause = 80;           // set animation loop pause
+        self.rd.animation.pause = g_animation;      // set animation loop pause
 
         self.rd.event.dropped = function () {
             //logit(self.rd.obj.holds);
