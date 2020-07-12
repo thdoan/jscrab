@@ -1,4 +1,4 @@
-//---------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // Assumptions
 // 1. g_bui exists and has the interface for interacting wih the board UI
 //    (redips-drag based UI creates g_bui in ui.js)
@@ -11,44 +11,46 @@
 //    given language. Defined in xx-letters.js
 // 5. t() defined in translate_xx.js and returns the translated text
 //    of a string.
-//---------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
-var g_board;                // letters on board
-var g_boardpoints;          // points on board
-var g_boardmults;           // board bonus multipliers (DL, TL, DW, TW)
-var g_letpool       = [];   // letter pool
-var g_letscore      = {};   // score for each letter
-var g_racksize      = 8;    // max number of letters on racks
-var g_matches_cache = {};   // to speed up regex matches
-var g_pscore        = 0;    // player score
-var g_oscore        = 0;    // opponent (computer) score
-var g_board_empty   = true; // first move flag
-var g_passes        = 0;    // number of consecutive passes
-var g_maxpasses     = 2;    // maximum number of consecutive passes
-var g_lmults = [1,2,3,1,1]; // letter multipliers by index
-var g_wmults = [1,1,1,2,3]; // word multipliers by index
-var g_animation     = 0;    // animation speed (lower = faster)
-var g_wait          = 500;  // wait time in between moves (in ms)
+var g_board;                // Letters on board
+var g_boardpoints;          // Points on board
+var g_boardmults;           // Board bonus multipliers (DL, TL, DW, TW)
+var g_letpool       = [];   // Letter pool
+var g_letscore      = {};   // Score for each letter
+var g_racksize      = 8;    // Max number of letters on racks
+var g_matches_cache = {};   // To speed up regex matches
+var g_pscore        = 0;    // Player score
+var g_oscore        = 0;    // Opponent (computer) score
+var g_board_empty   = true; // First move flag
+var g_passes        = 0;    // Number of consecutive passes
+var g_maxpasses     = 2;    // Maximum number of consecutive passes
+var g_lmults = [1,2,3,1,1]; // Letter multipliers by index
+var g_wmults = [1,1,1,2,3]; // Word multipliers by index
+var g_animation     = 0;    // Animation speed (lower = faster)
+var g_wait          = 500;  // Wait time in between moves (in ms)
 
 var g_opponent_has_joker;   // Optimization flag if computer has joker tile
 
-var gCloneFunc = typeof(Object.create)=="function" ? Object.create :
-                 function(obj) {
-                    var cl={};
-                    for (var i in obj) cl[i]=obj[i];
-                    return cl;
-                 };
+var gCloneFunc = (typeof Object.create==='function') ? Object.create :
+    function(obj) {
+        var cl = {};
+        for (var i in obj) {
+            cl[i] = obj[i];
+        }
+        return cl;
+    };
 
 var g_allLettersBonus = 50;
-var g_playlevel = g_bui.getPlayLevel(); // computer play level
-var g_maxwpoints = [10,20,30,40,50,75,100,125,250,500]; // maximum word score for each level
+var g_playlevel = g_bui.getPlayLevel(); // Computer play level
+var g_maxwpoints = [10,20,30,40,50,75,100,125,250,500]; // Maximum word score for each level
 
 var g_wstr = [];
 
 // Used to store word definition retrieved from the internet
 var g_def;
 
-//---------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 /*
 var timers = {};
@@ -90,7 +92,7 @@ var g_timers = timers.create();
 
 */
 
-//---------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 function shuffle_pool()
 {
     var total = g_letpool.length;
@@ -102,7 +104,7 @@ function shuffle_pool()
     }
 }
 
-//---------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 function init( iddiv )
 {
     // Put all the letters in the pool
@@ -113,14 +115,15 @@ function init( iddiv )
         var lpoints = letinfo[1];
         var numlets = letinfo[2];
         g_letscore[whichlt] = lpoints;
-        for (var j=0; j<numlets; ++j)
+        for (var j=0; j<numlets; ++j) {
             g_letpool.push( whichlt );
+        }
     }
 
     shuffle_pool();
 
-    var my_letters   = "";
-    var comp_letters = "";
+    var my_letters = '';
+    var comp_letters = '';
 
     my_letters   = takeLetters( my_letters );
     comp_letters = takeLetters( comp_letters );
@@ -134,41 +137,37 @@ function init( iddiv )
     // Build g_wstr list
     var g_wstr_arr = [];
     for (var i in g_wordmap) {
-      if (i.length>15) continue;
-      if (!g_wstr_arr[i.length-2]) g_wstr_arr[i.length-2] = [];
-      g_wstr_arr[i.length-2].push(i);
+        if (i.length>15) continue;
+        if (!g_wstr_arr[i.length-2]) g_wstr_arr[i.length-2] = [];
+        g_wstr_arr[i.length-2].push(i);
     }
     for (var i=0; i<g_wstr_arr.length; ++i) {
-      if (!g_wstr_arr[i]) continue;
-      g_wstr.push('_' + g_wstr_arr[i].join('_') + '_');
+        if (!g_wstr_arr[i]) continue;
+        g_wstr.push('_' + g_wstr_arr[i].join('_') + '_');
     }
 }
 
-//---------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 function takeLetters( existing )
 {
     var poolsize = g_letpool.length;
-    if (poolsize === 0)
-        return existing;
-
+    if (poolsize === 0) return existing;
     var needed = g_racksize - existing.length;
-    if (needed > poolsize)
-        needed = poolsize;
-    var letters = g_letpool.slice(0, needed).join("");
+    if (needed > poolsize) needed = poolsize;
+    var letters = g_letpool.slice(0, needed).join('');
     g_letpool.splice(0, needed);
     return letters+existing;
 }
 
-//---------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 function checkValidPlacement( placement )
 {
-    if (placement.length === 0)
-        return { played:"", msg:t("no letters were placed.") };
+    if (placement.length === 0) return { played:'', msg:t('no letters were placed.') };
 
     var isplacement = {};
-    var worderrs = "";
+    var worderrs = '';
 
-    var lplayed = "";
+    var lplayed = '';
     var minx = placement[0].x;
     var miny = placement[0].y;
     var maxx = minx;
@@ -180,91 +179,70 @@ function checkValidPlacement( placement )
     var sp = g_bui.getStartXY();
     var onStar = false;
 
-    var x,y,xy;
+    var x, y, xy;
 
     for (var i=0; i<placement.length; ++i) {
         var pl = placement[i];
-        if (pl.lsc === 0)
-            lplayed += "*";
-        else
-            lplayed += pl.ltr;
+        if (pl.lsc === 0) lplayed += '*';
+        else lplayed += pl.ltr;
         x = pl.x;
         y = pl.y;
 
-        if (x==sp.x && y==sp.y)
-            onStar = true;
+        if (x===sp.x && y===sp.y) onStar = true;
 
-        xy = x+"_"+y;
+        xy = x + '_' + y;
         isplacement[xy] = pl;
 
-        if (minx > x)
-            minx = x;
-
-        if (maxx < x)
-            maxx = x;
-
-        if (miny > y)
-            miny = y;
-
-        if (maxy<y)
-            maxy = y;
+        if (minx > x) minx = x;
+        if (maxx < x) maxx = x;
+        if (miny > y) miny = y;
+        if (maxy<y) maxy = y;
     }
 
-    if (miny < maxy)
-        dy = 1;
+    if (miny < maxy) dy = 1;
+    if (minx < maxx) dx = 1;
 
-    if (minx < maxx)
-        dx = 1;
-
-    if (dx==1 && dy==1)
-        return {played:"", msg:t("word must be horizontal or vertical.") };
-
-    if (g_board_empty && !onStar)
-        return {played:"", msg:t("first word must be on the star.") };
+    if (dx===1 && dy===1) return { played:'', msg:t('word must be horizontal or vertical.') };
+    if (g_board_empty && !onStar) return { played:'', msg:t('first word must be on the star.') };
 
     var mbx = g_board.length;
     var mby = mbx;
 
     if (dx===0 && dy===0) {
-        // only one letter was placed
-        if (minx>0 && g_board[minx-1][miny]!=="" ||
-            minx<mbx-1 && g_board[minx+1][miny]!=="" )
+        // Only one letter was placed
+        if ((minx>0 && g_board[minx-1][miny]!=='') || (minx<mbx-1 && g_board[minx+1][miny]!=='')) {
             dx = 1;
-        else
-        if (miny>0 && g_board[minx][miny-1]!=="" ||
-            miny<mby-1 && g_board[minx][miny+1]!=="" )
+        } else if ((miny>0 && g_board[minx][miny-1]!=='') || (miny<mby-1 && g_board[minx][miny+1]!=='')) {
             dy = 1;
-        else {
-            lplayed = lplayed.toUpperCase();
-            var msg = lplayed + t(" is not connected to a word.");
-            return {played:"", msg:msg };
+        } else {
+            lplayed = '<strong>' + lplayed.toUpperCase() + '</strong>';
+            var msg = lplayed + t(' is not connected to a word.');
+            return { played:'', msg:msg };
         }
     }
 
-    var numl = (dx==1) ? maxx-minx+1 : maxy-miny+1;
+    var numl = (dx===1) ? maxx-minx+1 : maxy-miny+1;
     var px = minx-dx;
     var py = miny-dy;
-    var word = "";
+    var word = '';
 
     var wordmult = 1;
-    var wscore = 0; // word score
-    var oscore = 0; // score from orthogonal created words
+    var wscore = 0; // Word score
+    var oscore = 0; // Score from orthogonal created words
     var ltr;
-    var words = []; // array of word and orthogonal words created
+    var words = []; // Array of word and orthogonal words created
 
     for (var i=0; i<numl; ++i) {
         x = px+dx;
         y = py+dy;
 
         ltr = g_board[x][y];
-        if (ltr === "") {
-            // spaces in the middle of the word
-            return { played:"", msg:t("spaces in word.") };
-        }
+        // Spaces in the middle of the word?
+        if (ltr === '') return { played:'', msg:t('spaces in word.') };
 
-        xy = x+"_"+y;
+        xy = x + '_' + y;
         if (xy in isplacement) {
-            // check if orthogonal word created
+            // Check if orthogonal word created
             var pinfo = isplacement[xy];
             var bonus = g_boardmults[x][y];
             var lscr  = pinfo.lsc;
@@ -276,9 +254,8 @@ function checkValidPlacement( placement )
             wscore += lscr;
             wordmult *= g_wmults[bonus];
 
-            if ( orthinfo.score == -1 ) {
-                if (worderrs !== "")
-                    worderrs += ", ";
+            if ( orthinfo.score === -1 ) {
+                if (worderrs !== '') worderrs += ', ';
                 worderrs += orthinfo.word.toUpperCase();
             }
 
@@ -287,11 +264,10 @@ function checkValidPlacement( placement )
                 words.push(orthinfo.word);
             }
             //logit( "orthword:"+orthinfo.word+", score:"+orthinfo.score );
-
-        }
-        else
+        } else {
             // Add score of existing tile on board
             wscore += g_boardpoints[x][y];
+        }
 
         word += ltr;
         px += dx;
@@ -301,7 +277,7 @@ function checkValidPlacement( placement )
     // Add letters from board before placement
     var xpre = minx-dx;
     var ypre = miny-dy;
-    while (xpre>=0 && ypre>=0 && g_board[xpre][ypre] !== "") {
+    while (xpre>=0 && ypre>=0 && g_board[xpre][ypre] !== '') {
         ltr = g_board[xpre][ypre];
         wscore += g_boardpoints[xpre][ypre];
         word = ltr + word;
@@ -311,7 +287,7 @@ function checkValidPlacement( placement )
 
     var xpst = maxx+dx;
     var ypst = maxy+dy;
-    while (xpst<mbx && ypst<mby && g_board[xpst][ypst] !== "") {
+    while (xpst<mbx && ypst<mby && g_board[xpst][ypst] !== '') {
         ltr = g_board[xpst][ypst];
         wscore += g_boardpoints[xpst][ypst];
         word += ltr;
@@ -320,21 +296,20 @@ function checkValidPlacement( placement )
     }
 
     if (!(word in g_wordmap)) {
-        if (worderrs !== "")
-            worderrs += ", ";
+        if (worderrs !== '') worderrs += ', ';
         worderrs += word.toUpperCase();
     }
 
-    if (worderrs !== "") {
-        worderrs += t(" not found in dictionary.");
-        return { played:"", msg:worderrs };
+    if (worderrs !== '') {
+        worderrs = '<strong>' + worderrs + '</strong>';
+        worderrs += t(' not found in dictionary.');
+        return { played:'', msg:worderrs };
     }
 
-    if (!g_board_empty && oscore == 0 && word.length == placement.length) {
-        // No orthogonal words created and no extension to existing
-        // word created - this means that the new word isn't connected
-        // to anything.
-        return { played:"", msg:t("word not connected.") };
+    if (!g_board_empty && oscore === 0 && word.length === placement.length) {
+        // No orthogonal words created and no extension to existing word created;
+        // this means that the new word isn't connected to anything.
+        return { played:'', msg:t('word is not connected.') };
     }
 
     //logit( "created word is:"+ word);
@@ -345,38 +320,39 @@ function checkValidPlacement( placement )
     return { played:lplayed, score:score, words:words };
 }
 
-//---------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 function onPlayerClear()
 {
     g_bui.cancelPlayerPlacement();
 }
 
-//---------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 function onPlayerSwap()
 {
-    // If there were any tiles from the player's rack on the board
-    // put them back on the rack
+    // If there were any tiles from the player's rack on the board, put them
+    // back on the rack.
     var tilesLeft = g_letpool.length;
     if (tilesLeft === 0) {
-        g_bui.prompt( t("Sorry, no tiles left to swap.") );
+        g_bui.prompt( t('Sorry, no tiles left to swap.') );
         return;
     }
     g_bui.cancelPlayerPlacement();
     g_bui.showSwapModal( tilesLeft );
 }
 
-//---------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 function onPlayerSwapped( keep, swap )
 {
     if (swap.length === 0) {
         g_bui.setPlayerRack( keep );
-        // initialize redisp again
+        // Initialize REDISP again
         g_bui.makeTilesFixed();
         return;
     }
 
-    for (var i=0; i<swap.length; ++i)
+    for (var i=0; i<swap.length; ++i) {
         g_letpool.push( swap.charAt(i) );
+    }
 
     shuffle_pool();
 
@@ -386,25 +362,22 @@ function onPlayerSwapped( keep, swap )
     onPlayerMoved( true );
 }
 
-//---------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 function onPlayerMoved( passed )
 {
-    if (passed)
-        g_bui.cancelPlayerPlacement();
-
+    if (passed) g_bui.cancelPlayerPlacement();
     self.passed = passed;
     g_bui.showBusy();
     setTimeout( onPlayerMove, 100 );
 }
 
-//---------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 function find_first_move( opponent_rack, fx, fy )
 {
-    // Not going to bother finding the best possible
-    // word for the 1st move - just take some letter,
-    // put it on the board and see what can be built
+    // Not going to bother finding the best possible word for the 1st move;
+    // just take some letter, put it on the board, and see what can be built
     // around it.
-    var letters = opponent_rack.split("").sort();
+    var letters = opponent_rack.split('').sort();
     var foundv = false;
     var anchor = 0;
     for (var i=0; i<letters.length; ++i) {
@@ -417,8 +390,8 @@ function find_first_move( opponent_rack, fx, fy )
     var alet = letters[anchor];
     var aletscr = g_letscore[alet];
 
-    // The new rack is what is left after we remove the candidate
-    // letter from the starting rack and place it on the board.
+    // The new rack is what is left after we remove the candidate letter from
+    // the starting rack and place it on the board.
 
     letters.splice( anchor, 1 );
 
@@ -429,76 +402,68 @@ function find_first_move( opponent_rack, fx, fy )
     // Now fund best move assuming board has candidate letter on it
     var selword = { score:-1 };
 
-    if (fx > 0)
-        selword = findBestWord( opponent_rack, letters, fx-1, fy );
+    if (fx > 0) selword = findBestWord( opponent_rack, letters, fx-1, fy );
 
-    if (selword.score == -1 && fx>=0 && fx<g_board.length-1 )
-        selword = findBestWord( opponent_rack, letters, fx+1, fy );
+    if (selword.score === -1 && fx>=0 && fx<g_board.length-1 ) selword = findBestWord( opponent_rack, letters, fx+1, fy );
 
-    if (selword.score == -1) {
-        // no word found - remove traces from board
-        g_board[fx][fy] = "";
+    if (selword.score === -1) {
+        // No word found - remove traces from board
+        g_board[fx][fy] = '';
         g_boardpoints[fx][fy] = 0;
         return null;
     }
 
-    //----------------------------------------------------------------
-    // Patch the letter sequence points and the letter sequence
-    // so that the first letter we simulated as being on the
-    // board will also be included
+    //--------------------------------------------------------------------------
+    // Patch the letter sequence points and the letter sequence so that the
+    // first letter we simulated as being on the board will also be included.
     var pos = Math.abs(fx - selword.ax);
-    if (selword.ax < fx)
-        // sequence begins before simulated first letter on board -
-        // insert first letter score to its propper place
-        selword.lscrs.splice(pos, 0, aletscr);
-    else
-        // sequence begins after simulated first letter on board.
-        // It must be also first letter in word.
-        selword.lscrs.splice(0, 0, aletscr);
 
-    // In the case of the first move, the sequence of played letters
-    // and the word played are identical
+    // Sequence begins before simulated first letter on board; insert first
+    // letter score to its propper place
+    if (selword.ax < fx) selword.lscrs.splice(pos, 0, aletscr);
+    // Sequence begins after simulated first letter on board; it must be also
+    // first letter in word
+    else selword.lscrs.splice(0, 0, aletscr);
+
+    // In the case of the first move, the sequence of played letters and the
+    // word played are identical.
     selword.seq = selword.word;
-    //----------------------------------------------------------------
+    //--------------------------------------------------------------------------
 
-    // remove traces of simulating first letter on the board
-    g_board[fx][fy] = "";
+    // Remove traces of simulating first letter on the board
+    g_board[fx][fy] = '';
     g_boardpoints[fx][fy] = 0;
 
-    // Update the word score with the score of the anchor letter we
-    // placed to build the word on.
+    // Update the word score with the score of the anchor letter we placed to
+    // build the word on
     selword.score += aletscr;
     //g_bui.opponentPlay(fx, fy, alet, aletscr);
     return selword;
 }
 
-//---------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 function find_best_move( opponent_rack )
 {
     var num = opponent_rack.length;
     var letters = [];
-    for (var i=0; i<num; ++i)
+    for (var i=0; i<num; ++i) {
         letters[i] = opponent_rack.charAt(i);
+    }
 
     var board_best_score = -1;
     var board_best_word = null;
 
     for (var ax=0; ax<g_board.length; ++ax) {
         for (var ay=0; ay<g_board[ax].length; ++ay) {
-            if (g_board[ax][ay] !== "")
-                continue;
-
+            if (g_board[ax][ay] !== '') continue;
             //logit( "scanning:"+ax+","+ay );
-            // find the best possible word for board
-            // placement at coordinates ax,ay given
-            // the current set of letters
+            // Find the best possible word for board placement at coordinates
+            // ax,ay given the current set of letters
             var word = findBestWord( opponent_rack, letters, ax, ay );
-            if (word.score > -1)
-                logit( "Found word: "+word.word+" ("+letters+")" );
-
+            if (word.score > -1) logit( 'Found word: ' + word.word + ' (' + letters + ')' );
             if (board_best_score < word.score) {
-                // If this is better than all the board placements
-                // so far, update the best word information
+                // If this is better than all the board placements so far,
+                // update the best word information
                 board_best_score = word.score;
                 board_best_word = word;
             }
@@ -509,19 +474,21 @@ function find_best_move( opponent_rack )
     return board_best_word;
 }
 
-//---------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 function announceWinner()
 {
     var oleft = g_bui.getOpponentRack();
     var pleft = g_bui.getPlayerRack();
 
     var odeduct = 0;
-    for (var i=0; i<oleft.length; ++i)
+    for (var i=0; i<oleft.length; ++i) {
         odeduct += g_letscore[oleft.charAt(i)];
+    }
 
     var pdeduct = 0;
-    for (var i=0; i<pleft.length; ++i)
+    for (var i=0; i<pleft.length; ++i) {
         pdeduct += g_letscore[pleft.charAt(i)];
+    }
 
     g_oscore -= odeduct;
     g_pscore -= pdeduct;
@@ -530,21 +497,18 @@ function announceWinner()
     html += '<ul><li>';
     html += t('You: ') + g_pscore + '</li><li>' + t('Computer: ') + g_oscore + '</li></ul>';
     var msg = t('It\'s a draw!');
-    if (g_oscore > g_pscore)
-        msg = t('Computer wins.');
-    else
-    if (g_oscore < g_pscore)
-        msg = t('You win!');
+    if (g_oscore > g_pscore) msg = t('Computer wins.');
+    else if (g_oscore < g_pscore) msg = t('You win!');
     html += '<font size="+2">' + msg + '</font>';
     g_bui.prompt(html, '<span class="button" onclick="location.reload()">' + t('Play Again') + '</span>');
 }
 
-//---------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 function onPlayerMove()
 {
     var passed = self.passed;
     if (passed) {
-        ++g_passes; // increase consecutive opponent passes
+        ++g_passes; // Increase consecutive opponent passes
         if (g_passes>=g_maxpasses) {
             announceWinner();
             return;
@@ -562,15 +526,15 @@ function onPlayerMove()
         var placement = g_bui.getPlayerPlacement();
         var pinfo = checkValidPlacement( placement );
         var pstr = pinfo.played;
-        if ( pstr === "" ) {
-            g_bui.prompt( t("Sorry, ") + pinfo.msg );
+        if ( pstr === '' ) {
+            g_bui.prompt( t('Sorry, ') + pinfo.msg );
             return;
         }
 
         //logit( "player placement chars:" + pstr );
         g_bui.acceptPlayerPlacement();
-        g_board_empty = false; // placement made
-        g_passes = 0; // reset consecutive passes
+        g_board_empty = false; // Placement made
+        g_passes = 0; // Reset consecutive passes
 
         if (pstr.length == g_racksize)
             g_pscore += g_allLettersBonus;
@@ -584,35 +548,33 @@ function onPlayerMove()
         var pletters = g_bui.getPlayerRack();
         //logit( "left on player rack:" + pletters );
         pletters = takeLetters(pletters);
-        if (pletters === "") {
-            // All tiles were played and nothing left
-            // in the tile pool
+        if (pletters === '') {
+            // All tiles were played and nothing left in the tile pool
             announceWinner();
             return;
         }
         //logit( "setting player rack to:" + pletters );
         g_bui.setPlayerRack( pletters );
         g_bui.setTilesLeft( g_letpool.length );
-    }
-    else {
-        // put back whatever was placed on the board
+    } else {
+        // Put back whatever was placed on the board
         g_bui.cancelPlayerPlacement();
         //logit( "after cancel, left on player rack:" + g_bui.getPlayerRack() );
     }
 
     var ostr = g_bui.getOpponentRack();
-    g_opponent_has_joker = ostr.search("\\*") != -1;
+    g_opponent_has_joker = ostr.search('\\*') !== -1;
     g_playlevel = g_bui.getPlayLevel();
 
-    logit( "Opponent rack has: " + ostr );
+    logit( 'Opponent rack has: ' + ostr );
 
     var play_word;
     if ( g_board_empty ) {
         var start = g_bui.getStartXY();
         play_word = find_first_move( ostr, start.x, start.y );
-    }
-    else
+    } else {
         play_word = find_best_move( ostr );
+    }
 
     //logit( "opponent word is:" + play_word.word );
 
@@ -620,58 +582,53 @@ function onPlayerMove()
     {
         g_bui.makeTilesFixed();
         //g_bui.hideBusy();
-        // create the array of word and created orthogonal
-        // words created by opponent move.
+        // Create the array of word and created orthogonal words created by
+        // opponent move.
         var words = play_word.owords;
         words.push( play_word.word );
 
-        // and send it to the played history window
+        // And send it to the played history window
         g_bui.addToHistory(words, 2);
 
         var score = play_word.score;
         g_oscore += score;
-        if (play_word.seq.length == g_racksize)
-                g_oscore += g_allLettersBonus;
+        if (play_word.seq.length === g_racksize) g_oscore += g_allLettersBonus;
         g_bui.setOpponentScore( score, g_oscore );
 
         var played = play_word.seq;
 
-        var letters_used = "";
+        var letters_used = '';
         for (var i=0; i<played.length; ++i) {
             var pltr = played.charAt(i);
-            if (ostr.search(pltr) > -1)
-                    letters_used += pltr;
-                else
-                    letters_used += "*";
+            if (ostr.search(pltr) > -1) letters_used += pltr;
+            else letters_used += '*';
         }
         g_bui.removefromOpponenentRack( letters_used );
 
-        // get letters from pool as number of missing letters
+        // Get letters from pool as number of missing letters
         var letters_left = g_bui.getOpponentRack();
-        logit( "Opponent rack left with: " + letters_left);
+        logit( 'Opponent rack left with: ' + letters_left );
         var newLetters = takeLetters(letters_left);
-        if (newLetters === "") {
+        if (newLetters === '') {
             // All tiles taken, nothing left in tile pool
             announceWinner();
             return;
         }
-        logit( "After taking letters, opponent rack is: " + newLetters);
+        logit( 'After taking letters, opponent rack is: ' + newLetters );
         g_bui.setOpponentRack( newLetters );
         g_bui.setTilesLeft( g_letpool.length );
     };
 
-
     if (play_word !== null) {
         placeOnBoard( play_word, animCallback );
-        g_passes = 0; // reset consecutive opponeny passes
-    }
-    else {
+        g_passes = 0; // Reset consecutive opponeny passes
+    } else {
         //g_bui.hideBusy();
-        ++g_passes; // increase consecutive opponent passes
-        if (g_passes >= g_maxpasses)
+        ++g_passes; // Increase consecutive opponent passes
+        if (g_passes >= g_maxpasses) {
             announceWinner();
-        else {
-            g_bui.prompt( t("I pass, your turn.") );
+        } else {
+            g_bui.prompt( t('I pass, your turn.') );
             g_bui.makeTilesFixed();
         }
         return;
@@ -679,7 +636,7 @@ function onPlayerMove()
 
 }
 
-//---------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 function findBestWord( rack, letters, ax, ay )
 {
     //var t1 = +new Date();
@@ -688,7 +645,7 @@ function findBestWord( rack, letters, ax, ay )
 
     var bestscore = -1;
     var bestword = {score:-1};
-    var dirs = ["x","y"];
+    var dirs = ['x','y'];
     for (var dir in dirs) {
         var xy = dirs[dir];
         //logit( "direction:" + xy );
@@ -709,73 +666,68 @@ function findBestWord( rack, letters, ax, ay )
         }
     }
 
-    // var t2 = +new Date();
-    // logit( "Time for findBestWord:"+(t2-t1) );
+    //var t2 = +new Date();
+    //logit( "Time for findBestWord:"+(t2-t1) );
 
     return bestword;
 }
 
-//---------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 function getBestScore( regex, letters, ax, ay )
 {
     var rletmap = {};
     var numjokers = 0;
     for (var i=0; i<letters.length; ++i) {
         var ltr = letters[i];
-        if (ltr == "*") // joker
-            ++numjokers;
-        else
-        if (!(ltr in rletmap))
-            rletmap[ltr]=1;
-        else
-            ++rletmap[ltr];
+        // Joker
+        if (ltr === '*') ++numjokers;
+        else if (!(ltr in rletmap)) rletmap[ltr] = 1;
+        else ++rletmap[ltr];
     }
 
     var bestscore = -1;
     var bestword = { score:-1 };
 
-    if (regex.max - 1 >= g_wstr.length)
-        return bestword;
+    if (regex.max - 1 >= g_wstr.length) return bestword;
 
-    var regexp = new RegExp(regex.rgx, "g");
+    var regexp = new RegExp(regex.rgx, 'g');
     var match, matches;
     var req_seq, word;
 
     for (var wlc=regex.min-2; wlc<regex.max-1; ++wlc) {
         var id = regex.rgx + wlc;
-        if (id in g_matches_cache)
+        if (id in g_matches_cache) {
             matches = g_matches_cache[id];
-        else {
+        } else {
             matches = [];
             while ((match=regexp.exec(g_wstr[wlc]))!==null) {
-                // go over all matching regex groups for this word
-                // (g_wstr[wlc]), and save the required letters
-                req_seq = "";
+                // Go over all matching regex groups for this word
+                // (g_wstr[wlc]) and save the required letters
+                req_seq = '';
                 //g_timers.begin( "req_seq using loop" );
                 for (var i=1; i<match.length; ++i) {
-                    if (match[i]) // ignore the groups with 'undefined'
-                        req_seq += match[i];
+                    // Ignore the groups with 'undefined'
+                    if (match[i]) req_seq += match[i];
                 }
                 //g_timers.pause( "req_seq using loop" );
-                // save the word and the missing letters
+                // Save the word and the missing letters
                 var mseq = match[0];
-                // remove the marker symbols for the regex match
+                // Remove the marker symbols for the regex match
                 word = mseq.substr(1,mseq.length-2);
-                matches.push({word:word, reqs:req_seq});
+                matches.push({ word:word, reqs:req_seq });
             }
 
-            // cache the regexp word match and required letters
+            // Cache the regexp word match and required letters
             g_matches_cache[id] = matches;
         }
 
         for (var j=0; j<matches.length; ++j) {
 
-            // we have a word that matches the required regular expression
-            // check if we have matching letters for the sequence of missing
-            // letters found in the regular expression for this word
+            // We have a word that matches the required regular expression check
+            // if we have matching letters for the sequence of missing letters
+            // found in the regular expression for this word.
 
-            // create a count of the letters available to play
-
+            // Create a count of the letters available to play
             var seq_lscrs = [];
 
             req_seq = matches[j].reqs;
@@ -792,44 +744,40 @@ function getBestScore( regex, letters, ax, ay )
             for (var i=0; i<req_seq.length; ++i) {
                 var rlet = req_seq.charAt(i);
                 //if (rlet in letmap && letmap[rlet]>0 ) {
-                // the above is not necessary due to regex optmizations
+                // The above is not necessary due to regex optimizations
                 if ( letmap[rlet]>0 ) {
                     --letmap[rlet];
                     seq_lscrs.push(g_letscore[rlet]);
-                }
-                else {
-                    // we don't have a letter required for this word
-                    // or we don't have enough of this type of letter
+                } else {
+                    // We don't have a letter required for this word or we don't
+                    // have enough of this type of letter
                     if (jokers === 0) {
-                        // and no jokers either - can't create
-                        // this word.
+                        // And no jokers either - can't create this word
                         ok = false;
                         break;
                     }
-                    // a joker is required
+                    // A joker is required
                     --jokers;
-                    seq_lscrs.push(0); // no points for joker
+                    seq_lscrs.push(0); // No points for joker
                 }
             }
 
-            if (!ok)
-                // Can't create this word, continue to the next one
-                continue;
-
+            // Continue to the next one if can't create this word
+            if (!ok) continue;
 
             // We have all the letters required to create this word
             var wordinfo   = { word:word, ax:ax, ay:ay };
-            wordinfo.seq   = req_seq;     // sequence to put on board
-            wordinfo.lscrs = seq_lscrs;   // sequence letter scores
-            wordinfo.ps    = regex.ps;    // index of word start
-            wordinfo.xy    = regex.xy;    // direction of scan
-            wordinfo.prec  = regex.prec;  // letters before anchor
+            wordinfo.seq   = req_seq;    // Sequence to put on board
+            wordinfo.lscrs = seq_lscrs;  // Sequence letter scores
+            wordinfo.ps    = regex.ps;   // Index of word start
+            wordinfo.xy    = regex.xy;   // Direction of scan
+            wordinfo.prec  = regex.prec; // Letters before anchor
 
             //g_timers.begin( "getWordScore" );
             // getWordScore will return the total score of all the orthogonal
             // created words from placing this word. It will also populate
-            // wordinfo with a new field words, which will contain the array
-            // of the valid created orthogonal words (if score>0)
+            // wordinfo with a new field words, which will contain the array of
+            // the valid created orthogonal words (if score>0).
             var score = getWordScore( wordinfo );
             //g_timers.pause( "getWordScore" );
 
@@ -845,10 +793,10 @@ function getBestScore( regex, letters, ax, ay )
     return bestword;
 }
 
-//---------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 function getWordScore( wordinfo )
 {
-    var xdir = (wordinfo.xy == "x");
+    var xdir = (wordinfo.xy === 'x');
     var ax   = wordinfo.ax;
     var ay   = wordinfo.ay;
     var ap   = xdir ? ax : ay;
@@ -868,38 +816,35 @@ function getWordScore( wordinfo )
     if (xdir) {
         x = ps;
         y = ay;
-    }
-    else {
+    } else {
         x = ax;
         y = ps;
     }
 
-    var owords = []; // list of valid orthogonal words created with this move
-    var wscore = 0;  // word score
-    var oscore = 0;  // orthogonal created words score
+    var owords = []; // List of valid orthogonal words created with this move
+    var wscore = 0;  // Word score
+    var oscore = 0;  // Orthogonal created words score
 
     var lscores = wordinfo.lscrs;
-    var locs = "x"+x+"y"+y+"d"+wordinfo.xy;
+    var locs = 'x' + x + 'y' + y + 'd' + wordinfo.xy;
 
     var wordmult  = 1;
 
     while (ps < max) {
-        if (g_board[x][y] === "") {
-            var lscr = lscores[seqc]; // score of letter in sequence
-            var lseq = seq.charAt(seqc++);   // the letter itself.
+        if (g_board[x][y] === '') {
+            var lscr = lscores[seqc]; // Score of letter in sequence
+            var lseq = seq.charAt(seqc++); // The letter itself
 
             // Add score of newly placed tile
             var bonus = g_boardmults[x][y];
 
-            // calculate the ortagonal word score
+            // Calculate the orthogonal word score
             var ows = getOrthWordScore( lseq, lscr, x, y, dx, dy );
 
-            if (ows.score == -1)
-                // an invalid orthogonal word was created.
-                return -1;
+            // An invalid orthogonal word was created?
+            if (ows.score === -1) return -1;
 
-            if (ows.score > 0)
-                owords.push( ows.word );
+            if (ows.score > 0) owords.push( ows.word );
 
             wordmult *= g_wmults[bonus];
             lscr     *= g_lmults[bonus];
@@ -909,16 +854,14 @@ function getWordScore( wordinfo )
             x += dx;
             y += dy;
             ++ps;
-            if (seqc == seq.length)
-                // all letters and possibly created words
-                // have been checked
-                break;
-        }
-        else
+            // All letters and possible created words have been checked?
+            if (seqc == seq.length) break;
+        } else {
             // Add score of existing tile on board
             wscore += g_boardpoints[x][y];
+        }
 
-        while (ps<max && g_board[x][y] !== "") {
+        while (ps<max && g_board[x][y] !== '') {
             x += dx;
             y += dy;
             ++ps;
@@ -928,14 +871,13 @@ function getWordScore( wordinfo )
     //logit( "word:" + wordinfo.word + ", mult:" + wordmult );
     wscore *= wordmult;
 
-    if (seq.length == g_racksize)
-        wscore += g_allLettersBonus;
+    if (seq.length === g_racksize) wscore += g_allLettersBonus;
 
     wordinfo.owords = owords;
     return wscore+oscore;
 }
 
-//---------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 function getOrthWordScore( lseq, lscr, x, y, dx, dy )
 {
     var wordmult = 1;
@@ -947,8 +889,8 @@ function getOrthWordScore( lseq, lscr, x, y, dx, dy )
     var xmax = g_board.length;
     var ymax = g_board[x].length;
 
-    // If not already there, pretend weve placed the orhagonal anchor on
-    // the board so we can include it when scanning the ortagonal word
+    // If not already there, pretend we've placed the orthogonal anchor on the
+    // board so we can include it when scanning the orthogonal word
     var lsave = g_board[wx][wy];
     var ssave = g_boardpoints[wx][wy];
 
@@ -959,18 +901,17 @@ function getOrthWordScore( lseq, lscr, x, y, dx, dy )
     g_board[wx][wy] = lseq;
     g_boardpoints[wx][wy] = lscr;
 
-
     //logit("checking orth:"+[lseq,x,y]);
-    while (x>=0 && y>=0 && g_board[x][y]!=="") {
+    while (x>=0 && y>=0 && g_board[x][y]!=='') {
         x -= dy;
         y -= dx;
     }
-    if (x<0 || y<0 || g_board[x][y]==="") {
+    if (x<0 || y<0 || g_board[x][y]==='') {
         x += dy;
         y += dx;
     }
-    var orthword = "";
-    while (x<xmax && y<ymax && g_board[x][y]!=="") {
+    var orthword = '';
+    while (x<xmax && y<ymax && g_board[x][y]!=='') {
         var letter = g_board[x][y];
         score += g_boardpoints[x][y];
         orthword += letter;
@@ -978,17 +919,15 @@ function getOrthWordScore( lseq, lscr, x, y, dx, dy )
         y += dx;
     }
 
-    // Orthogonal word built - we can now go back to the previous
-    // value on the board in the position of the orthogonal anchor
+    // Orthogonal word built - we can now go back to the previous value on the
+    // board in the position of the orthogonal anchor
     g_board[wx][wy] = lsave;
     g_boardpoints[wx][wy] = ssave;
 
-    if (orthword.length == 1)
-        // the letter does not form an orthogonal word.
-        return {score:0, word:orthword };
+    // The letter does not form an orthogonal word?
+    if (orthword.length === 1) return { score:0, word:orthword };
 
-    if (!(orthword in g_wordmap))
-        return {score:-1, word:orthword };
+    if (!(orthword in g_wordmap)) return { score:-1, word:orthword };
 
     score *= wordmult;
 
@@ -996,14 +935,14 @@ function getOrthWordScore( lseq, lscr, x, y, dx, dy )
     return { score:score, word:orthword };
 }
 
-//---------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 function placeOnBoard( word, animCallback )
 {
     var lcount = 0;
     var seqlen = word.seq.length;
     var dx = 1;
     var dy = 0;
-    if (word.xy=="y") {
+    if (word.xy==='y') {
         dx = 0;
         dy = 1;
     }
@@ -1011,10 +950,10 @@ function placeOnBoard( word, animCallback )
     var y = word.ay;
     var placements = [];
     while (lcount < seqlen) {
-        if (g_board[x][y] === "") {
+        if (g_board[x][y] === '') {
             var lscr = word.lscrs[lcount];
             var ltr  = word.seq.charAt(lcount++);
-            placements.push({x:x, y:y, ltr:ltr, lscr:lscr});
+            placements.push({ x:x, y:y, ltr:ltr, lscr:lscr });
             //g_bui.opponentPlay(x, y, ltr, lscr);
         }
         x += dx;
@@ -1026,30 +965,28 @@ function placeOnBoard( word, animCallback )
     g_board_empty = false;
 }
 
-//---------------------------------------------------------------------------
-// Get regular expression that matches all the words that qualify being
-// in the set of words that place the first letter on the board at anchor
-// position ax,ay in direction dir using at most numlets number of letters.
+//------------------------------------------------------------------------------
+// Get regular expression that matches all the words that qualify being in the
+// set of words that place the first letter on the board at anchor position
+// ax,ay in direction dir using at most numlets number of letters.
 
 function getRegex( dir, ax, ay, rack )
 {
-    // deX........  => /de[a-z]{1,7}/g
-    // ..eX.m.....  => /e[a-z]{2}m[a-z]{0,3}/g
-    // ...X.m..p..  => /e[a-z]m[a-z]{2}p[a-z]{0,2}/g
+    // deX........ => /de[a-z]{1,7}/g
+    // ..eX.m..... => /e[a-z]{2}m[a-z]{0,3}/g
+    // ...X.m..p.. => /e[a-z]m[a-z]{2}p[a-z]{0,2}/g
 
-    // r = new RegExp("de[a-z]{1,7}", "g")
-    // word.match(r); // returns null if nothing found
-    var letrange = "["+rack+"]";
-    if (g_opponent_has_joker)
-        letrange = g_letrange;
+    //r = new RegExp("de[a-z]{1,7}", "g")
+    //word.match(r); // Returns null if nothing found
+    var letrange = '[' + rack + ']';
+    if (g_opponent_has_joker) letrange = g_letrange;
 
     var numlets = rack.length;
 
-    if (g_board[ax][ay] !== "")
-        // There already a letter on the board here
-        return null;
+    // There's already a letter on the board here?
+    if (g_board[ax][ay] !== '') return null;
 
-    var xdir = (dir == "x");
+    var xdir = dir==='x';
 
     var ap = xdir ? ax : ay;
 
@@ -1058,80 +995,71 @@ function getRegex( dir, ax, ay, rack )
     var dx = xdir ? 1 : 0;
     var dy = 1 - dx;
 
-    //--------------------------------------------------------------------
-    // check that there is some letter on the board
-    // that we can connect to
+    //--------------------------------------------------------------------------
+    // Check that there is some letter on the board that we can connect to
     var ok = false;
 
-    var l_x = ax - dx; // board position to left of x
-    var a_y = ay - dy; // board position above y
+    var l_x = ax - dx; // Board position to left of x
+    var a_y = ay - dy; // Board position above y
 
-    if (ap>0 && g_board[l_x][a_y] !== "")
-        // Either placement to left of x or
-        // above y has a letter on board
-        ok = true;
+    // Either placement to left of x or above y has a letter on board?
+    if (ap>0 && g_board[l_x][a_y] !== '') ok = true;
 
-    // Start scanning for letters on board from parallel lines
-    // staring at position ax+1,ay or ax,ay+1
-    var sc = ap;  // sc: short for scan
+    // Start scanning for letters on board from parallel lines staring at
+    // position ax+1,ay or ax,ay+1
+    var sc = ap; // sc: short for scan
     var scx = ax+dx;
     var scy = ay+dy;
 
-    // by default, set the minimum location of the first
-    // letter found in the parallel line search to be
-    // higher than any possible minimum found when building
-    // the regex, so that if no minimum is found in the
-    // parallel scan, the minimum from the regex creation
-    // will be used.
+    // By default, set the minimum location of the first letter found in the
+    // parallel line search to be higher than any possible minimum found when
+    // building the regex, so that if no minimum is found in the parallel scan,
+    // the minimum from the regex creation will be used.
     var sminpos = max;
     var empty;
 
-    if (!ok)
-        empty = 0;
-        // No board letters to the left or above anchor, check
-        // if lines parallel to direction have letters in them.
-        while (sc < max-1) {
-            if ( g_board[scx][scy] !== "" ) {
-                ok = true;
-                break;
-            }
-            else
-                ++empty;
+    if (!ok) empty = 0;
 
-            if (empty > numlets)
-                // we can't get further than this point
-                // with the number of letters we have
-                break;
-
-            a_y = scy-dx;  // x line above y
-            l_x = scx-dy;  // y line left of x
-            var b_y = scy+dx;  // x line below y
-            var r_x = scx+dy;  // y line right of x
-            if ( l_x>=0 && a_y>=0 && g_board[l_x][a_y] !== "" ||
-                 r_x<max && b_y<max && g_board[r_x][b_y] !== "" ) {
-                // found a board letter to the left or
-                // above the scanned line.
-                sminpos = sc + 1;
-                ok = true;
-                break;
-            }
-
-            scx += dx;
-            scy += dy;
-            ++sc;
+    // No board letters to the left or above anchor, check if lines parallel to
+    // direction have letters in them.
+    while (sc < max-1) {
+        if ( g_board[scx][scy] !== '' ) {
+            ok = true;
+            break;
+        } else {
+            ++empty;
         }
 
-    if (!ok)
-        // No letters that we can connect to from ax,ay
-        return null;
+        // Stop if we can't get further than this point with the number of
+        // letters that we have
+        if (empty > numlets) break;
 
-    //----------------------------------------------------------------------
+        a_y = scy-dx; // x line above y
+        l_x = scx-dy; // y line left of x
+        var b_y = scy+dx; // x line below y
+        var r_x = scx+dy; // y line right of x
+        if ( l_x>=0 && a_y>=0 && g_board[l_x][a_y] !== '' || r_x<max && b_y<max && g_board[r_x][b_y] !== '' ) {
+            // Found a board letter to the left or above the scanned line
+            sminpos = sc + 1;
+            ok = true;
+            break;
+        }
+
+        scx += dx;
+        scy += dy;
+        ++sc;
+    }
+
+    // No letters that we can connect to from ax,ay?
+    if (!ok) return null;
+
+    //--------------------------------------------------------------------------
     // Find any letters immediately preceeding the first placement location
 
     var ps = ap - 1;
     var xs = ax - dx;
     var ys = ay - dy;
-    while (ps>=0 && g_board[xs][ys]!=="") {
+    while (ps>=0 && g_board[xs][ys]!=='') {
         xs -= dx;
         ys -= dy;
         --ps;
@@ -1139,107 +1067,98 @@ function getRegex( dir, ax, ay, rack )
 
     if (ps < 0) {
         ps = 0;
-        if (xs < 0)
-            xs = 0;
-        else
-        if (ys < 0)
-            ys = 0;
+        if (xs < 0) xs = 0;
+        else if (ys < 0) ys = 0;
     }
 
-    var prev = "";
+    var prev = '';
     for (var i=ps; i<ap; ++i) {
         prev += g_board[xs][ys];
         xs += dx;
         ys += dy;
     }
-    // prev now contains the sequence of letters that immediatly preceede
-    // the anchor position (either above it or to it's left, depending on
-    // the direction context).
+    // prev now contains the sequence of letters that immediatly preceede the
+    // anchor position (either above it or to it's left, depending on the
+    // direction context).
 
-    //--------------------------------------------------------------------
-    // Generate the regular expression for the possible words
-    // starting at ax,ay using direction dir. Also calculate minimum
-    // word size, maximum word size and word starting position.
+    //--------------------------------------------------------------------------
+    // Generate the regular expression for the possible words starting at ax,ay
+    // using direction dir. Also calculate minimum word size, maximum word size,
+    // and word starting position.
 
     var x = ax; // x anchor coordinate
     var y = ay; // y anchor coordinate
-    var p = ap; // either ax or ay, depending on the context
+    var p = ap; // Either ax or ay, depending on the context
 
-    var mws = "_"; // "^"; // marker for word start
-    var mwe = "_"; // "$"; // marker for word end
+    var mws = '_'; //'^'; // Marker for word start
+    var mwe = '_'; //'$'; // Marker for word end
     var regex = mws+prev; // regexp match
-    var regex2 = ""; // another possible match
+    var regex2 = ''; // Another possible match
     var letters = 0;
-    var blanks  = 0;
+    var blanks = 0;
 
-    var minl    = 0; // minimum word length that can be created
-    var minplay = 1; // no letters were played yet
+    var minl = 0; // Minimum word length that can be created
+    var minplay = 1; // No letters were played yet
 
-    var countpost; // flag to include letters in line for minl count
+    var countpost; // Flag to include letters in line for minl count
 
     var prevlen = prev.length;
 
     var flpos = ap;
     var l;
-    // iterate over word letters
+    // Iterate over word letters
     while ( p < max ) {
         // l is the letter at position x,y on the board
         l = g_board[x][y];
-        if (l === "") {
+        if (l === '') {
             // There is no letter at board position x,y
             if (p==ap && prevlen>0) {
                 minl = prevlen + 1;
-                // start adding additional board
-                // letters to minimum word length
+                // Start adding additional board letters to minimum word length
                 countpost = true;
-            }
-            else
-                // stop adding additional board
-                // letters to minimum word length
+            } else {
+                // Stop adding additional board letters to minimum word length
                 countpost = false;
+            }
 
             ++blanks;
-            if (letters == numlets)
-                break;
+            if (letters === numlets) break;
             ++letters;
-        }
-        else {
+        } else {
             if (blanks > 0) {
-                regex += "(" + letrange;
+                regex += '(' + letrange;
                 if (blanks > 1) {
-                    // If there are letters before the anchor position
-                    // and two or more free spaces, we can add another
-                    // match for a shorter word without the connecting
-                    // to additional letters in same line on board.
-                    // For example, the following:
+                    // If there are letters before the anchor position and two
+                    // or more free spaces, we can add another match for a
+                    // shorter word without the connecting to additional letters
+                    // in same line on board. For example,
+                    //
                     // ..ad..sing (two blanks after d)
-                    // Should make it possible to find ..adD.sing
-                    // and also ..adVIsing, so the search should match
-                    // _ad([a-z]{1})_  or _ad([a-z]{2})sing_
-                    if (prev !== "") {
-                        regex2 = "|"+regex;
-                        if (blanks > 2)
-                            regex2 += "{1,"+(blanks-1)+"}";
-                        regex2 += ")"+mwe;
+                    //
+                    // should make it possible to find ..adD.sing and also
+                    // ..adVIsing, so the search should match _ad([a-z]{1})_  or
+                    // _ad([a-z]{2})sing_
+                    if (prev !== '') {
+                        regex2 = '|' + regex;
+                        if (blanks > 2) regex2 += '{1,' + (blanks-1) + '}';
+                        regex2 += ')' + mwe;
                     }
-                    regex += "{" + blanks + "}";
+                    regex += '{' + blanks + '}';
                 }
-                regex += ")"; // close group capture
+                regex += ')'; // Close group capture
                 if (minl === 0) {
                     minl = prevlen + blanks;
-                    // start adding additional board
-                    // letters to minimum word length
+                    // Start adding additional board letters to minimum word
+                    // length
                     countpost = true;
                 }
-                if (countpost && flpos==ap)
-                    // save 1st letter position
-                    flpos = p;
+                // Save 1st letter position?
+                if (countpost && flpos==ap) flpos = p;
                 blanks = 0;
             }
             regex += l;
-            if (countpost)
-                ++minl;
-            minplay = 0; // letters were played
+            if (countpost) ++minl;
+            minplay = 0; // Letters were played
         }
         x += dx;
         y += dy;
@@ -1248,70 +1167,63 @@ function getRegex( dir, ax, ay, rack )
 
     if (blanks > 0) {
         // Last place was a blank
-        regex += "(" + letrange;
-        if (p == max)
-            // and it was the end of the board
-            regex += "{"+minplay+","+blanks+"}";
-        else {
-            // used all the letters before
-            // reaching the end of the board
+        regex += '(' + letrange;
+        if (p === max) {
+            // And it was the end of the board
+            regex += '{' + minplay + ',' + blanks + '}';
+        } else {
+            // Used all the letters before reaching the end of the board;
             // check the next board space
-            if (g_board[x][y] === "")
-                regex += "{"+minplay+","+blanks+"}";
-            else {
-                regex += "{"+blanks+"}";
+            if (g_board[x][y] === '') {
+                regex += '{' + minplay + ',' + blanks + '}';
+            } else {
+                regex += '{' + blanks + '}';
                 for (var i=p+1; i<max; ++i) {
                     l = g_board[x][y];
-                    if (l === "") break;
+                    if (l === '') break;
                     regex += l;
                     x += dx;
                     y += dy;
                 }
             }
         }
-        regex += ")";  // close group capture
+        regex += ')'; // Close group capture
     }
 
-    // flpos - position of first letter that was found
-    //         when generating the regex
+    // flpos - position of first letter that was found when generating the regex
     // sminpos - first letter found in parallel line scan
     //logit( "flpos="+flpos+", sminpos="+sminpos );
-    if (flpos == ap)
-        // no first letter was found in the regex scan.
+    if (flpos === ap) {
+        // No first letter was found in the regex scan
 
         // Are there any letters before the anchor ?
-        if (prev !== "")
-            //  yes - then the minimum is one more
-            minl = prevlen + 1;
-        else
-            // No, then set the minimum word length to
-            // be the distance to the first letter found
-            // in the parallel line scan.
-            minl = sminpos - ap + 1;
-    else {
+        // If yes, then the minimum is one more
+        if (prev !== '') minl = prevlen + 1;
+        // If no, then set the minimum word length to be the distance to the
+        // first letter found in the parallel line scan
+        else minl = sminpos - ap + 1;
+    } else {
         var mindiff = flpos - sminpos;
-        if ( mindiff > 1 )
-            // If the regex scan first letter position is at a
-            // distance of two or more further from the parallel
-            // scan first letter position, then the minimum word
-            // length is the distance from the anchor to the first
-            // letter found in the parallel scan.
-            minl -= mindiff;
+        // If the regex scan first letter position is at a distance of two or
+        // more further from the parallel scan first letter position, then the
+        // minimum word length is the distance from the anchor to the first
+        // letter found in the parallel scan.
+        if (mindiff > 1) minl -= mindiff;
     }
 
     var s = ap-prev.length;
     var maxl = p-s;
 
-    // if there was another possible match then add it
+    // If there was another possible match, then add it
     regex += mwe + regex2;
 
-    // eg: {rgx: "^am[a-z]{2}t$", xs: 0, min: 3, max: 5, prf: "am"}
+    // Example: { rgx: '^am[a-z]{2}t$', xs: 0, min: 3, max: 5, prf: 'am' }
     // will be returned for |am*.t|
     // TODO: optimize by eliminating length 4 in this case
-    var res  = { rgx:regex, ps:s, min:minl, max:maxl };
+    var res = { rgx:regex, ps:s, min:minl, max:maxl };
     res.prec = prev;
-    res.xy   = dir;
+    res.xy = dir;
     return res;
 }
 
-window["init"] = init;
+window['init'] = init;

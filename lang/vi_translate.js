@@ -33,6 +33,7 @@ var translation_map = {
   'Swap': 'Swap',
   'Tiles left:': 'Tiles left:',
   'Word definitions not enabled.': 'Word definitions not enabled.',
+  'word is not connected.': 'word is not connected.',
   'word must be horizontal or vertical.': 'word must be horizontal or vertical.',
   'Words played:': 'Words played:',
   'You win!': 'You win!',
