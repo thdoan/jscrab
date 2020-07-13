@@ -210,7 +210,7 @@ function RedipsUI()
         html += hr;
 
         html += '</table>';
-        html += '<div id="footer">' + t('Feedback?') + ' <a href="mailto:winter1977@gmail.com?subject=Ô Chữ Tiếng Việt">winter1977@gmail.com</a></div>';
+        html += '<div id="footer">' + t('Feedback?') + ' <a href="mailto:winter1977@gmail.com?subject=Vietboard">winter1977@gmail.com</a></div>';
         html += '</td></tr></table>';
         dget('uidiv').innerHTML = html;
 

@@ -1,6 +1,6 @@
 @echo off
 setlocal
-set target=build
+set target=play
 AjaxMin.exe -clobber css\style.css css\submodal.css -out %target%\css\styles.min.css
 AjaxMin.exe -inline:no -clobber -term lang\vi_wordlist.js lang\vi_defs.js lang\vi_letters.js lang\vi_translate.js src\submodal.js src\sizzle.js src\redipsdrag.js src\bonuses.js src\ui.js src\engine.js -out %target%\js\app.min.js
 copy /y index.html %target%
