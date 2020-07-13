@@ -5,6 +5,24 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <title>Vietboard : Ô Chữ Tiếng Việt</title>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-RY3TDJ1NZ9"></script>
+<script>
+// GA
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-RY3TDJ1NZ9');
+// App
+var t1 = +(new Date());
+function _init() {
+  if (!document.querySelectorAll) document.querySelectorAll = Sizzle;
+  init('idBoard');
+}
+function logit(str) {
+  window.console && console.log(str);
+}
+</script>
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/submodal.css">
 <link rel="apple-touch-icon" sizes="180x180" href="../favicon/apple-touch-icon.png">
@@ -19,16 +37,6 @@
 <meta name="msapplication-config" content="../favicon/browserconfig.xml">
 <meta name="theme-color" content="#d4c462">
 <meta name="description" content="Vietboard is a Vietnamese Scrabble-type game (Ô Chữ Tiếng Việt) played against the computer.">
-<script>
-var t1 = +(new Date());
-function _init() {
-  if (!document.querySelectorAll) document.querySelectorAll = Sizzle;
-  init('idBoard');
-}
-function logit(str) {
-  window.console && console.log(str);
-}
-</script>
 </head>
 <body onload="_init()" onselectstart="return false;">
 <div id="uidiv"></div>
