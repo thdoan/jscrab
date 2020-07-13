@@ -12,6 +12,14 @@ Corrections and comments are welcome by [sending an email](mailto:winter1977@gma
 
 - Localized to Vietnamese language
 - Added ability to use compound words via the Space tile (fundamental to Vietnamese vocabulary)
+- Optimized images using [RIOT](https://riot-optimizer.com/)
+- Changed computer tile border to solid for consistency
+- Moved `index.html` to root
+- Added sound effects
+- Deleted unused JavaScript files
+- Optimized JavaScript code and prepared it for minification
+- Added local build script (concatenates and minifies)
+- Fixed a couple of missing translation strings and miscellaneous typos
 - Increased rack size to eight tiles (improves playability in Vietnamese)
 - Replaced hard-coded `g_wstr` with a dynamically created list
 - Improved modal dialog spacing
@@ -26,7 +34,9 @@ Corrections and comments are welcome by [sending an email](mailto:winter1977@gma
 - Added ability to remember selected computer level
 - Added feedback footer link
 - Increased to 10 difficulty levels that have a smoother progression
-- Added favicon
+- Fixed move cursor shown for computer tiles
+- Added icon effect on mouse hover
+- Added favicon for all platforms
 
 ## Dependencies for local build
 
