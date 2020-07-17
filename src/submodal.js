@@ -18,7 +18,7 @@ var gLoading = 'loading.html';
 
 var gTabIndexes = [];
 // Pre-defined list of tags we want to disable/enable tabbing into
-var gTabbableTags = new Array('A','BUTTON','TEXTAREA','INPUT','IFRAME');
+var gTabbableTags = new Array('A', 'BUTTON', 'TEXTAREA', 'INPUT', 'IFRAME');
 
 // If using Mozilla or Firefox, use Tab-key trap.
 if (!document.all) document.onkeypress = keyDownHandler;
@@ -27,67 +27,67 @@ if (!document.all) document.onkeypress = keyDownHandler;
  * Override the loading page from loading.html to something else
  */
 function setPopUpLoadingPage(loading) {
-    gLoading = loading;
+  gLoading = loading;
 }
 
 /**
  * Initializes popup code on load.
  */
 function initPopUp() {
-    // Add the HTML to the body
-    var body = document.getElementsByTagName('body')[0];
-    var popmask = document.createElement('div');
-    popmask.id = 'popupMask';
-    var popcont = document.createElement('div');
-    popcont.id = 'popupContainer';
-    popcont.innerHTML = '' +
-        '<div id="popupInner">' +
-            /*
-            '<div id="popupTitleBar">' +
-                '<div id="popupTitle"></div>' +
-                '<div id="popupControls">' +
-                    '<a onclick="hidePopWin(false);"><span>Close</span></a>'+
-                '</div>' +
-            '</div>' +
-            */
-            '<div id="popupContent"></div>' +
-        '</div>';
-    body.appendChild(popmask);
-    body.appendChild(popcont);
+  // Add the HTML to the body
+  var body = document.getElementsByTagName('body')[0];
+  var popmask = document.createElement('div');
+  popmask.id = 'popupMask';
+  var popcont = document.createElement('div');
+  popcont.id = 'popupContainer';
+  popcont.innerHTML = '' +
+    '<div id="popupInner">' +
+    /*
+    '<div id="popupTitleBar">' +
+        '<div id="popupTitle"></div>' +
+        '<div id="popupControls">' +
+            '<a onclick="hidePopWin(false);"><span>Close</span></a>'+
+        '</div>' +
+    '</div>' +
+    */
+    '<div id="popupContent"></div>' +
+    '</div>';
+  body.appendChild(popmask);
+  body.appendChild(popcont);
 
-    gPopupMask = document.getElementById('popupMask');
-    gPopupContainer = document.getElementById('popupContainer');
+  gPopupMask = document.getElementById('popupMask');
+  gPopupContainer = document.getElementById('popupContainer');
 
-    // check to see if this is IE version 6 or lower. hide select boxes if so
-    // maybe they'll fix this in version 7?
-    var brsVersion = parseInt(window.navigator.appVersion.charAt(0), 10);
-    if (brsVersion <= 6 && window.navigator.userAgent.indexOf('MSIE') > -1) {
-        gHideSelects = true;
-    }
+  // check to see if this is IE version 6 or lower. hide select boxes if so
+  // maybe they'll fix this in version 7?
+  var brsVersion = parseInt(window.navigator.appVersion.charAt(0), 10);
+  if (brsVersion <= 6 && window.navigator.userAgent.indexOf('MSIE') > -1) {
+    gHideSelects = true;
+  }
 
-    // Add onclick handlers to 'a' elements of class submodal or submodal-width-height
-    var elms = document.getElementsByTagName('a');
-    for (var i = 0; i < elms.length; ++i) {
-        if (elms[i].className.indexOf('submodal') >= 0) {
-            elms[i].onclick = function() {
-                // Default width and height
-                var width = 320;
-                //var height = 200;
-                // Parse out optional width and height from className
-                var startIndex = this.className.indexOf('submodal');
-                var endIndex = this.className.indexOf(' ', startIndex);
-                if (endIndex < 0) endIndex = this.className.length;
-                var clazz = this.className.substring(startIndex, endIndex);
-                params = clazz.split('-');
-                if (params.length === 3) {
-                    width = parseInt(params[1],10);
-                    //height = parseInt(params[2],10);
-                }
-                showPopWin(this.href, width);
-                return false;
-            };
+  // Add onclick handlers to 'a' elements of class submodal or submodal-width-height
+  var elms = document.getElementsByTagName('a');
+  for (var i = 0; i < elms.length; ++i) {
+    if (elms[i].className.indexOf('submodal') >= 0) {
+      elms[i].onclick = function() {
+        // Default width and height
+        var width = 320;
+        //var height = 200;
+        // Parse out optional width and height from className
+        var startIndex = this.className.indexOf('submodal');
+        var endIndex = this.className.indexOf(' ', startIndex);
+        if (endIndex < 0) endIndex = this.className.length;
+        var clazz = this.className.substring(startIndex, endIndex);
+        params = clazz.split('-');
+        if (params.length === 3) {
+          width = parseInt(params[1], 10);
+          //height = parseInt(params[2],10);
         }
+        showPopWin(this.href, width);
+        return false;
+      };
     }
+  }
 }
 
 addEvent(window, 'load', initPopUp);
@@ -98,21 +98,21 @@ addEvent(window, 'load', initPopUp);
  * @argument returnFunc - function to call when returning true from the window.
  */
 function showPopWin(html, width, returnFunc) {
-    document.getElementById('popupContent').innerHTML = html;
-    gPopupIsShown = true;
-    disableTabIndexes();
-    gPopupMask.style.display = 'block';
-    gPopupContainer.style.display = 'table';
-    setTimeout(function() {
-        gPopupMask.classList.add('on');
-    }, 0);
-    //centerPopWin(width, height);
-    //var titleBarHeight = parseInt(document.getElementById('popupTitleBar').offsetHeight, 10);
-    if (parseFloat(width)) gPopupContainer.style.width = width + 'px';
-    //gPopupContainer.style.height = (height+titleBarHeight) + 'px';
-    if (typeof returnFunc==='function') gReturnFunc = returnFunc;
-    // For IE
-    if (gHideSelects === true) hideSelectBoxes();
+  document.getElementById('popupContent').innerHTML = html;
+  gPopupIsShown = true;
+  disableTabIndexes();
+  gPopupMask.style.display = 'block';
+  gPopupContainer.style.display = 'table';
+  setTimeout(function() {
+    gPopupMask.classList.add('on');
+  }, 0);
+  //centerPopWin(width, height);
+  //var titleBarHeight = parseInt(document.getElementById('popupTitleBar').offsetHeight, 10);
+  if (parseFloat(width)) gPopupContainer.style.width = width + 'px';
+  //gPopupContainer.style.height = (height+titleBarHeight) + 'px';
+  if (typeof returnFunc === 'function') gReturnFunc = returnFunc;
+  // For IE
+  if (gHideSelects === true) hideSelectBoxes();
 }
 
 /*
@@ -161,68 +161,68 @@ window.onscroll = centerPopWin;
  * @argument returnVal - anything - return value
  */
 function hidePopWin(callReturnFunc) {
-    gPopupIsShown = false;
-    restoreTabIndexes();
-    if (gPopupMask === null) return;
-    gPopupMask.classList.remove('on');
-    gPopupContainer.style.display = 'none';
-    setTimeout(function() {
-        gPopupMask.style.display = 'none';
-    }, 300);
-    if (callReturnFunc === true && gReturnFunc !== null) gReturnFunc(window.frames['popupFrame'].returnVal);
-    // Display all select boxes
-    if (gHideSelects === true) displaySelectBoxes();
+  gPopupIsShown = false;
+  restoreTabIndexes();
+  if (gPopupMask === null) return;
+  gPopupMask.classList.remove('on');
+  gPopupContainer.style.display = 'none';
+  setTimeout(function() {
+    gPopupMask.style.display = 'none';
+  }, 300);
+  if (callReturnFunc === true && gReturnFunc !== null) gReturnFunc(window.frames['popupFrame'].returnVal);
+  // Display all select boxes
+  if (gHideSelects === true) displaySelectBoxes();
 }
 
 // Tab key trap. iff popup is shown and key was [TAB], suppress it.
 // @argument e - event - keyboard event that caused this function to be called.
 function keyDownHandler(e) {
-    if (gPopupIsShown && e.keyCode === 9) return false;
+  if (gPopupIsShown && e.keyCode === 9) return false;
 }
 
 // For IE. Go through predefined tags and disable tabbing into them.
 function disableTabIndexes() {
-    if (document.all) {
-        var i = 0;
-        for (var j = 0; j < gTabbableTags.length; ++j) {
-            var tagElements = document.getElementsByTagName(gTabbableTags[j]);
-            for (var k = 0 ; k < tagElements.length; ++k) {
-                gTabIndexes[i] = tagElements[k].tabIndex;
-                tagElements[k].tabIndex = '-1';
-                ++i;
-            }
-        }
+  if (document.all) {
+    var i = 0;
+    for (var j = 0; j < gTabbableTags.length; ++j) {
+      var tagElements = document.getElementsByTagName(gTabbableTags[j]);
+      for (var k = 0; k < tagElements.length; ++k) {
+        gTabIndexes[i] = tagElements[k].tabIndex;
+        tagElements[k].tabIndex = '-1';
+        ++i;
+      }
     }
+  }
 }
 
 // For IE. Restore tab-indexes.
 function restoreTabIndexes() {
-    if (document.all) {
-        var i = 0;
-        for (var j = 0; j < gTabbableTags.length; ++j) {
-            var tagElements = document.getElementsByTagName(gTabbableTags[j]);
-            for (var k = 0 ; k < tagElements.length; ++k) {
-                tagElements[k].tabIndex = gTabIndexes[i];
-                tagElements[k].tabEnabled = true;
-                ++i;
-            }
-        }
+  if (document.all) {
+    var i = 0;
+    for (var j = 0; j < gTabbableTags.length; ++j) {
+      var tagElements = document.getElementsByTagName(gTabbableTags[j]);
+      for (var k = 0; k < tagElements.length; ++k) {
+        tagElements[k].tabIndex = gTabIndexes[i];
+        tagElements[k].tabEnabled = true;
+        ++i;
+      }
     }
+  }
 }
 
 /**
-* Hides all drop down form select boxes on the screen so they do not appear above the mask layer.
-* IE has a problem with wanted select form tags to always be the topmost z-index or layer
-* Thanks for the code Scott!
-*/
+ * Hides all drop down form select boxes on the screen so they do not appear above the mask layer.
+ * IE has a problem with wanted select form tags to always be the topmost z-index or layer
+ * Thanks for the code Scott!
+ */
 function hideSelectBoxes() {
-    for (var i = 0; i < document.forms.length; ++i) {
-        for (var e = 0; e < document.forms[i].length; ++e) {
-            if (document.forms[i].elements[e].tagName === 'SELECT') {
-                document.forms[i].elements[e].style.visibility = "hidden";
-            }
-        }
+  for (var i = 0; i < document.forms.length; ++i) {
+    for (var e = 0; e < document.forms[i].length; ++e) {
+      if (document.forms[i].elements[e].tagName === 'SELECT') {
+        document.forms[i].elements[e].style.visibility = 'hidden';
+      }
     }
+  }
 }
 
 /**
@@ -230,13 +230,13 @@ function hideSelectBoxes() {
  * IE has a problem with wanted select form tags to always be the topmost z-index or layer
  */
 function displaySelectBoxes() {
-    for (var i = 0; i < document.forms.length; ++i) {
-        for (var e = 0; e < document.forms[i].length; ++e) {
-            if (document.forms[i].elements[e].tagName === 'SELECT') {
-                document.forms[i].elements[e].style.visibility = 'visible';
-            }
-        }
+  for (var i = 0; i < document.forms.length; ++i) {
+    for (var e = 0; e < document.forms[i].length; ++e) {
+      if (document.forms[i].elements[e].tagName === 'SELECT') {
+        document.forms[i].elements[e].style.visibility = 'visible';
+      }
     }
+  }
 }
 
 /**
@@ -246,15 +246,15 @@ function displaySelectBoxes() {
  * @argument fn - function to call
  */
 function addEvent(obj, evType, fn) {
-    if (obj.addEventListener) {
-        obj.addEventListener(evType, fn, false);
-        return true;
-    } else if (obj.attachEvent) {
-        var r = obj.attachEvent('on' + evType, fn);
-        return r;
-    } else {
-        return false;
-    }
+  if (obj.addEventListener) {
+    obj.addEventListener(evType, fn, false);
+    return true;
+  } else if (obj.attachEvent) {
+    var r = obj.attachEvent('on' + evType, fn);
+    return r;
+  } else {
+    return false;
+  }
 }
 
 /**
@@ -263,15 +263,15 @@ function addEvent(obj, evType, fn) {
  * Gets the full width/height because it's different for most browsers.
  */
 function getViewportHeight() {
-    if (window.innerHeight!=window.undefined) return window.innerHeight;
-    if (document.compatMode==='CSS1Compat') return document.documentElement.clientHeight;
-    if (document.body) return document.body.clientHeight;
-    return window.undefined;
+  if (window.innerHeight !== undefined) return window.innerHeight;
+  if (document.compatMode === 'CSS1Compat') return document.documentElement.clientHeight;
+  if (document.body) return document.body.clientHeight;
+  return window.undefined;
 }
 
 function getViewportWidth() {
-    if (window.innerWidth!=window.undefined) return window.innerWidth;
-    if (document.compatMode==='CSS1Compat') return document.documentElement.clientWidth;
-    if (document.body) return document.body.clientWidth;
-    return window.undefined;
+  if (window.innerWidth !== undefined) return window.innerWidth;
+  if (document.compatMode === 'CSS1Compat') return document.documentElement.clientWidth;
+  if (document.body) return document.body.clientWidth;
+  return window.undefined;
 }

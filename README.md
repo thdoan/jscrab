@@ -22,7 +22,7 @@ Corrections and comments are welcome by [sending an email](mailto:winter1977@gma
 - Fixed a couple of missing translation strings and miscellaneous typos
 - Increased rack size to eight tiles (improves playability in Vietnamese)
 - Replaced hard-coded `g_wstr` with a dynamically created list
-- Improved modal dialog spacing
+- Improved modal dialog formatting and spacing
 - Added subtle animation and shadow to modal dialog
 - Added Play Again button to the "game over" dialog
 - Increased computer AI so it can create up to 15-letter words
