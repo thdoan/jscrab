@@ -42,6 +42,7 @@ Corrections and comments are welcome by [sending an email](mailto:winter1977@gma
 - Fixed ability to drag tiles onto opponent's button
 - Added GA event tracking
 - Added ability to close modals by clicking on the shadow
+- Added app fade-in transition
 
 ## Dependencies for local build
 
