@@ -38,6 +38,7 @@ Corrections and comments are welcome by [sending an email](mailto:winter1977@gma
 - Added icon effect on mouse hover
 - Added favicon for all platforms
 - Added Open Graph and JSON-LD tags (SEO)
+- Added language selector for the UI
 
 ## Dependencies for local build
 
