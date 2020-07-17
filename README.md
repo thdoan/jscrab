@@ -40,6 +40,7 @@ Corrections and comments are welcome by [sending an email](mailto:winter1977@gma
 - Added Open Graph and JSON-LD tags (SEO)
 - Added language selector for the UI
 - Fixed ability to drag tiles onto opponent's button
+- Added GA event tracking
 
 ## Dependencies for local build
 
