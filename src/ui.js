@@ -119,7 +119,10 @@ function RedipsUI()
             self.prompt( g_def );
 
             // GA
-            ga('send', 'event', 'Definition', word, g_def.indexOf('</b> not found')<0 ? 'Found' : 'Not Found');
+            gtag('event', word, {
+              'event_category': 'Definition',
+              'event_label': g_def.indexOf('</b> not found')<0 ? 'Found' : 'Not Found'
+            });
           });
 
         }
@@ -148,8 +151,19 @@ function RedipsUI()
         if (words.length>0) {
             // Delay required to get actual score
             setTimeout(function() {
-                if (player===0) ga('send', 'event', 'Gameplay - Lvl ' + (g_playlevel+1), 'Player Move', words.join(', '), +dget('lpscore').textContent);
-                else ga('send', 'event', 'Gameplay - Lvl ' + (g_playlevel+1), 'Computer Move', words.join(', '), +dget('loscore').textContent);
+                if (player===0) {
+                  gtag('event', 'Player Move', {
+                    'event_category': 'Gameplay - Lvl ' + (g_playlevel+1),
+                    'event_label': words.join(', '),
+                    'value': +dget('lpscore').textContent
+                  });
+                } else {
+                  gtag('event', 'Computer Move', {
+                    'event_category': 'Gameplay - Lvl ' + (g_playlevel+1),
+                    'event_label': words.join(', '),
+                    'value': +dget('loscore').textContent
+                  });
+                }
             }, 100);
         }
     };

@@ -302,7 +302,10 @@ function checkValidPlacement( placement )
 
     if (worderrs !== '') {
         // GA
-        ga('send', 'event', 'Gameplay - Lvl ' + (g_playlevel+1), 'Word Not Found', worderrs);
+        gtag('event', 'Word Not Found', {
+          'event_category': 'Gameplay - Lvl ' + (g_playlevel+1),
+          'event_label': worderrs
+        });
 
         worderrs = '<strong>' + worderrs + '</strong>';
         worderrs += t(' not found in dictionary.');
@@ -374,7 +377,11 @@ function onPlayerMoved( passed, swapped )
     setTimeout( onPlayerMove, 100 );
 
     // GA
-    if (passed) ga('send', 'event', 'Gameplay - Lvl ' + (g_playlevel+1), 'Player ' + (swapped?'Swap':'Pass'), '[' + g_bui.getPlayerRack() + ']', g_letpool.length);
+    gtag('event', 'Player ' + (swapped?'Swap':'Pass'), {
+      'event_category': 'Gameplay - Lvl ' + (g_playlevel+1),
+      'event_label': '[' + g_bui.getPlayerRack() + ']',
+      'value': g_letpool.length
+    });
 }
 
 //------------------------------------------------------------------------------
@@ -509,7 +516,12 @@ function announceWinner()
     g_bui.prompt(html, '<span class="button" onclick="location.reload()">' + t('Play Again') + '</span>');
 
     // GA
-    ga('send', 'event', 'Gameplay - Lvl ' + (g_playlevel+1), 'Game Over', 'Player=' + g_pscore + ', Computer=' + g_oscore, g_letpool.length);
+    gtag('event', 'Game Over', {
+      'event_category': 'Gameplay - Lvl ' + (g_playlevel+1),
+      'event_label': 'Player=' + g_pscore + ', Computer=' + g_oscore,
+      'value': g_letpool.length
+    });
+
 }
 
 //------------------------------------------------------------------------------
@@ -633,7 +645,11 @@ function onPlayerMove()
         g_passes = 0; // Reset consecutive opponent passes
     } else {
         // GA
-        ga('send', 'event', 'Gameplay - Lvl ' + (g_playlevel+1), 'Computer Pass', '[' + g_bui.getOpponentRack() + ']', g_letpool.length);
+        gtag('event', 'Computer Pass', {
+          'event_category': 'Gameplay - Lvl ' + (g_playlevel+1),
+          'event_label': '[' + g_bui.getOpponentRack() + ']',
+          'value': g_letpool.length
+        });
 
         //g_bui.hideBusy();
         ++g_passes; // Increase consecutive opponent passes
