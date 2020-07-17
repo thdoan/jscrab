@@ -210,7 +210,13 @@ function RedipsUI()
         html += hr;
 
         html += '</table>';
-        html += '<div id="footer">' + t('Feedback?') + ' <a href="mailto:winter1977@gmail.com?subject=Vietboard">winter1977@gmail.com</a></div>';
+        html +=
+            '<div id="footer">' +
+            (getQueryStringValue('lang')==='vi' ?
+                '<a href="/play/">' + t('English') + '</a> | ' + t('Vietnamese') :
+                t('English') + ' | <a href="index.html?lang=vi">' + t('Vietnamese') + '</a>') + '<br><br>' +
+            t('Feedback?') + ' <a href="mailto:winter1977@gmail.com?subject=Vietboard">winter1977@gmail.com</a>' +
+            '</div>';
         html += '</td></tr></table>';
         dget('uidiv').innerHTML = html;
 
