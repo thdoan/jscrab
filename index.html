@@ -22,6 +22,20 @@ function _init() {
 function logit(str) {
   window.console && console.log(str);
 }
+// Extract query string value
+function getQueryStringValue(sKey) {
+  if (!sKey || !window.location.search) return '';
+  sKey = sKey.replace(/[\[]/g, '\\[').replace(/[\]]/g, '\\]');
+  var re = new RegExp('[\\?&]' + sKey + '=([^&#]*)'),
+    results = re.exec(window.location.search);
+  return results===null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+}
+(function() {
+  // Load translation
+  var js = document.createElement('script');
+  js.src = 'lang/' + (getQueryStringValue('lang')==='vi' ? 'vi' : 'en') + '_translate.js';
+  document.head.appendChild(js);
+})();
 </script>
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/submodal.css">
@@ -51,7 +65,6 @@ function logit(str) {
 <script src="lang/vi_wordlist.js"></script>
 <script src="lang/vi_defs.js"></script>
 <script src="lang/vi_letters.js"></script>
-<script src="lang/vi_translate.js"></script>
 <script src="src/submodal.js"></script>
 <script src="src/sizzle.js"></script>
 <script src="src/redipsdrag.js"></script>
