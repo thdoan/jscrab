@@ -22,6 +22,20 @@ function _init() {
 function logit(str) {
   window.console && console.log(str);
 }
+// Extract query string value
+function getQueryStringValue(sKey) {
+  if (!sKey || !window.location.search) return '';
+  sKey = sKey.replace(/[\[]/g, '\\[').replace(/[\]]/g, '\\]');
+  var re = new RegExp('[\\?&]' + sKey + '=([^&#]*)'),
+    results = re.exec(window.location.search);
+  return results===null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+}
+(function() {
+  // Load translation
+  var js = document.createElement('script');
+  js.src = 'lang/' + (getQueryStringValue('lang')==='vi' ? 'vi' : 'en') + '_translate.js';
+  document.head.appendChild(js);
+})();
 </script>
 <link rel="stylesheet" href="css/styles.min.css">
 <link rel="apple-touch-icon" sizes="180x180" href="../favicon/apple-touch-icon.png">
