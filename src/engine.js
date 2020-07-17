@@ -301,6 +301,9 @@ function checkValidPlacement( placement )
     }
 
     if (worderrs !== '') {
+        // GA
+        ga('send', 'event', 'Gameplay - Lvl ' + (g_playlevel+1), 'Word Not Found', worderrs);
+
         worderrs = '<strong>' + worderrs + '</strong>';
         worderrs += t(' not found in dictionary.');
         return { played:'', msg:worderrs };
@@ -359,16 +362,19 @@ function onPlayerSwapped( keep, swap )
     var newLetters = takeLetters( keep );
     g_bui.setPlayerRack( newLetters );
 
-    onPlayerMoved( true );
+    onPlayerMoved( true, true );
 }
 
 //------------------------------------------------------------------------------
-function onPlayerMoved( passed )
+function onPlayerMoved( passed, swapped )
 {
     if (passed) g_bui.cancelPlayerPlacement();
     self.passed = passed;
     g_bui.showBusy();
     setTimeout( onPlayerMove, 100 );
+
+    // GA
+    if (passed) ga('send', 'event', 'Gameplay - Lvl ' + (g_playlevel+1), 'Player ' + (swapped?'Swap':'Pass'), '[' + g_bui.getPlayerRack() + ']', g_letpool.length);
 }
 
 //------------------------------------------------------------------------------
@@ -399,7 +405,7 @@ function find_first_move( opponent_rack, fx, fy )
     g_board[fx][fy] = alet;
     g_boardpoints[fx][fy] = aletscr;
 
-    // Now fund best move assuming board has candidate letter on it
+    // Now find best move assuming board has candidate letter on it
     var selword = { score:-1 };
 
     if (fx > 0) selword = findBestWord( opponent_rack, letters, fx-1, fy );
@@ -501,6 +507,9 @@ function announceWinner()
     else if (g_oscore < g_pscore) msg = t('You win!');
     html += '<font size="+2">' + msg + '</font>';
     g_bui.prompt(html, '<span class="button" onclick="location.reload()">' + t('Play Again') + '</span>');
+
+    // GA
+    ga('send', 'event', 'Gameplay - Lvl ' + (g_playlevel+1), 'Game Over', 'Player=' + g_pscore + ', Computer=' + g_oscore, g_letpool.length);
 }
 
 //------------------------------------------------------------------------------
@@ -621,8 +630,11 @@ function onPlayerMove()
 
     if (play_word !== null) {
         placeOnBoard( play_word, animCallback );
-        g_passes = 0; // Reset consecutive opponeny passes
+        g_passes = 0; // Reset consecutive opponent passes
     } else {
+        // GA
+        ga('send', 'event', 'Gameplay - Lvl ' + (g_playlevel+1), 'Computer Pass', '[' + g_bui.getOpponentRack() + ']', g_letpool.length);
+
         //g_bui.hideBusy();
         ++g_passes; // Increase consecutive opponent passes
         if (g_passes >= g_maxpasses) {
@@ -631,6 +643,7 @@ function onPlayerMove()
             g_bui.prompt( t('I pass, your turn.') );
             g_bui.makeTilesFixed();
         }
+
         return;
     }
 
