@@ -232,7 +232,7 @@ function RedipsUI()
         //---------------------------
         // Opponent's rack
 
-        html += '<table class="opponent"><tr><td bgcolor="' + self.rackbg + '">';
+        html += '<table class="opponent"><tr><td bgcolor="' + self.rackbg + '" class="marked">';
         html += '<span id="togglebtn" class="obutton" ';
         html += 'onclick="g_bui.toggleORV()"></span></td>';
 

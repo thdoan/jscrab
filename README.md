@@ -39,6 +39,7 @@ Corrections and comments are welcome by [sending an email](mailto:winter1977@gma
 - Added favicon for all platforms
 - Added Open Graph and JSON-LD tags (SEO)
 - Added language selector for the UI
+- Fixed ability to drag tiles onto opponent's button
 
 ## Dependencies for local build
 
