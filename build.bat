@@ -19,5 +19,6 @@ fart -C %target%\index.html --remove "<script src=\"src/sizzle.js\"></script>\n"
 fart -C %target%\index.html --remove "<script src=\"src/redipsdrag.js\"></script>\n"
 fart -C %target%\index.html --remove "<script src=\"src/bonuses.js\"></script>\n"
 fart -C %target%\index.html --remove "<script src=\"src/ui.js\"></script>\n"
-fart %target%\index.html src/engine.js js/app.min.js
+fart -C %target%\index.html --remove "<script src=\"src/engine.js\"></script>\n"
+fart %target%\index.html src/events.js js/app.min.js
 endlocal
