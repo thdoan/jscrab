@@ -928,22 +928,6 @@ function RedipsUI() {
 
 var g_bui = new RedipsUI();
 
-/**
- * EVENTS
- */
-
-// Handle keyboard shortcuts
-function handleKeyDown(e) {
-  // Close modal on Escape
-  if (e.key === 'Escape') {
-    var button = dget('#popupContent span.button');
-    if (button) button.click();
-    else hidePopWin();
-  }
-}
-
-document.addEventListener('keydown', handleKeyDown);
-
 // for Closure compiler:
 //-----------------------------
 // evals in strings:

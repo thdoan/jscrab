@@ -13,12 +13,7 @@ window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', 'UA-2843793-11');
-// App
-var t1 = +(new Date());
-function _init() {
-  if (!document.querySelectorAll) document.querySelectorAll = Sizzle;
-  init('idBoard');
-}
+// Logger
 function logit(str) {
   window.console && console.log(str);
 }
@@ -59,7 +54,7 @@ function getQueryStringValue(sKey) {
 <link rel="canonical" href="https://www.vietboard.org/play/">
 <script type="application/ld+json">{"@type":"WebSite","headline":"Vietboard Game","url":"https://www.vietboard.org/play/","name":"Vietboard Game","description":"Vietboard is a Vietnamese Scrabble-type game (Ô Chữ Tiếng Việt) played against the computer.","@context":"https://schema.org"}</script>
 </head>
-<body onload="_init()" onselectstart="return false;">
+<body>
 <div id="uidiv"></div>
 <audio id="sound" src="sounds/tileonboard.mp3" preload="auto"></audio>
 <script src="lang/vi_wordlist.js"></script>
@@ -71,5 +66,6 @@ function getQueryStringValue(sKey) {
 <script src="src/bonuses.js"></script>
 <script src="src/ui.js"></script>
 <script src="src/engine.js"></script>
+<script src="src/events.js"></script>
 </body>
 </html>
