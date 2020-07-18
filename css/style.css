@@ -1,3 +1,20 @@
+html.loading {
+  width: 100%;
+  height: 100%;
+  background: url(../pics/loading.gif) no-repeat center center;
+  margin-left: -20px;
+}
+html.loading:after {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  content: 'Loading...';
+  font: normal 14px Calibri, sans-serif;
+  line-height: 1;
+  margin-left: 22px;
+  transform: translate(-50%, -50%);
+}
+
 body {
   font-family: arial;
   margin: 0px;

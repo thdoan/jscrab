@@ -31,6 +31,7 @@ window.addEventListener('load', function() {
   if (!document.querySelectorAll) document.querySelectorAll = Sizzle;
   init('idBoard');
   // Fade in
+  document.documentElement.classList.remove('loading');
   dget('uidiv').classList.add('loaded');
   // Close modal by clicking on its shadow
   dget('popupInner').addEventListener('click', handleHidePopWin);
