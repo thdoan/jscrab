@@ -30,6 +30,7 @@ var translation_map = {
   'Show definition': 'Hiển thị định nghĩa',
   'Sorry, ': 'Xin lỗi, ',
   'Sorry, no tiles left to swap.': 'Xin lỗi, không còn chữ nào để đổi.',
+  'Sorry, this browser is not supported. Please upgrade to a modern browser.': 'Sorry, this browser is not supported. Please upgrade to a modern browser.',
   'spaces in word.': 'khoảng trống trong từ.',
   'Swap': 'Đổi Chữ',
   'Tiles left:': 'Số chữ còn lại:',
