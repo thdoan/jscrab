@@ -4,7 +4,7 @@ This is a Vietnamese Scrabble-type game implemented in pure JavaScript and playe
 
 The code comprises an engine (*engine.js*) that does the game logic and a user interface (*ui.js*) that renders the board and manages user interactions. This design allows one to easily create alternative user interfaces. The code is also designed to be easily localized to other languages and currently supports English, Russian, Spanish, and Vietnamese (this version).
 
-The fast game play is made possible by leveraging Regular Expressions to conduct searches. The current UI makes use of the excellent [REDIPS.drag](https://github.com/dbunic/REDIPS_drag) drag-and-drop library. Other credits go to [Sizzle](https://github.com/jquery/sizzle) for the CSS selector engine, [subModal](https://code.google.com/archive/p/submodal/) for the modal dialogs, [Hồ Ngọc Đức](https://www.informatik.uni-leipzig.de/~duc/) for the original word list (continuously being updated), and [VDict](https://vdict.com/) for the word definitions.
+The fast game play is made possible by leveraging Regular Expressions to conduct searches. The current UI makes use of the excellent [REDIPS.drag](https://github.com/dbunic/REDIPS_drag) drag-and-drop library. Other credits go to [subModal](https://code.google.com/archive/p/submodal/) for the modal dialogs, [Hồ Ngọc Đức](https://www.informatik.uni-leipzig.de/~duc/) for the original word list (continuously being updated), and [VDict](https://vdict.com/) for the word definitions.
 
 Corrections and comments are welcome by [sending an email](mailto:winter1977@gmail.com?subject=Vietboard) or [creating an Issue](https://github.com/thdoan/vietboard/issues).
 
@@ -43,6 +43,7 @@ Corrections and comments are welcome by [sending an email](mailto:winter1977@gma
 - Added GA event tracking
 - Added ability to close modals by clicking on the shadow
 - Added loading animation and fade-in transition
+- Removed dependency on Sizzle
 
 ## Dependencies for local build
 
