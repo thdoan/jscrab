@@ -2,7 +2,7 @@
 setlocal
 set target=play
 AjaxMin.exe -clobber css\style.css css\submodal.css -out %target%\css\styles.min.css
-AjaxMin.exe -inline:no -clobber -term lang\vi_wordlist.js lang\vi_defs.js lang\vi_letters.js src\submodal.js src\sizzle.js src\redipsdrag.js src\bonuses.js src\ui.js src\engine.js src\events.js -out %target%\js\app.min.js
+AjaxMin.exe -inline:no -clobber -term lang\vi_wordlist.js lang\vi_defs.js lang\vi_letters.js src\submodal.js src\redipsdrag.js src\bonuses.js src\ui.js src\engine.js src\events.js -out %target%\js\app.min.js
 copy /y index.html %target%
 xcopy /y lang\en_translate.js %target%\lang\
 xcopy /y lang\vi_translate.js %target%\lang\
@@ -15,7 +15,6 @@ fart -C %target%\index.html --remove "<script src=\"lang/vi_wordlist.js\"></scri
 fart -C %target%\index.html --remove "<script src=\"lang/vi_defs.js\"></script>\n"
 fart -C %target%\index.html --remove "<script src=\"lang/vi_letters.js\"></script>\n"
 fart -C %target%\index.html --remove "<script src=\"lang/vi_translate.js\"></script>\n"
-fart -C %target%\index.html --remove "<script src=\"src/sizzle.js\"></script>\n"
 fart -C %target%\index.html --remove "<script src=\"src/redipsdrag.js\"></script>\n"
 fart -C %target%\index.html --remove "<script src=\"src/bonuses.js\"></script>\n"
 fart -C %target%\index.html --remove "<script src=\"src/ui.js\"></script>\n"

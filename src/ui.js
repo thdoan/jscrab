@@ -2,7 +2,7 @@
 // 1. redipsdrag.js has already been included
 // 2. g_boardm exists and its init method returns the bonus layout (defined in bonuses.js)
 function dget(id) {
-  return document.getElementById(id) || (document.querySelector && document.querySelector(id));
+  return document.getElementById(id) || document.querySelector(id);
 }
 
 // VDict callback function
@@ -229,7 +229,7 @@ function RedipsUI() {
       '<div id="footer">' +
       (getQueryStringValue('lang') === 'vi' ?
         '<a href="/play/">' + t('English') + '</a> | ' + t('Vietnamese') :
-        t('English') + ' | <a href="index.html?lang=vi">' + t('Vietnamese') + '</a>') + '<br><br>' +
+        t('English') + ' | <a href="index.html?lang=vi">' + t('Vietnamese') + '</a>') + '<br>' +
       t('Feedback?') + ' <a href="mailto:winter1977@gmail.com?subject=Vietboard">winter1977@gmail.com</a>' +
       '</div>';
     html += '</td></tr></table>';

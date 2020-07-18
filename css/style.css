@@ -1,8 +1,8 @@
+/* Fade in */
 html.loading {
   width: 100%;
   height: 100%;
-  background: #d8be7f url(../pics/loading.gif) no-repeat center center;
-  margin-left: -20px;
+  background: url(../pics/loading.gif) no-repeat calc(50% - 20px) center;
 }
 html.loading:after {
   position: absolute;
@@ -13,6 +13,13 @@ html.loading:after {
   line-height: 1;
   margin-left: 22px;
   transform: translate(-50%, -50%);
+}
+html.loaded {
+  animation: fade-in 0.3s forwards;
+}
+@keyframes fade-in {
+  from { background-color: #fff; }
+  to { background-color: #d8be7f; }
 }
 
 body {
@@ -32,10 +39,15 @@ body {
   width: 100%;
   margin-top: -313px;
   opacity: 0;
+  text-align: center;
 }
-#uidiv.loaded {
+html.loaded #uidiv {
   opacity: 1;
-  transition: opacity 0.3s;
+  transition: opacity 0.6s;
+}
+#uidiv > strong {
+  color: #b8860b; /* darkgoldenrod */
+  font-size: 72px;
 }
 #uidiv > table {
   margin: auto;
@@ -130,7 +142,7 @@ table.gameinfo {
 }
 
 tr.heading {
-  background-color: #f5f5dc; /* Beige */
+  background-color: #f5f5dc; /* beige */
 }
 tr.highlight {
   background-color: #fefeba;
@@ -181,7 +193,7 @@ td.score {
 #drag {
   background-image: url(../pics/pattern.png);
   background-repeat: repeat;
-  /*border: 2px dashed LightBlue;*/
+  /*border: 2px dashed lightblue;*/
   display: table;
 }
 #drag img {
@@ -219,11 +231,11 @@ td.score {
 /* Drag object border for the second table */
 
 .t2 {
-  border: 2px solid #cd5c5c; /* IndianRed */
+  border: 2px solid #cd5c5c; /* indianred */
 }
 
 .scroller {
-  /*position:absolute;*/
+  /*position: absolute;*/
   width: 100%;
   height: 250px;
   background-color: #f7fef7;
@@ -294,7 +306,13 @@ td.swapit {
   bottom: 0;
   box-sizing: border-box;
   font-size: 12px;
+  line-height: 2;
   padding: 0.5rem;
-  text-align: center;
   width: 100%;
+}
+
+@media (max-width: 665px) {
+  #footer {
+    position: static;
+  }
 }
