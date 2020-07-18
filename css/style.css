@@ -1,7 +1,7 @@
 html.loading {
   width: 100%;
   height: 100%;
-  background: url(../pics/loading.gif) no-repeat center center;
+  background: #d8be7f url(../pics/loading.gif) no-repeat center center;
   margin-left: -20px;
 }
 html.loading:after {
