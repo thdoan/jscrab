@@ -144,8 +144,8 @@ REDIPS.drag = (function () {
 		// (object) defines color and border styles for current TD and TR
 		// hover.borderTr defines border color used in "row" mode to show whether row will be dropped above or below current row
 		// borderTd and borderTr are initially undefined
-		hover = {colorTd: '#E7AB83',
-				colorTr: '#E7AB83'},
+		hover = {colorTd: '#83bfe7',
+				colorTr: '#83bfe7'},
 		scroll = {enable : true,	// (boolean) enable/disable autoscroll function (default is true)
 				bound : 25,			// (integer) bound width for autoscroll
 				speed : 20},		// (integer) scroll speed in milliseconds
@@ -158,7 +158,7 @@ REDIPS.drag = (function () {
 		style = {borderEnabled : 'solid',	// (string) border style for enabled elements
 				borderDisabled : 'solid',	// (string) border style for disabled elements
 				opacityDisabled : '',		// (integer) set opacity for disabled elements
-				rowEmptyColor : 'white'},	// (string) color of empty row
+				rowEmptyColor : '#fff'},	// (string) color of empty row
 		tableSort = true,				// (boolean) sort tables on DIV element click
 		trash = {className : 'trash',	// (object) contains trash class name and confirmation questions for delete DIV or ROW
 				question : null,

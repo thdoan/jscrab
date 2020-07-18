@@ -1,10 +1,10 @@
 #popupMask {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: #000;
+  background: #000;
   display: none;
   filter: alpha(opacity=0);
   -moz-opacity: 0;
@@ -42,7 +42,7 @@
   position: relative;
   min-width: 240px;
   max-width: 480px;
-  background-color: #fff;
+  background: #fff;
   border-left: 1px solid rgba(0,0,0,0.9);
   border-bottom: 1px solid rgba(0,0,0,0.9);
   border-right: 1px solid rgba(0,0,0,0.8);
@@ -59,7 +59,7 @@
   left: -1px;
   width: 100%;
   height: 10px;
-  background-color: #99b;
+  background: #99b;
   border-top: 1px solid #78a3f2;
   border-left: 1px solid #78a3f2;
   border-bottom: 2px solid #000;

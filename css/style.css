@@ -142,16 +142,16 @@ table.gameinfo {
 }
 
 tr.heading {
-  background-color: #f5f5dc; /* beige */
+  background: #f5f5dc; /* beige */
 }
 tr.highlight {
-  background-color: #fefeba;
+  background: #fefeba;
 }
 tr.ruler {
-  background-color: #adadad;
+  background: #adadad;
 }
 tr.trash {
-  background-color: #ffbebe;
+  background: #ffbebe;
 }
 
 td.DL {
@@ -176,10 +176,10 @@ td.ST {
 }
 
 td.player-0 {
-  background-color: #f1fefe;
+  background: #f1fefe;
 }
 td.player-1 {
-  background-color: #fefef1;
+  background: #fefef1;
 }
 
 td.score {
@@ -205,7 +205,7 @@ td.score {
 .drag {
   width: 28px;
   height: 23px;
-  background-color: #fff;
+  background: #fff;
   -moz-border-radius: 4px;
   -webkit-border-radius: 4px;
   border-radius: 4px;
@@ -238,16 +238,9 @@ td.score {
   /*position: absolute;*/
   width: 100%;
   height: 250px;
-  background-color: #f7fef7;
+  background: #f7fef7;
   font-size: 14px;
   overflow: auto;
-}
-
-/* Allow/Deny access to cells marked with "mark" class name */
-
-.mark {
-  background-color: #9b9ea2;
-  color: #fff;
 }
 
 /* Tables */
@@ -314,5 +307,15 @@ td.swapit {
 @media (max-width: 665px) {
   #footer {
     position: static;
+  }
+}
+
+@media (max-height: 628px) and (orientation: landscape) {
+  #uidiv {
+    position: static;
+    margin: 0;
+  }
+  #footer {
+    line-height: 1.6;
   }
 }
