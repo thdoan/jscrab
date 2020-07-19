@@ -45,10 +45,14 @@ var g_allLettersBonus = 50;
 var g_playlevel = g_bui.getPlayLevel(); // Computer play level
 var g_maxwpoints = [10, 20, 30, 40, 50, 75, 100, 125, 250, 500]; // Maximum word score for each level
 
+// Words grouped by length
 var g_wstr = [];
 
 // Used to store word definition retrieved from the internet
 var g_def;
+
+// Cached elements
+var g_cache;
 
 //------------------------------------------------------------------------------
 /*
@@ -529,7 +533,7 @@ function announceWinner() {
   if (g_oscore > g_pscore) msg = t('Computer wins.');
   else if (g_oscore < g_pscore) msg = t('You win!');
   html += '<font size="+2">' + msg + '</font>';
-  g_bui.prompt(html, '<span class="button" onclick="location.reload()">' + t('Play Again') + '</span>');
+  g_bui.prompt(html, '<button class="button" onclick="location.reload()">' + t('Play Again') + '</button>');
 
   // GA
   gtag('event', 'Game Over', {

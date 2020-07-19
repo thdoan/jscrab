@@ -1,6 +1,8 @@
 // Assumptions:
 // 1. redipsdrag.js has already been included
 // 2. g_boardm exists and its init method returns the bonus layout (defined in bonuses.js)
+
+// Get element
 function dget(id) {
   return document.getElementById(id) || document.querySelector(id);
 }
@@ -38,18 +40,42 @@ function getJsonp(sUrl, callback) {
   document.head.appendChild(js);
 }
 
-function getStorage(key) {
-  if (window.localStorage) return localStorage[key];
-  else return undefined;
+// Modal functions
+function showModal(html, width) {
+  g_cache['modalContent'].innerHTML = html;
+  g_cache['modalMask'].style.display = 'block';
+  if (parseFloat(width)) g_cache['modalContainer'].style.width = width + 'px';
+  g_cache['modalContainer'].style.display = 'block';
+  g_cache['modalContainer'].style.marginTop = '-' + ((g_cache['modalContainer'].clientHeight - 13) / 2) + 'px'; // 13px for the titlebar
+  setTimeout(function() {
+    // Autofocus on first input or button
+    g_cache['modalContent'].querySelector('input, button').focus();
+    g_cache['modalMask'].classList.add('on');
+    g_cache['modalContainer'].classList.add('on');
+  }, 0);
+}
+function hideModal(callReturnFunc) {
+  g_cache['modalContainer'].classList.remove('on');
+  g_cache['modalMask'].classList.remove('on');
+  setTimeout(function() {
+    g_cache['modalContainer'].style.display = 'none';
+    g_cache['modalMask'].style.display = 'none';
+  }, 300); // Sync with transition time
 }
 
-function setStorage(key, value) {
+// Local storage functions
+function getStorage(sKey) {
+  if (window.localStorage) return localStorage[sKey];
+  else return undefined;
+}
+function setStorage(sKey, sValue) {
   if (window.localStorage) {
-    localStorage[key] = value;
+    localStorage[sKey] = sValue;
     return true;
   } else return false;
 }
 
+// Main UI logic
 function RedipsUI() {
   var self = this;
 
@@ -181,7 +207,7 @@ function RedipsUI() {
   };
 
   self.playSound = function(soundfile) {
-    dget('sound').play();
+    g_cache['sound'].play();
   };
 
   self.create = function(iddiv, bx, by, scores, racksize) {
@@ -233,7 +259,7 @@ function RedipsUI() {
       t('Feedback?') + ' <a href="mailto:winter1977@gmail.com?subject=Vietboard">winter1977@gmail.com</a>' +
       '</div>';
     html += '</td></tr></table>';
-    dget('uidiv').innerHTML = html;
+    g_cache['app'].innerHTML = html;
 
     self.scores = scores;
 
@@ -248,8 +274,7 @@ function RedipsUI() {
     // Opponent's rack
 
     html += '<table class="opponent"><tr><td bgcolor="' + self.rackbg + '" class="marked">';
-    html += '<span id="togglebtn" class="obutton" ';
-    html += 'onclick="g_bui.toggleORV()"></span></td>';
+    html += '<button id="togglebtn" class="obutton" onclick="g_bui.toggleORV()"></button></td>';
 
     for (var i = 0; i < racksize; ++i) {
       html += '<td id="' + self.oppRackId + i;
@@ -293,24 +318,20 @@ function RedipsUI() {
     //---------------------------
 
     html += '<td class="marked" bgcolor="' + self.rackbg + '" >';
-    html += '<span class="button" ';
-    html += 'onclick="onPlayerMoved(false)">' + t('Play') + '</span></td>';
+    html += '<button class="button" onclick="onPlayerMoved(false)">' + t('Play') + '</button></td>';
 
     html += '<td class="marked" bgcolor="' + self.rackbg + '" >';
-    html += '<span class="obutton" ';
-    html += 'onclick="onPlayerMoved(true)">' + t('Pass') + '</span></td>';
+    html += '<button class="obutton" onclick="onPlayerMoved(true)">' + t('Pass') + '</button></td>';
 
     html += '<td class="marked" bgcolor="' + self.rackbg + '" >';
-    html += '<span class="obutton" ';
-    html += 'onclick="onPlayerClear()">' + t('Clear') + '</span></td>';
+    html += '<button class="obutton" onclick="onPlayerClear()">' + t('Clear') + '</button></td>';
 
     html += '<td class="marked" bgcolor="' + self.rackbg + '" >';
-    html += '<span class="obutton" ';
-    html += 'onclick="onPlayerSwap()">' + t('Swap') + '</span></td>';
+    html += '<button class="obutton" onclick="onPlayerSwap()">' + t('Swap') + '</button></td>';
 
     html += '</tr></table></center>';
-
     html += '</div>';
+
     dget(iddiv).innerHTML = html;
 
     // Initialize custom DOM "holds" property
@@ -370,17 +391,17 @@ function RedipsUI() {
   };
 
   self.showBusy = function() {
-    showPopWin('<center>' + t('Computer thinking, please wait...') + '</center>');
+    showModal('<center>' + t('Computer thinking, please wait...') + '</center>');
   };
 
   self.hideBusy = function() {
-    hidePopWin();
+    hideModal();
   };
 
   self.onSwap = function() {
     var id;
     var keep = '';
-    for (var i = 0;; ++i) {
+    for (var i = 0; ; ++i) {
       id = 'swap_candidate' + i;
       var swapc = dget(id);
       if (swapc === null)
@@ -390,7 +411,7 @@ function RedipsUI() {
     }
 
     var swap = '';
-    for (var i = 0;; ++i) {
+    for (var i = 0; ; ++i) {
       id = 'swap' + i;
       var swp = dget(id);
       if (swp === null)
@@ -409,7 +430,7 @@ function RedipsUI() {
     dget('swaptable').innerHTML = '';
     self.initRedips();
 
-    hidePopWin();
+    hideModal();
     onPlayerSwapped(keep, swap);
   };
 
@@ -430,7 +451,7 @@ function RedipsUI() {
     var div = cell.firstChild;
     div.holds = self.hcopy(holds);
     div.innerHTML = html;
-    hidePopWin();
+    hideModal();
   };
 
   self.showSwapModal = function(tilesLeft) {
@@ -455,10 +476,11 @@ function RedipsUI() {
       html += '<td class="swapit" id="swap' + i + '"></td>';
     }
     html += '</tr></table>';
-    html += '</div><span class="button" onclick="g_bui.onSwap()">';
-    html += t('OK') + '</span></center>';
+    html += '</div><button class="button" onclick="g_bui.onSwap()">' + t('OK') + '</button></center>';
+
     // Display the HTML in the modal window
-    showPopWin(html);
+    showModal(html);
+
     // And then fill the DOM in the modal window with the existing letter
     // divs from the players rack
     for (var i = 0; i < divs.length; ++i) {
@@ -479,8 +501,8 @@ function RedipsUI() {
       var ltr = g_letters[i][0];
       if (ltr !== '*') {
         if (html !== '' && i % rlen === 0) html += '</tr><tr>'
-        html += '<td><span class="obutton" onclick="g_bui.onSelLetter(\'' + ltr + '\')">';
-        html += (ltr === ' ' ? '&nbsp;' : ltr.toUpperCase()) + '</span></td>';
+        html += '<td><button class="obutton" onclick="g_bui.onSelLetter(\'' + ltr + '\')">';
+        html += (ltr === ' ' ? '&nbsp;' : ltr.toUpperCase()) + '</button></td>';
       }
     }
     for (var i = llen;
@@ -488,7 +510,7 @@ function RedipsUI() {
       html += '<td></td>';
     }
     html = '<table id="letters"><tr>' + html + '</tr></table>';
-    showPopWin(html);
+    showModal(html);
   };
 
   self.initRedips = function() {
@@ -514,19 +536,19 @@ function RedipsUI() {
         self.newplays[id] = self.hcopy(holds);
         self.playSound();
       } else
-      if (id.charAt(0) === 'p') {
-        // Tile dropped on player rack
-        if (holds !== '' &&     // Should never happen
-          holds.points === 0 && // Joker
-          sc === self.boardId) { // Taken board to rack
-          // Remove selected letter from joker tile
-          self.rd.obj.innerHTML = '';
-          self.rd.obj.holds = {
-            letter: '',
-            points: 0
-          };
+        if (id.charAt(0) === 'p') {
+          // Tile dropped on player rack
+          if (holds !== '' &&     // Should never happen
+            holds.points === 0 && // Joker
+            sc === self.boardId) { // Taken board to rack
+            // Remove selected letter from joker tile
+            self.rd.obj.innerHTML = '';
+            self.rd.obj.holds = {
+              letter: '',
+              points: 0
+            };
+          }
         }
-      }
     };
     self.rd.event.moved = function() {
       self.rd.td.source.holds = '';
@@ -920,14 +942,10 @@ function RedipsUI() {
 
   self.prompt = function(msg, button) {
     var html = msg + '<br><center>';
-    html += button || '<span class="button" onclick="hidePopWin()">' + t('OK') + '</span>';
+    html += button || '<button class="button" onclick="hideModal()">' + t('OK') + '</button>';
     html += '</center>';
-    showPopWin(html);
+    showModal(html);
   };
 }
 
 var g_bui = new RedipsUI();
-
-// for Closure compiler:
-//-----------------------------
-// evals in strings:
