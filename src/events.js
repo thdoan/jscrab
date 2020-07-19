@@ -4,7 +4,7 @@
 
 // Close the modal properly
 function closeModal() {
-  var elButton = g_cache['modalContent'].querySelector('span.button');
+  var elButton = g_cache['modalContent'].querySelector('.button');
   if (elButton) elButton.click();
   else hideModal();
 }
