@@ -16,7 +16,8 @@ function handleHideModal(e) {
 
 // Handle focus trap
 function handleTrapFocus() {
-  g_cache['modalContent'].querySelector('input, button').focus();
+  var elControl = g_cache['modalContent'].querySelector('input, button');
+  if (elControl) elControl.focus();
 }
 
 // Handle keyboard shortcuts
@@ -38,12 +39,13 @@ window.addEventListener('load', function() {
     'sound': dget('sound')
   };
   // Check browser support
-  if (document.querySelector
+  if (Array.prototype.indexOf
+    && document.querySelector
     && window.addEventListener
     && window.console
     && window.DOMTokenList
     && window.JSON) {
-    init('idBoard');
+    init('board');
     // Close modal by clicking on its shadow
     g_cache['modalMask'].addEventListener('click', closeModal);
     g_cache['modalInner'].addEventListener('click', handleHideModal);

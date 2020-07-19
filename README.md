@@ -46,6 +46,7 @@ Corrections and comments are welcome by [sending an email](mailto:winter1977@gma
 - Removed dependency on Sizzle
 - Fixed modal rendering on mobile
 - Removed dependency on subModal
+- Added ability to choose different tilesets
 
 ## Dependencies for local build
 

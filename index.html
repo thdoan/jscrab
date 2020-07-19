@@ -13,23 +13,39 @@ window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', 'UA-2843793-11');
-// Logger
-function logit(str) {
-  window.console && console.log(str);
+// Local storage functions
+function getStorage(sKey) {
+  if (window.localStorage) return localStorage[sKey];
+  else return null;
 }
-// Extract query string value
-function getQueryStringValue(sKey) {
-  if (!sKey || !window.location.search) return '';
-  sKey = sKey.replace(/[\[]/g, '\\[').replace(/[\]]/g, '\\]');
-  var re = new RegExp('[\\?&]' + sKey + '=([^&#]*)'),
-    results = re.exec(window.location.search);
-  return results===null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+function setStorage(sKey, sValue) {
+  if (window.localStorage) {
+    localStorage[sKey] = sValue;
+    return true;
+  } else return false;
 }
 (function() {
+  // Load tileset
+  window.g_tilesets = [
+    'Comfortaa',
+    'Dancing Script',
+    'Grenze Gotisch',
+    'Lemonada',
+    'MuseoModerno'
+  ];
+  window.g_tileset = getStorage('tileset');
+  var sFamily = (Array.prototype.indexOf && g_tilesets.indexOf(g_tileset)>-1) ? g_tileset : 'Maven+Pro:wght@500';
+  var link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = 'https://fonts.googleapis.com/css2?family=' + sFamily + '&display=swap';
+  document.head.appendChild(link);
+  var style = document.createElement('style');
+  style.innerHTML = '.drag{font-family:\'' + (sFamily.indexOf('Maven')===0 ? 'Maven Pro' : sFamily) + '\',Arial,sans-serif}';
+  document.head.appendChild(style);
   // Load translation
-  var js = document.createElement('script');
-  js.src = 'lang/' + (getQueryStringValue('lang')==='vi' ? 'vi' : 'en') + '_translate.js';
-  document.head.appendChild(js);
+  var script = document.createElement('script');
+  script.src = 'lang/' + (getStorage('lang')==='vi' ? 'vi' : 'en') + '_translate.js';
+  document.head.appendChild(script);
 })();
 </script>
 <link rel="stylesheet" href="css/style.css">

@@ -40,6 +40,26 @@ function getJsonp(sUrl, callback) {
   document.head.appendChild(js);
 }
 
+// Set language
+function setLang(sLang) {
+  setStorage('lang', sLang);
+  // GA
+  gtag('event', sLang, {
+    'event_category': 'Language'
+  });
+  location.reload();
+}
+
+// Set tileset
+function setTileset(elSelect) {
+  setStorage('tileset', elSelect.value);
+  // GA
+  gtag('event', elSelect.value, {
+    'event_category': 'Tileset'
+  });
+  location.reload();
+}
+
 // Modal functions
 function showModal(html, width) {
   g_cache['modalContent'].innerHTML = html;
@@ -49,7 +69,8 @@ function showModal(html, width) {
   g_cache['modalContainer'].style.marginTop = '-' + ((g_cache['modalContainer'].clientHeight - 13) / 2) + 'px'; // 13px for the titlebar
   setTimeout(function() {
     // Autofocus on first input or button
-    g_cache['modalContent'].querySelector('input, button').focus();
+    var elControl = g_cache['modalContent'].querySelector('input, button');
+    if (elControl) elControl.focus();
     g_cache['modalMask'].classList.add('on');
     g_cache['modalContainer'].classList.add('on');
   }, 0);
@@ -61,18 +82,6 @@ function hideModal(callReturnFunc) {
     g_cache['modalContainer'].style.display = 'none';
     g_cache['modalMask'].style.display = 'none';
   }, 300); // Sync with transition time
-}
-
-// Local storage functions
-function getStorage(sKey) {
-  if (window.localStorage) return localStorage[sKey];
-  else return undefined;
-}
-function setStorage(sKey, sValue) {
-  if (window.localStorage) {
-    localStorage[sKey] = sValue;
-    return true;
-  } else return false;
 }
 
 // Main UI logic
@@ -190,15 +199,15 @@ function RedipsUI() {
 
   self.levelUp = function() {
     if (self.level < g_maxwpoints.length) ++self.level;
-    dget('idlevel').innerHTML = self.level;
-    dget('idlevel').title = t('Computer can score up to ') + g_maxwpoints[self.level - 1] + t(' points per turn');
+    dget('level').innerHTML = self.level;
+    dget('level').title = t('Computer can score up to ') + g_maxwpoints[self.level - 1] + t(' points per turn');
     setStorage('level', self.level);
   };
 
   self.levelDn = function() {
     if (self.level > 1) --self.level;
-    dget('idlevel').innerHTML = self.level;
-    dget('idlevel').title = t('Computer can score up to ') + g_maxwpoints[self.level - 1] + t(' points per turn');
+    dget('level').innerHTML = self.level;
+    dget('level').title = t('Computer can score up to ') + g_maxwpoints[self.level - 1] + t(' points per turn');
     setStorage('level', self.level);
   };
 
@@ -216,9 +225,9 @@ function RedipsUI() {
 
     self.boardm = g_boardm.init(bx, by);
     var hr = '<tr class="ruler"><td colspan="2"></td></tr>';
-    var html = '<table><tr><td><div id="idBoard"></div>';
+    var html = '<table><tr><td><div id="board"></div>';
 
-    html += '</td><td class="score" valign="top">';
+    html += '</td><td class="score">';
     html += '<table class="gameinfo">';
 
     html += hr;
@@ -230,11 +239,21 @@ function RedipsUI() {
     html += hr;
 
     html += '<tr><td>' + t('Playing at level:') + '</td><td>';
-    html += '<span id="idlevel" title="' + t('Computer can score up to ') + g_maxwpoints[g_playlevel] + t(' points per turn') + '">' + (g_playlevel + 1) + '</span>';
+    html += '<span id="level" title="' + t('Computer can score up to ') + g_maxwpoints[g_playlevel] + t(' points per turn') + '">' + (g_playlevel + 1) + '</span>';
     html += '&nbsp;<span class="link" title="' + t('Increase difficulty') + '" onclick="g_bui.levelUp()">';
     html += '<img src="pics/up.png" alt="Up"></span>';
     html += '<span class="link" title="' + t('Decrease difficulty') + '" onclick="g_bui.levelDn()">';
-    html += '<img src="pics/dn.png" alt="Down"></span>';
+    html += '<img src="pics/dn.png" alt="Down"></span></td>';
+
+    var sTileset = g_tilesets.indexOf(g_tileset) > -1 ? g_tileset : t('Default');
+    var sSelect = '<select title="' + sTileset + '" onchange="setTileset(this)"><option>' + sTileset + '</option>';
+    if (sTileset !== t('Default')) sSelect += '<option value="">' + t('Default') + '</option>';
+    for (var i = 0; i < g_tilesets.length; ++i) {
+      if (g_tilesets[i] === sTileset) continue;
+      sSelect += '<option>' + g_tilesets[i] + '</option>';
+    }
+    sSelect += '</select>';
+    html += '<tr><td>' + t('Tileset:') + '</td><td>' + sSelect + '</td></tr>';
     html += hr;
 
     html += '<tr><td>' + t('Computer last score:') + '</td><td id="loscore">0</td></tr>';
@@ -253,11 +272,12 @@ function RedipsUI() {
     html += '</table>';
     html +=
       '<div id="footer">' +
-      (getQueryStringValue('lang') === 'vi' ?
-        '<a href="/play/">' + t('English') + '</a> | ' + t('Vietnamese') :
-        t('English') + ' | <a href="index.html?lang=vi">' + t('Vietnamese') + '</a>') + '<br>' +
+      (getStorage('lang') === 'vi' ?
+        '<a href="javascript:setLang(\'en\')">' + t('English') + '</a> | ' + t('Vietnamese') :
+        t('English') + ' | <a href="javascript:setLang(\'vi\')">' + t('Vietnamese') + '</a>') + '<br>' +
       t('Feedback?') + ' <a href="mailto:feedback@vietboard.org?subject=Vietboard">feedback@vietboard.org</a>' +
       '</div>';
+
     html += '</td></tr></table>';
     g_cache['app'].innerHTML = html;
 
@@ -520,7 +540,7 @@ function RedipsUI() {
     self.rd.animation.pause = g_animation; // Set animation loop pause
 
     self.rd.event.dropped = function() {
-      //logit(self.rd.obj.holds);
+      //console.log(self.rd.obj.holds);
       var holds = self.hcopy(self.rd.obj.holds);
       self.rd.td.target.holds = holds;
       var id = self.rd.td.target.id;
@@ -597,8 +617,7 @@ function RedipsUI() {
     // been determined.
     var newrack = orack;
     var dlet = {};
-    logit('Placements:');
-    logit(placements);
+    console.log('Placements:', placements);
     for (var i = 0; i < placements.length; ++i) {
       var placement = placements[i];
       var l = placement.ltr;
@@ -625,8 +644,7 @@ function RedipsUI() {
       }
     }
 
-    logit('Dictionary of letter arrays:');
-    logit(dlet);
+    console.log('Dictionary of letter arrays:', dlet);
 
     // Go over each letter in the current opponent rack each time a letter
     // exists in the move dictionary (dlet), animate it to its position on
@@ -713,7 +731,7 @@ function RedipsUI() {
   self.animDone = function() {
     --self.animTiles;
     self.playSound();
-    logit('Animations left: ' + self.animTiles);
+    console.log('Animations left: ' + self.animTiles);
     if (self.animTiles === 0) {
       // Last opponent tile animated to its position; return original
       // show/hide state of tiles set to visible before animation.
@@ -767,7 +785,7 @@ function RedipsUI() {
       }
     }
 
-    //if (pl === 1) logit( "removeFromRack leaves " + rack );
+    //if (pl === 1) console.log('removeFromRack leaves: ' + rack);
     self.racks[pl] = rack.join('');
   };
 

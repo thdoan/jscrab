@@ -57,40 +57,38 @@ var g_cache;
 //------------------------------------------------------------------------------
 /*
 var timers = {};
-timers.create = function()
-{
-    var self = {};
-    var t1,total;
+timers.create = function () {
+  var self = {};
+  var t1, total;
 
-    self.begin = function(id) {
-        t1[id] = +new Date();
-        if (!(id in total))
-            total[id] = 0;
-    };
+  self.begin = function (id) {
+    t1[id] = +new Date();
+    if (!(id in total)) total[id] = 0;
+  };
 
-    self.pause = function(id) {
-        if (id in t1) {
-            var t2 = +new Date();
-            total[id] += t2-t1[id];
-            t1[id] = t2;
-        }
-    };
+  self.pause = function (id) {
+    if (id in t1) {
+      var t2 = +new Date();
+      total[id] += t2 - t1[id];
+      t1[id] = t2;
+    }
+  };
 
-    self.show = function() {
-        logit( "Total times:");
-        for (var id in total)
-            logit( id+": "+total[id]+" ms." );
-    };
+  self.show = function () {
+    console.log('Total times:');
+    for (var id in total) {
+      console.log(id + ': ' + total[id] + ' ms.');
+    }
+  };
 
-    self.reset = function() {
-        t1    = {};
-        total = {};
-    };
+  self.reset = function () {
+    t1 = {};
+    total = {};
+  };
 
-    self.reset();
-    return self;
+  self.reset();
+  return self;
 };
-
 var g_timers = timers.create();
 */
 
@@ -276,7 +274,7 @@ function checkValidPlacement(placement) {
         oscore += orthinfo.score;
         words.push(orthinfo.word);
       }
-      //logit( "orthword:"+orthinfo.word+", score:"+orthinfo.score );
+      //console.log('Orthword: ' + orthinfo.word, 'Score: ' + orthinfo.score);
     } else {
       // Add score of existing tile on board
       wscore += g_boardpoints[x][y];
@@ -337,7 +335,7 @@ function checkValidPlacement(placement) {
     };
   }
 
-  //logit( "created word is:"+ word);
+  //console.log('Created word is: ' + word);
   words.push(word);
 
   var score = wscore * wordmult + oscore;
@@ -490,11 +488,11 @@ function find_best_move(opponent_rack) {
   for (var ax = 0; ax < g_board.length; ++ax) {
     for (var ay = 0; ay < g_board[ax].length; ++ay) {
       if (g_board[ax][ay] !== '') continue;
-      //logit( "scanning:"+ax+","+ay );
+      //console.log('Scanning: ' + ax + ',' + ay);
       // Find the best possible word for board placement at coordinates
       // ax,ay given the current set of letters
       var word = findBestWord(opponent_rack, letters, ax, ay);
-      if (word.score > -1) logit('Found word: ' + word.word + ' (' + letters + ')');
+      if (word.score > -1) console.log('Found word: ' + word.word + ' (' + letters + ')');
       if (board_best_score < word.score) {
         // If this is better than all the board placements so far,
         // update the best word information
@@ -504,7 +502,7 @@ function find_best_move(opponent_rack) {
     }
   }
 
-  //logit( board_best_word.word );
+  //console.log('Best word: ' + board_best_word.word);
   return board_best_word;
 }
 
@@ -571,7 +569,7 @@ function onPlayerMove() {
       return;
     }
 
-    //logit( "player placement chars:" + pstr );
+    //console.log('Player placement chars: ' + pstr);
     g_bui.acceptPlayerPlacement();
     g_board_empty = false; // Placement made
     g_passes = 0; // Reset consecutive passes
@@ -583,30 +581,30 @@ function onPlayerMove() {
     g_bui.setPlayerScore(pinfo.score, g_pscore);
 
     g_bui.addToHistory(pinfo.words, 1);
-    //logit( "removing player chars:" + pstr );
+    //console.log('Removing player chars: ' + pstr);
     g_bui.removefromPlayerRack(pstr);
     var pletters = g_bui.getPlayerRack();
-    //logit( "left on player rack:" + pletters );
+    //console.log('Left on player rack: ' + pletters);
     pletters = takeLetters(pletters);
     if (pletters === '') {
       // All tiles were played and nothing left in the tile pool
       announceWinner();
       return;
     }
-    //logit( "setting player rack to:" + pletters );
+    //console.log('Setting player rack to: ' + pletters);
     g_bui.setPlayerRack(pletters);
     g_bui.setTilesLeft(g_letpool.length);
   } else {
     // Put back whatever was placed on the board
     g_bui.cancelPlayerPlacement();
-    //logit( "after cancel, left on player rack:" + g_bui.getPlayerRack() );
+    //console.log('After cancel, left on player rack: ' + g_bui.getPlayerRack());
   }
 
   var ostr = g_bui.getOpponentRack();
   g_opponent_has_joker = ostr.search('\\*') !== -1;
   g_playlevel = g_bui.getPlayLevel();
 
-  logit('Opponent rack has: ' + ostr);
+  console.log('Opponent rack has: ' + ostr);
 
   var play_word;
   if (g_board_empty) {
@@ -616,7 +614,7 @@ function onPlayerMove() {
     play_word = find_best_move(ostr);
   }
 
-  //logit( "opponent word is:" + play_word.word );
+  //console.log('Opponent word is: ' + play_word.word);
 
   var animCallback = function() {
     g_bui.makeTilesFixed();
@@ -646,14 +644,14 @@ function onPlayerMove() {
 
     // Get letters from pool as number of missing letters
     var letters_left = g_bui.getOpponentRack();
-    logit('Opponent rack left with: ' + letters_left);
+    console.log('Opponent rack left with: ' + letters_left);
     var newLetters = takeLetters(letters_left);
     if (newLetters === '') {
       // All tiles taken, nothing left in tile pool
       announceWinner();
       return;
     }
-    logit('After taking letters, opponent rack is: ' + newLetters);
+    console.log('After taking letters, opponent rack is: ' + newLetters);
     g_bui.setOpponentRack(newLetters);
     g_bui.setTilesLeft(g_letpool.length);
   };
@@ -696,26 +694,25 @@ function findBestWord(rack, letters, ax, ay) {
   var dirs = ['x', 'y'];
   for (var dir in dirs) {
     var xy = dirs[dir];
-    //logit( "direction:" + xy );
-    //g_timers.begin( "getRegex" );
+    //console.log('Direction: ' + xy);
+    //g_timers.begin('getRegex');
     var regex = getRegex(xy, ax, ay, rack);
-    //g_timers.pause( "getRegex" );
-    //logit( regex );
+    //g_timers.pause('getRegex');
+    //console.log('Regular expression: ' + regex);
     if (regex !== null) {
-      //g_timers.begin( "getBestScore" );
+      //g_timers.begin('getBestScore');
       var word = getBestScore(regex, letters, ax, ay);
-      //g_timers.pause( "getBestScore" );
+      //g_timers.pause('getBestScore');
       if (bestscore < word.score) {
         bestscore = word.score;
         bestword = word;
-        //logit( "new best:" );
-        //logit( bestword );
+        //console.log('New best word: ' + bestword);
       }
     }
   }
 
   //var t2 = +new Date();
-  //logit( "Time for findBestWord:"+(t2-t1) );
+  //console.log('Time for findBestWord: ' + (t2 - t1));
 
   return bestword;
 }
@@ -865,8 +862,8 @@ function getWordScore(wordinfo) {
   var x;
   var y;
 
-  //logit( "Checking orthogonals for:"+wordinfo.word+" dir:"+wordinfo.xy );
-  //logit( wordinfo );
+  //console.log('Checking orthogonals for: ' + wordinfo.word, 'Direction: ' + wordinfo.xy);
+  //console.log(wordinfo);
 
   if (xdir) {
     x = ps;
@@ -923,7 +920,7 @@ function getWordScore(wordinfo) {
     }
   }
 
-  //logit( "word:" + wordinfo.word + ", mult:" + wordmult );
+  //console.log('Word: ' + wordinfo.word, 'Mult: ' + wordmult);
   wscore *= wordmult;
 
   if (seq.length === g_racksize) wscore += g_allLettersBonus;
@@ -955,7 +952,7 @@ function getOrthWordScore(lseq, lscr, x, y, dx, dy) {
   g_board[wx][wy] = lseq;
   g_boardpoints[wx][wy] = lscr;
 
-  //logit("checking orth:"+[lseq,x,y]);
+  //console.log('Checking orth: ' + [lseq, x, y]);
   while (x >= 0 && y >= 0 && g_board[x][y] !== '') {
     x -= dy;
     y -= dx;
@@ -991,7 +988,7 @@ function getOrthWordScore(lseq, lscr, x, y, dx, dy) {
 
   score *= wordmult;
 
-  //logit( "orth word:"+ orthword + " score:" + score );
+  //console.log('Orth word: ' + orthword, 'Score: ' + score);
   return {
     score: score,
     word: orthword
@@ -1258,7 +1255,7 @@ function getRegex(dir, ax, ay, rack) {
 
   // flpos - position of first letter that was found when generating the regex
   // sminpos - first letter found in parallel line scan
-  //logit( "flpos="+flpos+", sminpos="+sminpos );
+  //console.log('flpos=' + flpos, 'sminpos=' + sminpos);
   if (flpos === ap) {
     // No first letter was found in the regex scan
 
