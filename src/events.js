@@ -28,20 +28,21 @@ function handleKeyDown(e) {
 document.addEventListener('keydown', handleKeyDown);
 
 window.addEventListener('load', function() {
+  // Cache elements
+  g_cache = {
+    'app': dget('app'),
+    'modalMask': dget('modal-mask'),
+    'modalContainer': dget('modal-container'),
+    'modalInner': dget('modal-inner'),
+    'modalContent': dget('modal-content'),
+    'sound': dget('sound')
+  };
   // Check browser support
   if (document.querySelector
     && window.addEventListener
     && window.console
     && window.DOMTokenList
     && window.JSON) {
-    g_cache = {
-      'app': dget('app'),
-      'modalMask': dget('modal-mask'),
-      'modalContainer': dget('modal-container'),
-      'modalInner': dget('modal-inner'),
-      'modalContent': dget('modal-content'),
-      'sound': dget('sound')
-    };
     init('idBoard');
     // Close modal by clicking on its shadow
     g_cache['modalMask'].addEventListener('click', closeModal);
