@@ -54,8 +54,14 @@ function getQueryStringValue(sKey) {
 <script type="application/ld+json">{"@type":"WebSite","headline":"Vietboard Game","url":"https://www.vietboard.org/play/","name":"Vietboard Game","description":"Vietboard is a Vietnamese Scrabble-type game (Ô Chữ Tiếng Việt) played against the computer.","@context":"https://schema.org"}</script>
 </head>
 <body>
-<div id="uidiv"></div>
+<div id="app"></div>
 <audio id="sound" src="sounds/tileonboard.mp3" preload="auto"></audio>
+<div id="modal-mask"></div>
+<div id="modal-container" role="dialog">
+  <div id="modal-inner">
+    <div id="modal-content"></div>
+  </div>
+</div>
 <script src="js/app.min.js"></script>
 </body>
 </html>
