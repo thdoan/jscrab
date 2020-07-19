@@ -1,11 +1,11 @@
 /*!
  * This derivative version of subModal can be downloaded from http://gabrito.com/files/subModal/
- * Original By Seth Banks (webmaster at subimage dot com)  http://www.subimage.com/
+ * Original By Seth Banks (webmaster at subimage dot com) http://www.subimage.com/
  * Contributions by Eric Angel (tab index code), Scott (hiding/showing selects
  * for IE users), Todd Huss (submodal class on hrefs, moving div containers into
- * javascript, phark method for putting close.gif into CSS), Thomas Risberg
- * (safari fixes for scroll amount), Dave Campbell (improved parsing of
- * submodal-width-height class)
+ * JavaScript, phark method for putting close.gif into CSS), Thomas Risberg
+ * (Safari fixes for scroll amount), and Dave Campbell (improved parsing of
+ * submodal-width-height class).
  */
 
 // Popup code
@@ -90,7 +90,7 @@ function initPopUp() {
   }
 }
 
-addEvent(window, 'load', initPopUp);
+window.addEventListener('load', initPopUp, false);
 
 /**
  * @argument width - int in pixels
@@ -102,9 +102,11 @@ function showPopWin(html, width, returnFunc) {
   gPopupIsShown = true;
   disableTabIndexes();
   gPopupMask.style.display = 'block';
-  gPopupContainer.style.display = 'table';
+  gPopupContainer.style.display = 'block';
+  gPopupContainer.style.marginTop = '-' + ((gPopupContainer.clientHeight - 13) / 2) + 'px'; // 13px for the titlebar
   setTimeout(function() {
     gPopupMask.classList.add('on');
+    gPopupContainer.classList.add('on');
   }, 0);
   //centerPopWin(width, height);
   //var titleBarHeight = parseInt(document.getElementById('popupTitleBar').offsetHeight, 10);
@@ -164,9 +166,10 @@ function hidePopWin(callReturnFunc) {
   gPopupIsShown = false;
   restoreTabIndexes();
   if (gPopupMask === null) return;
+  gPopupContainer.classList.remove('on');
   gPopupMask.classList.remove('on');
-  gPopupContainer.style.display = 'none';
   setTimeout(function() {
+    gPopupContainer.style.display = 'none';
     gPopupMask.style.display = 'none';
   }, 300);
   if (callReturnFunc === true && gReturnFunc !== null) gReturnFunc(window.frames['popupFrame'].returnVal);
@@ -245,6 +248,7 @@ function displaySelectBoxes() {
  * @argument evType - name of the event - DONT ADD "on", pass only "mouseover", etc
  * @argument fn - function to call
  */
+/*
 function addEvent(obj, evType, fn) {
   if (obj.addEventListener) {
     obj.addEventListener(evType, fn, false);
@@ -256,6 +260,7 @@ function addEvent(obj, evType, fn) {
     return false;
   }
 }
+*/
 
 /**
  * Code below taken from - http://www.evolt.org/article/document_body_doctype_switching_and_more/17/30655/ *

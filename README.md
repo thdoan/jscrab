@@ -44,6 +44,7 @@ Corrections and comments are welcome by [sending an email](mailto:winter1977@gma
 - Added ability to close modals by clicking on the shadow
 - Added loading animation and fade-in transition
 - Removed dependency on Sizzle
+- Fixed modal rendering on mobile
 
 ## Dependencies for local build
 

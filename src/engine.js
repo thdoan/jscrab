@@ -386,9 +386,11 @@ function onPlayerSwapped(keep, swap) {
 
 //------------------------------------------------------------------------------
 function onPlayerMoved(passed, swapped) {
-  if (passed) g_bui.cancelPlayerPlacement();
+  if (passed) {
+    g_bui.cancelPlayerPlacement();
+    g_bui.showBusy();
+  }
   self.passed = passed;
-  g_bui.showBusy();
   setTimeout(onPlayerMove, 100);
 
   // GA

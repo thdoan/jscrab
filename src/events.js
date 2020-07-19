@@ -30,9 +30,14 @@ document.addEventListener('selectstart', handleSelectStart);
 
 window.addEventListener('load', function() {
   // Check browser support
-  if (document.querySelector && window.console && window.DOMTokenList && window.JSON) {
+  if (document.querySelector
+    && window.addEventListener
+    && window.console
+    && window.DOMTokenList
+    && window.JSON) {
     init('idBoard');
     // Close modal by clicking on its shadow
+    dget('popupMask').addEventListener('click', closeModal);
     dget('popupInner').addEventListener('click', handleHidePopWin);
   } else {
     // Sad faces to randomly show
@@ -52,9 +57,9 @@ window.addEventListener('load', function() {
     ];
     // Return a random integer between nMin and nMax (inclusive)
     var randInt = function(nMin, nMax) {
-      return Math.floor(Math.random()*(nMax-nMin+1)+nMin);
+      return Math.floor(Math.random() * (nMax - nMin + 1) + nMin);
     };
-    dget('uidiv').innerHTML = '<strong>' + aEmojis[randInt(0, aEmojis.length-1)] + '</strong><br><br>' +
+    dget('uidiv').innerHTML = '<strong>' + aEmojis[randInt(0, aEmojis.length - 1)] + '</strong><br><br>' +
       t('Sorry, this browser is not supported. Please upgrade to a modern browser.');
   }
   // Fade in
