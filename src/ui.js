@@ -256,7 +256,7 @@ function RedipsUI() {
       (getQueryStringValue('lang') === 'vi' ?
         '<a href="/play/">' + t('English') + '</a> | ' + t('Vietnamese') :
         t('English') + ' | <a href="index.html?lang=vi">' + t('Vietnamese') + '</a>') + '<br>' +
-      t('Feedback?') + ' <a href="mailto:winter1977@gmail.com?subject=Vietboard">winter1977@gmail.com</a>' +
+      t('Feedback?') + ' <a href="mailto:feedback@vietboard.org?subject=Vietboard">feedback@vietboard.org</a>' +
       '</div>';
     html += '</td></tr></table>';
     g_cache['app'].innerHTML = html;
