@@ -249,7 +249,6 @@ REDIPS.drag = (function () {
 		if (!document.getElementById('redips_clone')) {
 			redipsClone = document.createElement('div');
 			redipsClone.id = 'redips_clone';
-			redipsClone.style.width = redipsClone.style.height = '1px';
 			dragContainer.appendChild(redipsClone);
 		}
 		// attach onmousedown event handler to the DIV elements

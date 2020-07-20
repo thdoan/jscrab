@@ -74,8 +74,8 @@ var translation_map = {
   "Swap":
   "Canjear",
 
-  "Words played:":
-  "palabras jugado",
+  "Words Played":
+  "Palabras Jugado",
 
   "Playing at level:":
   "Jugar en el nivel:",

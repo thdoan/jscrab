@@ -27,10 +27,8 @@ function setStorage(sKey, sValue) {
 (function() {
   // Load tileset
   window.g_tilesets = [
-    'Comfortaa',
     'Dancing Script',
     'Grenze Gotisch',
-    'Lemonada',
     'MuseoModerno'
   ];
   window.g_tileset = getStorage('tileset');
@@ -40,7 +38,7 @@ function setStorage(sKey, sValue) {
   link.href = 'https://fonts.googleapis.com/css2?family=' + sFamily + '&display=swap';
   document.head.appendChild(link);
   var style = document.createElement('style');
-  style.innerHTML = '.drag{font-family:\'' + (sFamily.indexOf('Maven')===0 ? 'Maven Pro' : sFamily) + '\',Arial,sans-serif}';
+  style.innerHTML = '.drag{font-family:\'' + (sFamily.indexOf('Maven')===0 ? 'Maven Pro' : sFamily) + '\', Arial, sans-serif}';
   document.head.appendChild(style);
   // Load translation
   var script = document.createElement('script');

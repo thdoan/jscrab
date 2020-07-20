@@ -99,7 +99,6 @@ function RedipsUI() {
   self.racks[2] = [];
   self.firstrack = true;
   self.cellbg = '#e0e0b0';
-  self.rackbg = '#e0f0d0';
   self.level = getStorage('level') || 1; // Playing level
   self.hlines = '';    // Play hisory lines
   self.hcount = 0;     // Play history count
@@ -131,10 +130,7 @@ function RedipsUI() {
       var ml = html.match(link);
       if (ml !== null) {
         var hword = ml[1];
-        var hyperlink = '<span class="link" onclick="g_bui.wordInfo(\'';
-        hyperlink += hword + '\')"';
-        hyperlink += 'style="text-decoration:underline">' + hword + '</span>';
-        html = html.replace(link, hyperlink);
+        html = html.replace(link, '<a class="link" title="' + t('Show definition') + '" aria-label="' + t('Show definition') + '" onclick="g_bui.wordInfo(\'' + hword + '\')">' + hword + '</a>');
       }
       html = word.toUpperCase() + ': ' + html;
       self.prompt(html);
@@ -167,7 +163,7 @@ function RedipsUI() {
       var word = words[i];
       html += '<tr class="player-' + player + '">';
       html += '<td>' + word.toUpperCase() + '</td><td>';
-      html += '<span class="link" title="' + t('Show definition') + '" onclick="g_bui.wordInfo(\'' + word + '\')"><img src="pics/info.png" alt=""></span>';
+      html += '<a class="link" title="' + t('Show definition') + '" aria-label="' + t('Show definition') + '" onclick="g_bui.wordInfo(\'' + word + '\')"><img src="pics/info.png" alt=""></a>';
       html += '</td></tr>';
     }
     html += '</table>';
@@ -199,14 +195,14 @@ function RedipsUI() {
 
   self.levelUp = function() {
     if (self.level < g_maxwpoints.length) ++self.level;
-    dget('level').innerHTML = self.level;
+    dget('level').textContent = self.level;
     dget('level').title = t('Computer can score up to ') + g_maxwpoints[self.level - 1] + t(' points per turn');
     setStorage('level', self.level);
   };
 
   self.levelDn = function() {
     if (self.level > 1) --self.level;
-    dget('level').innerHTML = self.level;
+    dget('level').textContent = self.level;
     dget('level').title = t('Computer can score up to ') + g_maxwpoints[self.level - 1] + t(' points per turn');
     setStorage('level', self.level);
   };
@@ -230,9 +226,8 @@ function RedipsUI() {
     html += '</td><td class="score">';
     html += '<table class="gameinfo">';
 
-    html += hr;
-    html += '<tr class="heading"><td colspan="2" align="left">';
-    html += t('Words played:') + '</td></tr>';
+    html += '<tr class="heading"><th colspan="2">';
+    html += t('Words Played') + '</th></tr>';
     html += '<tr><td colspan="2" align="left">';
     html += '<div class="scroller" id="history">';
     html += '</div></td></tr>';
@@ -240,10 +235,10 @@ function RedipsUI() {
 
     html += '<tr><td>' + t('Playing at level:') + '</td><td>';
     html += '<span id="level" title="' + t('Computer can score up to ') + g_maxwpoints[g_playlevel] + t(' points per turn') + '">' + (g_playlevel + 1) + '</span>';
-    html += '&nbsp;<span class="link" title="' + t('Increase difficulty') + '" onclick="g_bui.levelUp()">';
-    html += '<img src="pics/up.png" alt="Up"></span>';
-    html += '<span class="link" title="' + t('Decrease difficulty') + '" onclick="g_bui.levelDn()">';
-    html += '<img src="pics/dn.png" alt="Down"></span></td>';
+    html += '&nbsp;<a class="link" title="' + t('Increase difficulty') + '" aria-label="' + t('Increase difficulty') + '" onclick="g_bui.levelUp()">';
+    html += '<img src="pics/up.png" alt=""></a>';
+    html += '<a class="link" title="' + t('Decrease difficulty') + '" aria-label="' + t('Decrease difficulty') + '" onclick="g_bui.levelDn()">';
+    html += '<img src="pics/dn.png" alt=""></a></td>';
 
     var sTileset = g_tilesets.indexOf(g_tileset) > -1 ? g_tileset : t('Default');
     var sSelect = '<select title="' + sTileset + '" onchange="setTileset(this)"><option>' + sTileset + '</option>';
@@ -258,12 +253,12 @@ function RedipsUI() {
 
     html += '<tr><td>' + t('Computer last score:') + '</td><td id="loscore">0</td></tr>';
     html += '<tr class="highlight"><td>' + t('Computer total score:') + '</td>';
-    html += '<td id="oscore"><b>0</b></td></tr>';
+    html += '<td id="oscore">0</td></tr>';
     html += hr;
 
     html += '<tr><td>' + t('Your last score:') + '</td><td id="lpscore">0</td></tr>';
     html += '<tr class="highlight"><td>' + t('Your total score:') + '</td>';
-    html += '<td id="pscore"><b>0</b></td></tr>';
+    html += '<td id="pscore">0</td></tr>';
     html += hr;
 
     html += '<tr><td>' + t('Tiles left:') + '</td><td id="tleft"></td></tr>';
@@ -293,15 +288,14 @@ function RedipsUI() {
     //---------------------------
     // Opponent's rack
 
-    html += '<table class="opponent"><tr><td bgcolor="' + self.rackbg + '" class="marked">';
-    html += '<button id="togglebtn" class="obutton" onclick="g_bui.toggleORV()"></button></td>';
+    html += '<table class="opponent"><tr><td class="mark">';
+    html += '<button id="toggle" class="obutton" onclick="g_bui.toggleORV()"></button></td>';
 
     for (var i = 0; i < racksize; ++i) {
       html += '<td id="' + self.oppRackId + i;
-      html += '" bgcolor="' + self.rackbg + '" holds=""></td>';
+      html += '" holds=""></td>';
     }
     html += '</tr></table>';
-    //html += "<br>";
 
     //---------------------------
     // Playing board
@@ -326,30 +320,29 @@ function RedipsUI() {
       html += '</tr>';
     }
     html += '</table>';
-    //html += "<br>";
 
     //---------------------------
     // Player's rack
-    html += '<br><center><table><tr>';
+    html += '<table class="player"><tr>';
     for (var i = 0; i < racksize; ++i) {
       html += '<td id="' + self.plrRackId + i;
-      html += '" bgcolor="' + self.rackbg + '" holds=""></td>';
+      html += '" holds=""></td>';
     }
     //---------------------------
 
-    html += '<td class="marked" bgcolor="' + self.rackbg + '" >';
-    html += '<button class="button" onclick="onPlayerMoved(false)">' + t('Play') + '</button></td>';
+    html += '<td class="mark">';
+    html += '<button id="play" class="button" onclick="onPlayerMoved(false)">' + t('Play') + '</button></td>';
 
-    html += '<td class="marked" bgcolor="' + self.rackbg + '" >';
+    html += '<td class="mark">';
     html += '<button class="obutton" onclick="onPlayerMoved(true)">' + t('Pass') + '</button></td>';
 
-    html += '<td class="marked" bgcolor="' + self.rackbg + '" >';
+    html += '<td class="mark">';
     html += '<button class="obutton" onclick="onPlayerClear()">' + t('Clear') + '</button></td>';
 
-    html += '<td class="marked" bgcolor="' + self.rackbg + '" >';
+    html += '<td class="mark">';
     html += '<button class="obutton" onclick="onPlayerSwap()">' + t('Swap') + '</button></td>';
 
-    html += '</tr></table></center>';
+    html += '</tr></table>';
     html += '</div>';
 
     dget(iddiv).innerHTML = html;
@@ -379,16 +372,9 @@ function RedipsUI() {
   self.toggleORV = function() {
     // Toggle opponent rack visibility
     self.showOpRack = 1 - self.showOpRack;
-    var buttontxt = [];
-    buttontxt[0] = t('Show computer\'s rack');
-    buttontxt[1] = t('Hide computer\'s rack');
-    var tbtn = dget('togglebtn');
-    tbtn.innerHTML = buttontxt[self.showOpRack];
-    var toggle = ['none', ''];
+    dget('toggle').textContent = self.showOpRack ? t('Hide computer\'s rack') : t('Show computer\'s rack');
     for (var i = 0; i < self.racksize; ++i) {
-      var ido = self.oppRackId + i;
-      var tdo = dget(ido);
-      tdo.style.display = toggle[self.showOpRack];
+      dget(self.oppRackId + i).classList.toggle('on', self.showOpRack);
     }
   };
 
@@ -463,10 +449,9 @@ function RedipsUI() {
     var cell = dget(self.bdropCellId);
     cell.holds = self.hcopy(holds);
     var html = '';
-    //html += "<div class='drag t1'>";
-    html += ltr.toUpperCase() + '<sup><font size="-3">';
-    html += '&nbsp;</font></sup>';
-    //html += "</div>";
+    //html += '<div class="drag t1">';
+    html += ltr.toUpperCase() + '<sup><small>&nbsp;</small></sup>';
+    //html += '</div>';
     //cell.innerHTML = html;
     var div = cell.firstChild;
     div.holds = self.hcopy(holds);
@@ -593,7 +578,7 @@ function RedipsUI() {
 
     if (lts === 0) lts = '&nbsp;';
 
-    html += '<sup><font size="-3">' + lts + '</font></sup>';
+    html += '<sup><small>' + lts + '</small></sup>';
     html += '</div>';
     cell.innerHTML = html;
     cell.style.backgroundColor = '#ff0'; // Yellow
@@ -636,7 +621,7 @@ function RedipsUI() {
         var orcellid = self.oppRackId + jpos;
         var rcell = dget(orcellid);
         var html = '<div class="drag t2">' + l.toUpperCase();
-        html += '<sup><font size="-3">&nbsp;</font></sup>';
+        html += '<sup><small>&nbsp;</small></sup>';
         html += '</div>';
         rcell.innerHTML = html;
       } else {
@@ -737,7 +722,7 @@ function RedipsUI() {
       // show/hide state of tiles set to visible before animation.
       if (self.showOpRack === 0) {
         for (var i = 0; i < self.displayedcells.length; ++i) {
-          self.displayedcells[i].style.display = 'none';
+          //self.displayedcells[i].style.display = 'none';
         }
       }
       self.animCallback();
@@ -790,17 +775,17 @@ function RedipsUI() {
   };
 
   self.setTilesLeft = function(left) {
-    dget('tleft').innerHTML = left;
+    dget('tleft').textContent = left;
   };
 
   self.setPlayerScore = function(last, total) {
-    dget('lpscore').innerHTML = last;
-    dget('pscore').innerHTML = '<b>' + total + '</b>';
+    dget('lpscore').textContent = last;
+    dget('pscore').textContent = total;
   };
 
   self.setOpponentScore = function(last, total) {
-    dget('loscore').innerHTML = last;
-    dget('oscore').innerHTML = '<b>' + total + '</b>';
+    dget('loscore').textContent = last;
+    dget('oscore').textContent = total;
   };
 
   self.removefromPlayerRack = function(letters) {
@@ -914,8 +899,8 @@ function RedipsUI() {
         };
         rcell.holds = holds;
         if (ltr !== '*') {
-          html += upper.charAt(i) + '<sup><font size="-3">';
-          html += self.scores[ltr] + '</font></sup>';
+          var char = upper.charAt(i);
+          html += (char === ' ' ? '&nbsp;&nbsp;' : char) + '<sup><small>' + self.scores[ltr] + '</small></sup>';
         }
         html += '</div>';
         rcell.innerHTML = html;

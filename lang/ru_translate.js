@@ -6,13 +6,13 @@ var translation_map = {
   "распложите слова по горизонтали или по вертикали.",
 
   "first word must be on the star.":
-  "Первое слово должно быть на звезде",
+  "Первое слово должно быть на звезде.",
 
   " is not connected to a word.":
   " не подключен к слову.",
 
   "spaces in word.":
-  "пробелов в слове",
+  "пробелов в слове.",
 
   " not found in dictionary.":
   " отсутствует в словаре.",
@@ -21,7 +21,7 @@ var translation_map = {
   "К сожалению у вас не осталось букв для обмена.",
 
   "I pass, your turn.":
-  "У меня нет ходов, ваша  очередь",
+  "У меня нет ходов, ваша  очередь.",
 
   "After deducting points of unplaced tiles, the score is...":
   "Ваш балл после вычета оставшихся букв...",
@@ -74,14 +74,14 @@ var translation_map = {
   "Swap":
   "Обмен",
 
-  "Words played:":
+  "Words Played":
   "Сыгранные слова",
 
   "Show computer's rack":
   "Показать расклад компьютера",
 
   "Playing at level:":
-  "Играть на уровне",
+  "Играть на уровне:",
 
   "Hide computer's rack":
   "Скрыть расклад компьютера"

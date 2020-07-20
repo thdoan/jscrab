@@ -47,6 +47,7 @@ Corrections and comments are welcome by [sending an email](mailto:winter1977@gma
 - Fixed modal rendering on mobile
 - Removed dependency on subModal
 - Added ability to choose different tilesets
+- Simplified and polished user interface
 
 ## Dependencies for local build
 
