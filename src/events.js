@@ -44,7 +44,8 @@ window.addEventListener('load', function() {
     && window.addEventListener
     && window.console
     && window.DOMTokenList
-    && window.JSON) {
+    && window.JSON
+    && window.localStorage) {
     init('board');
     // Close modal by clicking on its shadow
     g_cache['modalMask'].addEventListener('click', closeModal);
@@ -73,6 +74,10 @@ window.addEventListener('load', function() {
     };
     g_cache['app'].innerHTML = '<p><strong>' + aEmojis[randInt(0, aEmojis.length - 1)] + '</strong><br><br>' +
       t('Sorry, this browser is not supported. Please upgrade to a modern browser.') + '</p>';
+    // GA
+    gtag('event', navigator.userAgent, {
+      'event_category': 'Unsupported Browser'
+    });
   }
   // Fade in
   document.documentElement.classList.replace('loading', 'loaded');

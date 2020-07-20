@@ -71,6 +71,7 @@ html.loaded #app {
   transition: opacity 0.6s;
 }
 #app > p {
+  font-size: 110%;
   margin: 5%;
 }
 #app > p > strong {
