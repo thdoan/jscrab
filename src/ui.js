@@ -242,7 +242,7 @@ function RedipsUI() {
 
     var sTileset = g_tilesets.indexOf(g_tileset) > -1 ? g_tileset : t('Default');
     var sSelect = '<select title="' + sTileset + '" onchange="setTileset(this)"><option>' + sTileset + '</option>';
-    if (sTileset !== t('Default')) sSelect += '<option value="">' + t('Default') + '</option>';
+    if (sTileset !== t('Default')) sSelect += '<option value="default">' + t('Default') + '</option>';
     for (var i = 0; i < g_tilesets.length; ++i) {
       if (g_tilesets[i] === sTileset) continue;
       sSelect += '<option>' + g_tilesets[i] + '</option>';
