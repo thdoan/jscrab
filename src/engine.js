@@ -13,6 +13,8 @@
 //    of a string.
 //------------------------------------------------------------------------------
 
+const DEBUG = true;
+
 var g_board;                    // Letters on board
 var g_boardpoints;              // Points on board
 var g_boardmults;               // Board bonus multipliers (DL, TL, DW, TW)
@@ -492,7 +494,7 @@ function find_best_move(opponent_rack) {
       // Find the best possible word for board placement at coordinates
       // ax,ay given the current set of letters
       var word = findBestWord(opponent_rack, letters, ax, ay);
-      if (word.score > -1) console.log('Found word: ' + word.word + ' (' + letters + ')');
+      if (DEBUG && word.score > -1) console.log('Found word: ' + word.word + ' (' + letters + ')');
       if (board_best_score < word.score) {
         // If this is better than all the board placements so far,
         // update the best word information
@@ -604,7 +606,7 @@ function onPlayerMove() {
   g_opponent_has_joker = ostr.search('\\*') !== -1;
   g_playlevel = g_bui.getPlayLevel();
 
-  console.log('Opponent rack has: ' + ostr);
+  if (DEBUG) console.log('Opponent rack has: ' + ostr);
 
   var play_word;
   if (g_board_empty) {
@@ -644,14 +646,14 @@ function onPlayerMove() {
 
     // Get letters from pool as number of missing letters
     var letters_left = g_bui.getOpponentRack();
-    console.log('Opponent rack left with: ' + letters_left);
+    if (DEBUG) console.log('Opponent rack left with: ' + letters_left);
     var newLetters = takeLetters(letters_left);
     if (newLetters === '') {
       // All tiles taken, nothing left in tile pool
       announceWinner();
       return;
     }
-    console.log('After taking letters, opponent rack is: ' + newLetters);
+    if (DEBUG) console.log('After taking letters, opponent rack is: ' + newLetters);
     g_bui.setOpponentRack(newLetters);
     g_bui.setTilesLeft(g_letpool.length);
   };
@@ -710,7 +712,6 @@ function findBestWord(rack, letters, ax, ay) {
       }
     }
   }
-
   //var t2 = +new Date();
   //console.log('Time for findBestWord: ' + (t2 - t1));
 

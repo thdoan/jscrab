@@ -602,7 +602,7 @@ function RedipsUI() {
     // been determined.
     var newrack = orack;
     var dlet = {};
-    console.log('Placements:', placements);
+    if (DEBUG) console.log('Placements:', placements);
     for (var i = 0; i < placements.length; ++i) {
       var placement = placements[i];
       var l = placement.ltr;
@@ -629,7 +629,7 @@ function RedipsUI() {
       }
     }
 
-    console.log('Dictionary of letter arrays:', dlet);
+    if (DEBUG) console.log('Dictionary of letter arrays:', dlet);
 
     // Go over each letter in the current opponent rack each time a letter
     // exists in the move dictionary (dlet), animate it to its position on
@@ -716,7 +716,7 @@ function RedipsUI() {
   self.animDone = function() {
     --self.animTiles;
     self.playSound();
-    console.log('Animations left: ' + self.animTiles);
+    if (DEBUG) console.log('Animations left: ' + self.animTiles);
     if (self.animTiles === 0) {
       // Last opponent tile animated to its position; return original
       // show/hide state of tiles set to visible before animation.
