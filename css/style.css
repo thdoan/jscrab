@@ -221,13 +221,16 @@ td.player-1 {
 #drag .player td {
   border: none;
 }
-#drag .opponent td[holds] {
-  opacity: 0;
-  -webkit-transition: opacity 0.3s;
-  transition: opacity 0.3s;
+#drag .opponent td .drag {
+  background-color: #000;
+  opacity: 0.4;
+  -webkit-transition: background-color 0.3s, opacity 0.3s;
+  transition: background-color 0.3s, opacity 0.3s;
 }
-#drag .opponent td[holds].on {
-  opacity: 1;
+#drag .opponent td.on .drag,
+#drag .opponent td .drag[style] {
+  background-color: #fff;
+  opacity: 0.9;
 }
 #drag .player {
   margin: 0 auto;
