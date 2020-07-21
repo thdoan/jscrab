@@ -43,7 +43,7 @@ body {
 }
 
 :focus {
-  outline: rgba(16,16,16,0.4) auto 1px; /* -webkit-focus-ring-color */
+  outline: none;
 }
 
 a {
@@ -52,6 +52,9 @@ a {
 a:hover img {
   -webkit-filter: brightness(0.85);
   filter: brightness(0.85);
+}
+a:focus {
+  outline: 1px dotted #00e; /* -webkit-link */
 }
 
 select {
@@ -102,7 +105,8 @@ html.loaded #app {
   text-shadow: 1px 1px 0px #aade7c;
   white-space: nowrap;
 }
-.button:hover {
+.button:hover,
+.button:focus {
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #5cb811), color-stop(1, #77d42a));
   background: linear-gradient(to bottom, #5cb811 5%, #77d42a 100%);
   background-color: #5cb811;
@@ -136,7 +140,8 @@ html.loaded #app {
   padding: 0px;
   text-align: center;
 }
-.obutton:hover {
+.obutton:hover,
+.obutton:focus {
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #ffab23), color-stop(1, #ffec64));
   background: linear-gradient(to bottom, #ffab23 5%, #ffec64 100%);
   background-color: #ffab23;
