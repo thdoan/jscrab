@@ -57,44 +57,6 @@ var g_def;
 var g_cache;
 
 //------------------------------------------------------------------------------
-/*
-var timers = {};
-timers.create = function () {
-  var self = {};
-  var t1, total;
-
-  self.begin = function (id) {
-    t1[id] = +new Date();
-    if (!(id in total)) total[id] = 0;
-  };
-
-  self.pause = function (id) {
-    if (id in t1) {
-      var t2 = +new Date();
-      total[id] += t2 - t1[id];
-      t1[id] = t2;
-    }
-  };
-
-  self.show = function () {
-    console.log('Total times:');
-    for (var id in total) {
-      console.log(id + ': ' + total[id] + ' ms.');
-    }
-  };
-
-  self.reset = function () {
-    t1 = {};
-    total = {};
-  };
-
-  self.reset();
-  return self;
-};
-var g_timers = timers.create();
-*/
-
-//------------------------------------------------------------------------------
 function shuffle_pool() {
   var total = g_letpool.length;
   for (var i = 0; i < total; ++i) {
@@ -504,7 +466,7 @@ function find_best_move(opponent_rack) {
     }
   }
 
-  //console.log('Best word: ' + board_best_word.word);
+  if (DEBUG) console.log('Best move: ', board_best_word.word);
   return board_best_word;
 }
 
@@ -554,8 +516,6 @@ function onPlayerMove() {
       return;
     }
   }
-
-  //g_timers.reset();
 
   var boardinfo = g_bui.getBoard();
   g_board = boardinfo.board;
@@ -685,10 +645,8 @@ function onPlayerMove() {
 
 //------------------------------------------------------------------------------
 function findBestWord(rack, letters, ax, ay) {
-  //var t1 = +new Date();
-
+  if (DEBUG) console.log('findBestWord', 'ax=' + ax, 'ay=' + ay);
   var numlets = letters.length;
-
   var bestscore = -1;
   var bestword = {
     score: -1
@@ -697,24 +655,18 @@ function findBestWord(rack, letters, ax, ay) {
   for (var dir in dirs) {
     var xy = dirs[dir];
     //console.log('Direction: ' + xy);
-    //g_timers.begin('getRegex');
     var regex = getRegex(xy, ax, ay, rack);
-    //g_timers.pause('getRegex');
-    //console.log('Regular expression: ' + regex);
+    //console.log('Regular expression:', regex);
     if (regex !== null) {
-      //g_timers.begin('getBestScore');
       var word = getBestScore(regex, letters, ax, ay);
-      //g_timers.pause('getBestScore');
+      //console.log(bestscore, word.score, word.word);
       if (bestscore < word.score) {
         bestscore = word.score;
         bestword = word;
-        //console.log('New best word: ' + bestword);
       }
     }
   }
-  //var t2 = +new Date();
-  //console.log('Time for findBestWord: ' + (t2 - t1));
-
+  if (DEBUG) console.log('Best word: ' + bestword.word);
   return bestword;
 }
 
@@ -751,12 +703,10 @@ function getBestScore(regex, letters, ax, ay) {
         // Go over all matching regex groups for this word
         // (g_wstr[wlc]) and save the required letters
         req_seq = '';
-        //g_timers.begin( "req_seq using loop" );
         for (var i = 1; i < match.length; ++i) {
           // Ignore the groups with 'undefined'
           if (match[i]) req_seq += match[i];
         }
-        //g_timers.pause( "req_seq using loop" );
         // Save the word and the missing letters
         var mseq = match[0];
         // Remove the marker symbols for the regex match
@@ -783,9 +733,7 @@ function getBestScore(regex, letters, ax, ay) {
       req_seq = matches[j].reqs;
       word = matches[j].word;
 
-      //g_timers.begin( "letmap init" );
       var letmap = gCloneFunc(rletmap);
-      //g_timers.pause( "letmap init" );
 
       // Check if the letters we have can create the word
       var ok = true;
@@ -827,13 +775,11 @@ function getBestScore(regex, letters, ax, ay) {
       wordinfo.xy = regex.xy;     // Direction of scan
       wordinfo.prec = regex.prec; // Letters before anchor
 
-      //g_timers.begin( "getWordScore" );
       // getWordScore will return the total score of all the orthogonal
       // created words from placing this word. It will also populate
       // wordinfo with a new field words, which will contain the array of
       // the valid created orthogonal words (if score>0).
       var score = getWordScore(wordinfo);
-      //g_timers.pause( "getWordScore" );
 
       var more = Math.ceil(Math.random() * 5);
       var maxwpoints = g_maxwpoints[g_playlevel] + more;
