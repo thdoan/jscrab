@@ -1,4 +1,3 @@
-function t( str )
-{
-    return str;
+function t(str) {
+  return str;
 }
