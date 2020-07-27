@@ -9,6 +9,7 @@ REM Comment out debugging stuff; space required before "//" to work around this 
 REM https://github.com/lionello/fart-it/issues/9
 fart %temp%\vietboard\src\engine.js "DEBUG = true" "DEBUG = false"
 fart %temp%\vietboard\src\*.js "if (DEBUG" " //if (DEBUG"
+fart %temp%\vietboard\src\*.js "console.log" " //console.log"
 REM Build (minify and concatenate)
 AjaxMin.exe -clobber css\style.css -out %target%\css\styles.min.css
 AjaxMin.exe -inline:no -clobber -term lang\vi_wordlist.js lang\vi_defs.js lang\vi_letters.js -out %target%\js\lang.min.js

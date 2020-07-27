@@ -68,11 +68,7 @@ window.addEventListener('load', function() {
       '&#128550;', // Frowning with open mouth
       '&#128551;'  // Anguished
     ];
-    // Return a random integer between nMin and nMax (inclusive)
-    var randInt = function(nMin, nMax) {
-      return Math.floor(Math.random() * (nMax - nMin + 1) + nMin);
-    };
-    g_cache['app'].innerHTML = '<p><strong>' + aEmojis[randInt(0, aEmojis.length - 1)] + '</strong><br><br>' +
+    g_cache['app'].innerHTML = '<p><strong>' + aEmojis[randInt(0, aEmojis.length - 1)] + '</strong><br><br><br>' +
       t('Sorry, this browser is not supported. Please upgrade to a modern browser.') + '</p>';
     // GA
     gtag('event', navigator.userAgent, {

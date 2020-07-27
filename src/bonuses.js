@@ -7,24 +7,24 @@ function BonusesLayout() {
 
     for (var i = 0; i < bx; ++i) {
       self.boardm[i] = [];
-      for (var j = 0; j < by; ++j)
+      for (var j = 0; j < by; ++j) {
         self.boardm[i][j] = 0;
+      }
     }
 
     var midx = Math.floor(bx / 2);
     var midy = Math.floor(by / 2);
-    for (var i = 0; i < midx; ++i)
+    for (var i = 0; i < midx; ++i) {
       for (var j = 0; j < midy; ++j) {
         var dist = bx * by - i - j;
-        if (dist % 8 === 0)
+        if (dist % 8 === 0) {
           self.setquad(i, j, 1); // DL
-        else
-          if (dist % 11 === 0)
-            self.setquad(i, j, 2); // TL
-          else
-            if (dist % 7 === 0)
-              self.setquad(i, j, 3); // DW
+        } else {
+          if (dist % 11 === 0) self.setquad(i, j, 2); // TL
+          else if (dist % 7 === 0) self.setquad(i, j, 3); // DW
+        }
       }
+    }
 
     self.setquad(midx, 0, 3);
     self.setquad(0, midy, 3);
@@ -40,6 +40,10 @@ function BonusesLayout() {
     self.setquad(2, 6, 0);
     self.setquad(4, 7, 3);
 
+    //self.setquad(6, 7, 3);
+    //self.setquad(7, 6, 3);
+
+    g_boardmults = self.boardm;
     return self.boardm;
   };
 

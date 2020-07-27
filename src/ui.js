@@ -40,6 +40,11 @@ function getJsonp(sUrl, callback) {
   document.head.appendChild(js);
 }
 
+// Return a random integer between nMin and nMax (inclusive)
+function randInt(nMin, nMax) {
+  return Math.floor(Math.random() * (nMax - nMin + 1) + nMin);
+}
+
 // Set language
 function setLang(sLang) {
   setStorage('lang', sLang);
@@ -75,7 +80,7 @@ function showModal(html, width) {
     g_cache['modalContainer'].classList.add('on');
   }, 0);
 }
-function hideModal(callReturnFunc) {
+function hideModal() {
   g_cache['modalContainer'].classList.remove('on');
   g_cache['modalMask'].classList.remove('on');
   setTimeout(function() {
@@ -211,13 +216,12 @@ function RedipsUI() {
     return self.level - 1;
   };
 
-  self.playSound = function(soundfile) {
+  self.playSound = function() {
     g_cache['sound'].play();
   };
 
   self.create = function(iddiv, bx, by, scores, racksize) {
-    if (self.created)
-      return;
+    if (self.created) return;
 
     self.boardm = g_boardm.init(bx, by);
     var hr = '<tr class="ruler"><td colspan="2"></td></tr>';
@@ -233,7 +237,7 @@ function RedipsUI() {
     html += '</div></td></tr>';
     html += hr;
 
-    html += '<tr><td>' + t('Playing at level:') + '</td><td>';
+    html += '<tr><td>' + t('Level:') + '</td><td>';
     html += '<span id="level" title="' + t('Computer can score up to ') + g_maxwpoints[g_playlevel] + t(' points per turn') + '">' + (g_playlevel + 1) + '</span>';
     html += '&nbsp;<a class="link" title="' + t('Increase difficulty') + '" aria-label="' + t('Increase difficulty') + '" onclick="g_bui.levelUp()">';
     html += '<img src="pics/up.png" alt=""></a>';
@@ -251,8 +255,8 @@ function RedipsUI() {
     html += '<tr><td>' + t('Tileset:') + '</td><td>' + sSelect + '</td></tr>';
     html += hr;
 
-    html += '<tr><td>' + t('Computer last score:') + '</td><td id="loscore">0</td></tr>';
-    html += '<tr class="highlight"><td>' + t('Computer total score:') + '</td>';
+    html += '<tr><td>' + t('Computer\'s last score:') + '</td><td id="loscore">0</td></tr>';
+    html += '<tr class="highlight"><td>' + t('Computer\'s total score:') + '</td>';
     html += '<td id="oscore">0</td></tr>';
     html += hr;
 
@@ -288,8 +292,8 @@ function RedipsUI() {
     //---------------------------
     // Opponent's rack
 
-    html += '<table class="opponent"><tr><td class="mark">';
-    html += '<button id="toggle" class="obutton" onclick="g_bui.toggleORV()"></button></td>';
+    html += '<table class="opponent"><tr>';
+    if (DEBUG) html += '<td class="mark"><button id="toggle" class="obutton" onclick="g_bui.toggleORV()"></button></td>';
 
     for (var i = 0; i < racksize; ++i) {
       html += '<td id="' + self.oppRackId + i;
@@ -309,12 +313,8 @@ function RedipsUI() {
       for (var j = 0; j < bx; ++j) {
         html += '<td bgcolor="' + self.cellbg + '" id="c' + j + '_' + i + '" ';
         mult = '';
-        if (j === st.x && i === st.y)
-          mult = 'ST';
-        else
-          mult = mults[self.boardm[j][i]];
-        if (mult !== '')
-          mult = 'class="' + mult + '"';
+        mult = (j === st.x && i === st.y) ? 'ST' : mults[self.boardm[j][i]];
+        if (mult !== '') mult = 'class="' + mult + '"';
         html += mult + '></td>';
       }
       html += '</tr>';
@@ -362,7 +362,7 @@ function RedipsUI() {
     }
 
     // Hide opponent's rack
-    self.toggleORV();
+    if (DEBUG) self.toggleORV();
 
     // Initialize REDIPS framework
     self.rd = REDIPS.drag;
@@ -383,16 +383,16 @@ function RedipsUI() {
     var fx = Math.round(self.bx / 2) - 1;
     var fy = Math.round(self.by / 2) - 1;
     return {
-      x: fx,
-      y: fy
+      'x': fx,
+      'y': fy
     };
   };
 
   self.hcopy = function(pholds) {
     if (pholds === undefined || pholds === '' || pholds === null) return '';
     return {
-      letter: pholds.letter,
-      points: pholds.points
+      'letter': pholds.letter,
+      'points': pholds.points
     };
   };
 
@@ -410,20 +410,16 @@ function RedipsUI() {
     for (var i = 0; ; ++i) {
       id = 'swap_candidate' + i;
       var swapc = dget(id);
-      if (swapc === null)
-        break;
-      if (swapc.firstChild)
-        keep += swapc.firstChild.holds.letter;
+      if (swapc === null) break;
+      if (swapc.firstChild) keep += swapc.firstChild.holds.letter;
     }
 
     var swap = '';
     for (var i = 0; ; ++i) {
       id = 'swap' + i;
       var swp = dget(id);
-      if (swp === null)
-        break;
-      if (swp.firstChild)
-        swap += swp.firstChild.holds.letter;
+      if (swp === null) break;
+      if (swp.firstChild) swap += swp.firstChild.holds.letter;
     }
 
     //alert( "keep:"+keep+" swap:"+swap );
@@ -442,8 +438,8 @@ function RedipsUI() {
 
   self.onSelLetter = function(ltr) {
     var holds = {
-      letter: ltr,
-      points: 0
+      'letter': ltr,
+      'points': 0
     };
     self.newplays[self.bdropCellId] = holds;
     var cell = dget(self.bdropCellId);
@@ -463,7 +459,7 @@ function RedipsUI() {
     var divs = [];
     var id;
     var html = '<center><div id="drags">';
-    html += '<table id="swaptable"><tr bgcolor="#beffbe">';
+    html += '<table id="swaptable"><tr>';
     for (var i = 0; i < self.racksize; ++i) {
       id = self.plrRackId + i;
       var rcell = dget(id);
@@ -532,8 +528,8 @@ function RedipsUI() {
       var sc = self.rd.td.source.id.charAt(0);
       if (id.charAt(0) === self.boardId) {
         // Tile dropped on playing board
-        if (holds !== '' &&     // Should never happen
-          holds.points === 0 && // Joker
+        if (holds !== '' &&      // Should never happen
+          holds.points === 0 &&  // Joker
           sc !== self.boardId) { // Taken from rack to board
           self.showLettersModal(id);
           return;
@@ -543,14 +539,14 @@ function RedipsUI() {
       } else
         if (id.charAt(0) === 'p') {
           // Tile dropped on player rack
-          if (holds !== '' &&     // Should never happen
-            holds.points === 0 && // Joker
+          if (holds !== '' &&      // Should never happen
+            holds.points === 0 &&  // Joker
             sc === self.boardId) { // Taken board to rack
             // Remove selected letter from joker tile
             self.rd.obj.innerHTML = '';
             self.rd.obj.holds = {
-              letter: '',
-              points: 0
+              'letter': '',
+              'points': 0
             };
           }
         }
@@ -558,10 +554,8 @@ function RedipsUI() {
     self.rd.event.moved = function() {
       self.rd.td.source.holds = '';
       var id = self.rd.td.source.id;
-      if (id.charAt(0) === self.boardId) {
-        // Tile lifted from playing board
-        delete self.newplays[id];
-      }
+      // Tile lifted from playing board
+      if (id.charAt(0) === self.boardId) delete self.newplays[id];
     };
   };
 
@@ -569,8 +563,8 @@ function RedipsUI() {
     // TODO: add animation, etc.
     var cell = dget(self.boardId + x + '_' + y);
     cell.holds = {
-      letter: lt,
-      points: lts
+      'letter': lt,
+      'points': lts
     };
 
     var ltru = lt.toUpperCase();
@@ -660,26 +654,26 @@ function RedipsUI() {
         var div = orcell.firstChild;
         var cell = dget(cellId);
         div.holds = {
-          letter: move.ltr,
-          points: move.ltscr
+          'letter': move.ltr,
+          'points': move.ltscr
         };
         //cell.innerHTML = "<div class='drag'></div>";
         // Update what the target cell will contain
         self.animTiles = placements.length;
         self.animCallback = callback;
         var moveinfo = {
-          obj: div,
-          target: cell,
-          callback: self.animDone
+          'obj': div,
+          'target': cell,
+          'callback': self.animDone
         };
         lettermoves.push({
-          info: moveinfo,
-          x: move.x,
-          y: move.y
+          'info': moveinfo,
+          'x': move.x,
+          'y': move.y
         });
         cell.holds = {
-          letter: move.ltr,
-          points: move.lscr
+          'letter': move.ltr,
+          'points': move.lscr
         };
         // Remove the placement element for this letter
         dlet[rlet].splice(0, 1);
@@ -716,15 +710,17 @@ function RedipsUI() {
   self.animDone = function() {
     --self.animTiles;
     self.playSound();
-    if (DEBUG) console.log('Animations left: ' + self.animTiles);
+    //console.log('Animations left: ' + self.animTiles);
     if (self.animTiles === 0) {
       // Last opponent tile animated to its position; return original
       // show/hide state of tiles set to visible before animation.
+      /*
       if (self.showOpRack === 0) {
         for (var i = 0; i < self.displayedcells.length; ++i) {
           //self.displayedcells[i].style.display = 'none';
         }
       }
+      */
       self.animCallback();
     }
   };
@@ -850,15 +846,11 @@ function RedipsUI() {
     for (var l in played) {
       var sc = l.substr(1);
       var co = sc.split('_');
-      var x = +co[0];
-      var y = +co[1];
-      var ltr = played[l].letter;
-      var scr = played[l].points;
       placement.push({
-        ltr: ltr,
-        lsc: scr,
-        x: x,
-        y: y
+        'ltr': played[l].letter,
+        'lsc': played[l].points,
+        'x': +co[0],
+        'y': +co[1]
       });
     }
     return placement;
@@ -872,7 +864,6 @@ function RedipsUI() {
   self.setLetters = function(player, letters) {
     self.racks[player] = letters;
     var cells = [];
-    var t;
 
     // TODO: sanity checks on values of player
 
@@ -892,10 +883,9 @@ function RedipsUI() {
       if (ltr !== '') {
         cells.push(rcell);
         var html = '<div class="drag t' + player + '">';
-        var ltscr = self.scores[ltr];
         var holds = {
-          letter: ltr,
-          points: ltscr
+          'letter': ltr,
+          'points': self.scores[ltr]
         };
         rcell.holds = holds;
         if (ltr !== '*') {
@@ -937,9 +927,8 @@ function RedipsUI() {
       }
     }
     return {
-      board: board,
-      boardp: boardp,
-      boardm: self.boardm
+      'board': board,
+      'boardp': boardp
     };
   };
 

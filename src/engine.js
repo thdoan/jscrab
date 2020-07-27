@@ -4,24 +4,28 @@
 //    (redips-drag based UI creates g_bui in ui.js)
 // 2. g_letters exists and contains the letter distribution and points
 //    (defined in xx_letters.js, where xx is the language code)
-// 3. g_vowels - a map of the vowels for the language used (temporarily? used
-//    for enabling the computer to make the first move). Defined in
-//    xx_letters.js
-// 4. g_letrange - the regular expression for the alphabet range of the
+// 3. g_letrange - the regular expression for the alphabet range of the
 //    given language. Defined in xx-letters.js
-// 5. t() defined in translate_xx.js and returns the translated text
+// 4. t() defined in translate_xx.js and returns the translated text
 //    of a string.
 //------------------------------------------------------------------------------
 
 const DEBUG = true;
 
+// Configuration
+var g_boardwidth = 15;          // How many tiles horizontally
+var g_boardheight = 15;         // How many tiles vertically
+var g_racksize = 8;             // Max number of letters on racks
+var g_animation = 0;            // Animation speed (lower = faster)
+var g_wait = 500;               // Wait time in between moves (in ms)
+
+// Don't touch settings below
 var g_board;                    // Letters on board
 var g_boardpoints;              // Points on board
 var g_boardmults;               // Board bonus multipliers (DL, TL, DW, TW)
 var g_letpool = [];             // Letter pool
 var g_letscore = {};            // Score for each letter
-var g_racksize = 8;             // Max number of letters on racks
-var g_matches_cache = {};       // To speed up regex matches
+var g_matches_cache = {};       // To speed up
 var g_pscore = 0;               // Player score
 var g_oscore = 0;               // Opponent (computer) score
 var g_board_empty = true;       // First move flag
@@ -29,10 +33,21 @@ var g_passes = 0;               // Number of consecutive passes
 var g_maxpasses = 2;            // Maximum number of consecutive passes
 var g_lmults = [1, 2, 3, 1, 1]; // Letter multipliers by index
 var g_wmults = [1, 1, 1, 2, 3]; // Word multipliers by index
-var g_animation = 0;            // Animation speed (lower = faster)
-var g_wait = 500;               // Wait time in between moves (in ms)
+var g_opponent_has_joker;       // Optimization flag if computer has joker tile
+var g_allLettersBonus = 50;     // Bonus when all letters in rack are played
 
-var g_opponent_has_joker; // Optimization flag if computer has joker tile
+// Computer play level
+var g_playlevel = g_bui.getPlayLevel();
+// Maximum word score for each level
+var g_maxwpoints = [10, 20, 30, 40, 50, 75, 100, 125, 250, 500];
+
+// Words grouped by length
+var g_wstr = [];
+// Used to store word definition retrieved from the internet
+var g_def;
+
+// Cached elements
+var g_cache;
 
 var gCloneFunc = (typeof Object.create === 'function') ? Object.create :
   function(obj) {
@@ -42,30 +57,6 @@ var gCloneFunc = (typeof Object.create === 'function') ? Object.create :
     }
     return cl;
   };
-
-var g_allLettersBonus = 50;
-var g_playlevel = g_bui.getPlayLevel(); // Computer play level
-var g_maxwpoints = [10, 20, 30, 40, 50, 75, 100, 125, 250, 500]; // Maximum word score for each level
-
-// Words grouped by length
-var g_wstr = [];
-
-// Used to store word definition retrieved from the internet
-var g_def;
-
-// Cached elements
-var g_cache;
-
-//------------------------------------------------------------------------------
-function shuffle_pool() {
-  var total = g_letpool.length;
-  for (var i = 0; i < total; ++i) {
-    var rnd = Math.floor((Math.random() * total));
-    var c = g_letpool[i];
-    g_letpool[i] = g_letpool[rnd];
-    g_letpool[rnd] = c;
-  }
-}
 
 //------------------------------------------------------------------------------
 function init(iddiv) {
@@ -82,7 +73,7 @@ function init(iddiv) {
     }
   }
 
-  shuffle_pool();
+  shufflePool();
 
   var my_letters = '';
   var comp_letters = '';
@@ -90,10 +81,13 @@ function init(iddiv) {
   my_letters = takeLetters(my_letters);
   comp_letters = takeLetters(comp_letters);
 
-  g_bui.create(iddiv, 15, 15, g_letscore, g_racksize);
+  g_bui.create(iddiv, g_boardwidth, g_boardheight, g_letscore, g_racksize);
 
   g_bui.setPlayerRack(my_letters);
   g_bui.setOpponentRack(comp_letters);
+  //g_bui.setOpponentRack('bmủtxnnt');
+  //g_bui.setOpponentRack('banhxnnt');
+  //g_bui.setOpponentRack('hkòngnnt');
   g_bui.setTilesLeft(g_letpool.length);
 
   // Build g_wstr list
@@ -110,21 +104,46 @@ function init(iddiv) {
 }
 
 //------------------------------------------------------------------------------
-function takeLetters(existing) {
-  var poolsize = g_letpool.length;
-  if (poolsize === 0) return existing;
-  var needed = g_racksize - existing.length;
-  if (needed > poolsize) needed = poolsize;
-  var letters = g_letpool.slice(0, needed).join('');
-  g_letpool.splice(0, needed);
-  return letters + existing;
+function announceWinner() {
+  var oleft = g_bui.getOpponentRack();
+  var pleft = g_bui.getPlayerRack();
+
+  var odeduct = 0;
+  for (var i = 0; i < oleft.length; ++i) {
+    odeduct += g_letscore[oleft.charAt(i)];
+  }
+
+  var pdeduct = 0;
+  for (var i = 0; i < pleft.length; ++i) {
+    pdeduct += g_letscore[pleft.charAt(i)];
+  }
+
+  g_oscore -= odeduct;
+  g_pscore -= pdeduct;
+
+  var html = t('After deducting points of unplaced tiles, the score is...');
+  html += '<ul><li>';
+  html += t('You: ') + g_pscore + '</li><li>' + t('Computer: ') + g_oscore + '</li></ul>';
+  var msg = t('It\'s a draw!');
+  if (g_oscore > g_pscore) msg = t('Computer wins.');
+  else if (g_oscore < g_pscore) msg = t('You win!');
+  html += '<font size="+2">' + msg + '</font>';
+  g_bui.prompt(html, '<button class="button" onclick="location.reload()">' + t('Play Again') + '</button>');
+
+  // GA
+  gtag('event', 'Game Over', {
+    'event_category': 'Gameplay - Lvl ' + (g_playlevel + 1),
+    'event_label': 'Player=' + g_pscore + ', Computer=' + g_oscore,
+    'value': g_letpool.length
+  });
+
 }
 
 //------------------------------------------------------------------------------
 function checkValidPlacement(placement) {
   if (placement.length === 0) return {
-    played: '',
-    msg: t('no letters were placed.')
+    'played': '',
+    'msg': t('no letters were placed.')
   };
 
   var isplacement = {};
@@ -166,12 +185,12 @@ function checkValidPlacement(placement) {
   if (minx < maxx) dx = 1;
 
   if (dx === 1 && dy === 1) return {
-    played: '',
-    msg: t('word must be horizontal or vertical.')
+    'played': '',
+    'msg': t('word must be horizontal or vertical.')
   };
   if (g_board_empty && !onStar) return {
-    played: '',
-    msg: t('first word must be on the star.')
+    'played': '',
+    'msg': t('first word must be on the star.')
   };
 
   var mbx = g_board.length;
@@ -187,8 +206,8 @@ function checkValidPlacement(placement) {
       lplayed = '<strong>' + lplayed.toUpperCase() + '</strong>';
       var msg = lplayed + t(' is not connected to a word.');
       return {
-        played: '',
-        msg: msg
+        'played': '',
+        'msg': msg
       };
     }
   }
@@ -211,8 +230,8 @@ function checkValidPlacement(placement) {
     ltr = g_board[x][y];
     // Spaces in the middle of the word?
     if (ltr === '') return {
-      played: '',
-      msg: t('spaces in word.')
+      'played': '',
+      'msg': t('spaces in word.')
     };
 
     xy = x + '_' + y;
@@ -285,8 +304,8 @@ function checkValidPlacement(placement) {
     worderrs = '<strong>' + worderrs + '</strong>';
     worderrs += t(' not found in dictionary.');
     return {
-      played: '',
-      msg: worderrs
+      'played': '',
+      'msg': worderrs
     };
   }
 
@@ -294,157 +313,24 @@ function checkValidPlacement(placement) {
     // No orthogonal words created and no extension to existing word created;
     // this means that the new word isn't connected to anything.
     return {
-      played: '',
-      msg: t('word is not connected.')
+      'played': '',
+      'msg': t('word is not connected.')
     };
   }
 
   //console.log('Created word is: ' + word);
   words.push(word);
 
-  var score = wscore * wordmult + oscore;
-
   return {
-    played: lplayed,
-    score: score,
-    words: words
+    'played': lplayed,
+    'score': (wscore * wordmult) + oscore,
+    'words': words
   };
 }
 
 //------------------------------------------------------------------------------
-function onPlayerClear() {
-  g_bui.cancelPlayerPlacement();
-}
-
-//------------------------------------------------------------------------------
-function onPlayerSwap() {
-  // If there were any tiles from the player's rack on the board, put them
-  // back on the rack.
-  var tilesLeft = g_letpool.length;
-  if (tilesLeft === 0) {
-    g_bui.prompt(t('Sorry, no tiles left to swap.'));
-    return;
-  }
-  g_bui.cancelPlayerPlacement();
-  g_bui.showSwapModal(tilesLeft);
-}
-
-//------------------------------------------------------------------------------
-function onPlayerSwapped(keep, swap) {
-  if (swap.length === 0) {
-    g_bui.setPlayerRack(keep);
-    // Initialize REDISP again
-    g_bui.makeTilesFixed();
-    return;
-  }
-
-  for (var i = 0; i < swap.length; ++i) {
-    g_letpool.push(swap.charAt(i));
-  }
-
-  shuffle_pool();
-
-  var newLetters = takeLetters(keep);
-  g_bui.setPlayerRack(newLetters);
-
-  onPlayerMoved(true, true);
-}
-
-//------------------------------------------------------------------------------
-function onPlayerMoved(passed, swapped) {
-  if (passed) {
-    g_bui.cancelPlayerPlacement();
-    g_bui.showBusy();
-  }
-  self.passed = passed;
-  setTimeout(onPlayerMove, 100);
-
-  // GA
-  gtag('event', 'Player ' + (swapped ? 'Swap' : 'Pass'), {
-    'event_category': 'Gameplay - Lvl ' + (g_playlevel + 1),
-    'event_label': '[' + g_bui.getPlayerRack() + ']',
-    'value': g_letpool.length
-  });
-}
-
-//------------------------------------------------------------------------------
-function find_first_move(opponent_rack, fx, fy) {
-  // Not going to bother finding the best possible word for the 1st move;
-  // just take some letter, put it on the board, and see what can be built
-  // around it.
-  var letters = opponent_rack.split('').sort();
-  var foundv = false;
-  var anchor = 0;
-  for (var i = 0; i < letters.length; ++i) {
-    if (letters[i] in g_vowels) {
-      foundv = true;
-      anchor = i;
-      break;
-    }
-  }
-  var alet = letters[anchor];
-  var aletscr = g_letscore[alet];
-
-  // The new rack is what is left after we remove the candidate letter from
-  // the starting rack and place it on the board.
-
-  letters.splice(anchor, 1);
-
-  // Simulate a first letter already existing on the board
-  g_board[fx][fy] = alet;
-  g_boardpoints[fx][fy] = aletscr;
-
-  // Now find best move assuming board has candidate letter on it
-  var selword = {
-    score: -1
-  };
-
-  if (fx > 0) selword = findBestWord(opponent_rack, letters, fx - 1, fy);
-
-  if (selword.score === -1 && fx >= 0 && fx < g_board.length - 1) selword = findBestWord(opponent_rack, letters, fx + 1, fy);
-
-  if (selword.score === -1) {
-    // No word found - remove traces from board
-    g_board[fx][fy] = '';
-    g_boardpoints[fx][fy] = 0;
-    return null;
-  }
-
-  //--------------------------------------------------------------------------
-  // Patch the letter sequence points and the letter sequence so that the
-  // first letter we simulated as being on the board will also be included.
-  var pos = Math.abs(fx - selword.ax);
-
-  // Sequence begins before simulated first letter on board; insert first
-  // letter score to its propper place
-  if (selword.ax < fx) selword.lscrs.splice(pos, 0, aletscr);
-  // Sequence begins after simulated first letter on board; it must be also
-  // first letter in word
-  else selword.lscrs.splice(0, 0, aletscr);
-
-  // In the case of the first move, the sequence of played letters and the
-  // word played are identical.
-  selword.seq = selword.word;
-  //--------------------------------------------------------------------------
-
-  // Remove traces of simulating first letter on the board
-  g_board[fx][fy] = '';
-  g_boardpoints[fx][fy] = 0;
-
-  // Update the word score with the score of the anchor letter we placed to
-  // build the word on
-  selword.score += aletscr;
-  //g_bui.opponentPlay(fx, fy, alet, aletscr);
-  return selword;
-}
-
-//------------------------------------------------------------------------------
-function find_best_move(opponent_rack) {
-  var num = opponent_rack.length;
-  var letters = [];
-  for (var i = 0; i < num; ++i) {
-    letters[i] = opponent_rack.charAt(i);
-  }
+function findBestMove(opponent_rack) {
+  var letters = opponent_rack.split('');
 
   var board_best_score = -1;
   var board_best_word = null;
@@ -455,8 +341,8 @@ function find_best_move(opponent_rack) {
       //console.log('Scanning: ' + ax + ',' + ay);
       // Find the best possible word for board placement at coordinates
       // ax,ay given the current set of letters
-      var word = findBestWord(opponent_rack, letters, ax, ay);
-      if (DEBUG && word.score > -1) console.log('Found word: ' + word.word + ' (' + letters + ')');
+      var word = findBestWord(letters, ax, ay);
+      if (DEBUG && word.score > -1) console.log('Found word: ' + word.word + ' (' + word.score + ')');
       if (board_best_score < word.score) {
         // If this is better than all the board placements so far,
         // update the best word information
@@ -466,212 +352,96 @@ function find_best_move(opponent_rack) {
     }
   }
 
-  if (DEBUG) console.log('Best move: ', board_best_word.word);
+  if (DEBUG) console.log('Best move:', board_best_word);
   return board_best_word;
 }
 
 //------------------------------------------------------------------------------
-function announceWinner() {
-  var oleft = g_bui.getOpponentRack();
-  var pleft = g_bui.getPlayerRack();
-
-  var odeduct = 0;
-  for (var i = 0; i < oleft.length; ++i) {
-    odeduct += g_letscore[oleft.charAt(i)];
-  }
-
-  var pdeduct = 0;
-  for (var i = 0; i < pleft.length; ++i) {
-    pdeduct += g_letscore[pleft.charAt(i)];
-  }
-
-  g_oscore -= odeduct;
-  g_pscore -= pdeduct;
-
-  var html = t('After deducting points of unplaced tiles, the score is...');
-  html += '<ul><li>';
-  html += t('You: ') + g_pscore + '</li><li>' + t('Computer: ') + g_oscore + '</li></ul>';
-  var msg = t('It\'s a draw!');
-  if (g_oscore > g_pscore) msg = t('Computer wins.');
-  else if (g_oscore < g_pscore) msg = t('You win!');
-  html += '<font size="+2">' + msg + '</font>';
-  g_bui.prompt(html, '<button class="button" onclick="location.reload()">' + t('Play Again') + '</button>');
-
-  // GA
-  gtag('event', 'Game Over', {
-    'event_category': 'Gameplay - Lvl ' + (g_playlevel + 1),
-    'event_label': 'Player=' + g_pscore + ', Computer=' + g_oscore,
-    'value': g_letpool.length
-  });
-
-}
-
-//------------------------------------------------------------------------------
-function onPlayerMove() {
-  var passed = self.passed;
-  if (passed) {
-    ++g_passes; // Increase consecutive opponent passes
-    if (g_passes >= g_maxpasses) {
-      announceWinner();
-      return;
-    }
-  }
-
-  var boardinfo = g_bui.getBoard();
-  g_board = boardinfo.board;
-  g_boardpoints = boardinfo.boardp;
-  g_boardmults = boardinfo.boardm;
-
-  if (!passed) {
-    var placement = g_bui.getPlayerPlacement();
-    var pinfo = checkValidPlacement(placement);
-    var pstr = pinfo.played;
-    if (pstr === '') {
-      g_bui.prompt(t('Sorry, ') + pinfo.msg);
-      return;
-    }
-
-    //console.log('Player placement chars: ' + pstr);
-    g_bui.acceptPlayerPlacement();
-    g_board_empty = false; // Placement made
-    g_passes = 0; // Reset consecutive passes
-
-    if (pstr.length === g_racksize)
-      g_pscore += g_allLettersBonus;
-
-    g_pscore += pinfo.score;
-    g_bui.setPlayerScore(pinfo.score, g_pscore);
-
-    g_bui.addToHistory(pinfo.words, 1);
-    //console.log('Removing player chars: ' + pstr);
-    g_bui.removefromPlayerRack(pstr);
-    var pletters = g_bui.getPlayerRack();
-    //console.log('Left on player rack: ' + pletters);
-    pletters = takeLetters(pletters);
-    if (pletters === '') {
-      // All tiles were played and nothing left in the tile pool
-      announceWinner();
-      return;
-    }
-    //console.log('Setting player rack to: ' + pletters);
-    g_bui.setPlayerRack(pletters);
-    g_bui.setTilesLeft(g_letpool.length);
-  } else {
-    // Put back whatever was placed on the board
-    g_bui.cancelPlayerPlacement();
-    //console.log('After cancel, left on player rack: ' + g_bui.getPlayerRack());
-  }
-
-  var ostr = g_bui.getOpponentRack();
-  g_opponent_has_joker = ostr.search('\\*') !== -1;
-  g_playlevel = g_bui.getPlayLevel();
-
-  if (DEBUG) console.log('Opponent rack has: ' + ostr);
-
-  var play_word;
-  if (g_board_empty) {
-    var start = g_bui.getStartXY();
-    play_word = find_first_move(ostr, start.x, start.y);
-  } else {
-    play_word = find_best_move(ostr);
-  }
-
-  //console.log('Opponent word is: ' + play_word.word);
-
-  var animCallback = function() {
-    g_bui.makeTilesFixed();
-    //g_bui.hideBusy();
-    // Create the array of word and created orthogonal words created by
-    // opponent move.
-    var words = play_word.owords;
-    words.push(play_word.word);
-
-    // And send it to the played history window
-    g_bui.addToHistory(words, 2);
-
-    var score = play_word.score;
-    g_oscore += score;
-    if (play_word.seq.length === g_racksize) g_oscore += g_allLettersBonus;
-    g_bui.setOpponentScore(score, g_oscore);
-
-    var played = play_word.seq;
-
-    var letters_used = '';
-    for (var i = 0; i < played.length; ++i) {
-      var pltr = played.charAt(i);
-      if (ostr.search(pltr) > -1) letters_used += pltr;
-      else letters_used += '*';
-    }
-    g_bui.removefromOpponenentRack(letters_used);
-
-    // Get letters from pool as number of missing letters
-    var letters_left = g_bui.getOpponentRack();
-    if (DEBUG) console.log('Opponent rack left with: ' + letters_left);
-    var newLetters = takeLetters(letters_left);
-    if (newLetters === '') {
-      // All tiles taken, nothing left in tile pool
-      announceWinner();
-      return;
-    }
-    if (DEBUG) console.log('After taking letters, opponent rack is: ' + newLetters);
-    g_bui.setOpponentRack(newLetters);
-    g_bui.setTilesLeft(g_letpool.length);
-  };
-
-  if (play_word !== null) {
-    placeOnBoard(play_word, animCallback);
-    g_passes = 0; // Reset consecutive opponent passes
-  } else {
-    // GA
-    gtag('event', 'Computer Pass', {
-      'event_category': 'Gameplay - Lvl ' + (g_playlevel + 1),
-      'event_label': '[' + g_bui.getOpponentRack() + ']',
-      'value': g_letpool.length
-    });
-
-    //g_bui.hideBusy();
-    ++g_passes; // Increase consecutive opponent passes
-    if (g_passes >= g_maxpasses) {
-      announceWinner();
-    } else {
-      g_bui.prompt(t('I pass, your turn.'));
-      g_bui.makeTilesFixed();
-    }
-
-    return;
-  }
-
-}
-
-//------------------------------------------------------------------------------
-function findBestWord(rack, letters, ax, ay) {
-  if (DEBUG) console.log('findBestWord', 'ax=' + ax, 'ay=' + ay);
-  var numlets = letters.length;
+function findBestWord(letters, ax, ay, dirs) {
   var bestscore = -1;
   var bestword = {
-    score: -1
+    'score': -1
   };
-  var dirs = ['x', 'y'];
+  if (!dirs) dirs = ['y'];//['x', 'y'];
   for (var dir in dirs) {
     var xy = dirs[dir];
-    //console.log('Direction: ' + xy);
-    var regex = getRegex(xy, ax, ay, rack);
-    //console.log('Regular expression:', regex);
+    var regex = getRegex(xy, ax, ay, letters.join(''));
+    //console.log('findBestWord', 'ax=' + ax, 'ay=' + ay, 'xy=' + xy, 'regex=' + ((regex && regex.rgx) || null));
     if (regex !== null) {
       var word = getBestScore(regex, letters, ax, ay);
-      //console.log(bestscore, word.score, word.word);
       if (bestscore < word.score) {
         bestscore = word.score;
         bestword = word;
       }
     }
   }
-  if (DEBUG) console.log('Best word: ' + bestword.word);
+  //console.log('Best word:', bestword);
   return bestword;
 }
 
 //------------------------------------------------------------------------------
+function findFirstMove(opponent_rack, fy) {
+  // Try to find the best move horizontally or vertically along the star axis
+  var letters;
+  var anchor;
+  var alet;
+  var aletscr;
+  var best_word = {
+    'score': -1
+  };
+  var selword = {
+    'score': -1
+  };
+
+  // Place each letter on the star to find the best word
+  for (var i = 0; i < opponent_rack.length; ++i) {
+    letters = opponent_rack.split('');
+    anchor = i;
+    alet = letters[anchor];
+    aletscr = g_letscore[alet];
+
+    // The new rack is what is left after we remove the candidate letter from
+    // the starting rack and place it on the board.
+    letters.splice(anchor, 1);
+
+    // Try starting from every position along the x star axis
+    for (var j = 0, _x; j < fy + 1; ++j) {
+      _x = j;
+      // Simulate a first letter already existing on the board
+      g_board[_x][fy] = alet;
+      g_boardpoints[_x][fy] = aletscr;
+      // Find best move along the star axis
+      selword = findBestWord(letters, _x + 1, fy, ['x']);
+      if (selword['score'] > best_word['score'] && selword['ps'] + selword['word'].length > fy) {
+        best_word = selword;
+        best_word['aletscr'] = aletscr;
+      }
+      // Remove traces from board for next candidate
+      g_board[_x][fy] = '';
+      g_boardpoints[_x][fy] = 0;
+    }
+  }
+
+  // No word found
+  if (best_word['score'] === -1) return null;
+
+  // Adjust properties for the first move only
+  best_word[best_word['xy'] === 'x' ? 'ax' : 'ay'] = best_word['ps'];
+  best_word['lscrs'].unshift(best_word['aletscr']);
+  best_word['prec'] = '';
+
+  // In the case of the first move, the sequence of played letters and the
+  // word played are identical.
+  best_word['seq'] = best_word['word'];
+
+  //g_bui.opponentPlay(fx, fy, alet, aletscr);
+  //console.log('findFirstMove', best_word);
+  return best_word;
+}
+
+//------------------------------------------------------------------------------
 function getBestScore(regex, letters, ax, ay) {
+  //console.log('getBestScore', regex, 'letters=' + letters.join(''), 'ax=' + ax, 'ay=' + ay);
   var rletmap = {};
   var numjokers = 0;
   for (var i = 0; i < letters.length; ++i) {
@@ -684,7 +454,7 @@ function getBestScore(regex, letters, ax, ay) {
 
   var bestscore = -1;
   var bestword = {
-    score: -1
+    'score': -1
   };
 
   if (regex.max - 1 >= g_wstr.length) return bestword;
@@ -712,8 +482,8 @@ function getBestScore(regex, letters, ax, ay) {
         // Remove the marker symbols for the regex match
         word = mseq.substr(1, mseq.length - 2);
         matches.push({
-          word: word,
-          reqs: req_seq
+          'word': word,
+          'reqs': req_seq
         });
       }
 
@@ -765,9 +535,9 @@ function getBestScore(regex, letters, ax, ay) {
 
       // We have all the letters required to create this word
       var wordinfo = {
-        word: word,
-        ax: ax,
-        ay: ay
+        'word': word,
+        'ax': ax,
+        'ay': ay
       };
       wordinfo.seq = req_seq;     // Sequence to put on board
       wordinfo.lscrs = seq_lscrs; // Sequence letter scores
@@ -781,9 +551,7 @@ function getBestScore(regex, letters, ax, ay) {
       // the valid created orthogonal words (if score>0).
       var score = getWordScore(wordinfo);
 
-      var more = Math.ceil(Math.random() * 5);
-      var maxwpoints = g_maxwpoints[g_playlevel] + more;
-      if (score < maxwpoints && bestscore < score) {
+      if (score <= g_maxwpoints[g_playlevel] && bestscore < score) {
         bestscore = score;
         bestword = wordinfo;
         bestword.score = score;
@@ -794,90 +562,8 @@ function getBestScore(regex, letters, ax, ay) {
 }
 
 //------------------------------------------------------------------------------
-function getWordScore(wordinfo) {
-  var xdir = (wordinfo.xy === 'x');
-  var ax = wordinfo.ax;
-  var ay = wordinfo.ay;
-  var ap = xdir ? ax : ay;
-  var max = xdir ? g_board.length : g_board[ax].length;
-
-  var dx = xdir ? 1 : 0;
-  var dy = 1 - dx;
-  var ps = wordinfo.ps;
-  var seq = wordinfo.seq;
-  var seqc = 0;
-  var x;
-  var y;
-
-  //console.log('Checking orthogonals for: ' + wordinfo.word, 'Direction: ' + wordinfo.xy);
-  //console.log(wordinfo);
-
-  if (xdir) {
-    x = ps;
-    y = ay;
-  } else {
-    x = ax;
-    y = ps;
-  }
-
-  var owords = []; // List of valid orthogonal words created with this move
-  var wscore = 0;  // Word score
-  var oscore = 0;  // Orthogonal created words score
-
-  var lscores = wordinfo.lscrs;
-  var locs = 'x' + x + 'y' + y + 'd' + wordinfo.xy;
-
-  var wordmult = 1;
-
-  while (ps < max) {
-    if (g_board[x][y] === '') {
-      var lscr = lscores[seqc];      // Score of letter in sequence
-      var lseq = seq.charAt(seqc++); // The letter itself
-
-      // Add score of newly placed tile
-      var bonus = g_boardmults[x][y];
-
-      // Calculate the orthogonal word score
-      var ows = getOrthWordScore(lseq, lscr, x, y, dx, dy);
-
-      // An invalid orthogonal word was created?
-      if (ows.score === -1) return -1;
-
-      if (ows.score > 0) owords.push(ows.word);
-
-      wordmult *= g_wmults[bonus];
-      lscr *= g_lmults[bonus];
-      wscore += lscr;
-
-      oscore += ows.score;
-      x += dx;
-      y += dy;
-      ++ps;
-      // All letters and possible created words have been checked?
-      if (seqc === seq.length) break;
-    } else {
-      // Add score of existing tile on board
-      wscore += g_boardpoints[x][y];
-    }
-
-    while (ps < max && g_board[x][y] !== '') {
-      x += dx;
-      y += dy;
-      ++ps;
-    }
-  }
-
-  //console.log('Word: ' + wordinfo.word, 'Mult: ' + wordmult);
-  wscore *= wordmult;
-
-  if (seq.length === g_racksize) wscore += g_allLettersBonus;
-
-  wordinfo.owords = owords;
-  return wscore + oscore;
-}
-
-//------------------------------------------------------------------------------
 function getOrthWordScore(lseq, lscr, x, y, dx, dy) {
+  //console.log('getOrthWordScore', lseq, lscr);
   var wordmult = 1;
 
   var score = 0;
@@ -924,64 +610,30 @@ function getOrthWordScore(lseq, lscr, x, y, dx, dy) {
 
   // The letter does not form an orthogonal word?
   if (orthword.length === 1) return {
-    score: 0,
-    word: orthword
+    'score': 0,
+    'word': orthword
   };
 
   if (!(orthword in g_wordmap)) return {
-    score: -1,
-    word: orthword
+    'score': -1,
+    'word': orthword
   };
 
   score *= wordmult;
 
   //console.log('Orth word: ' + orthword, 'Score: ' + score);
   return {
-    score: score,
-    word: orthword
+    'score': score,
+    'word': orthword
   };
-}
-
-//------------------------------------------------------------------------------
-function placeOnBoard(word, animCallback) {
-  var lcount = 0;
-  var seqlen = word.seq.length;
-  var dx = 1;
-  var dy = 0;
-  if (word.xy === 'y') {
-    dx = 0;
-    dy = 1;
-  }
-  var x = word.ax;
-  var y = word.ay;
-  var placements = [];
-  while (lcount < seqlen) {
-    if (g_board[x][y] === '') {
-      var lscr = word.lscrs[lcount];
-      var ltr = word.seq.charAt(lcount++);
-      placements.push({
-        x: x,
-        y: y,
-        ltr: ltr,
-        lscr: lscr
-      });
-      //g_bui.opponentPlay(x, y, ltr, lscr);
-    }
-    x += dx;
-    y += dy;
-  }
-
-  g_bui.playOpponentMove(placements, animCallback);
-  g_bui.hideBusy();
-  g_board_empty = false;
 }
 
 //------------------------------------------------------------------------------
 // Get regular expression that matches all the words that qualify being in the
 // set of words that place the first letter on the board at anchor position
 // ax,ay in direction dir using at most numlets number of letters.
-
 function getRegex(dir, ax, ay, rack) {
+  //console.log('getRegex', dir, ax, ay, rack);
   // deX........ => /de[a-z]{1,7}/g
   // ..eX.m..... => /e[a-z]{2}m[a-z]{0,3}/g
   // ...X.m..p.. => /e[a-z]m[a-z]{2}p[a-z]{0,2}/g
@@ -1222,7 +874,6 @@ function getRegex(dir, ax, ay, rack) {
   }
 
   var s = ap - prev.length;
-  var maxl = p - s;
 
   // If there was another possible match, then add it
   regex += mwe + regex2;
@@ -1231,14 +882,347 @@ function getRegex(dir, ax, ay, rack) {
   // will be returned for |am*.t|
   // TODO: optimize by eliminating length 4 in this case
   var res = {
-    rgx: regex,
-    ps: s,
-    min: minl,
-    max: maxl
+    'min': minl,
+    'max': p - s,
+    'prec': prev,
+    'ps': s,
+    'rgx': regex,
+    'xy': dir
   };
-  res.prec = prev;
-  res.xy = dir;
+
   return res;
+}
+
+//------------------------------------------------------------------------------
+function getWordScore(wordinfo) {
+  //console.log('getWordScore', wordinfo);
+  var xdir = (wordinfo.xy === 'x');
+  var ax = wordinfo.ax;
+  var ay = wordinfo.ay;
+  var max = xdir ? g_board.length : g_board[ax].length;
+
+  var dx = xdir ? 1 : 0;
+  var dy = 1 - dx;
+  var ps = wordinfo.ps;
+  var seq = wordinfo.seq;
+  var seqc = 0;
+  var x;
+  var y;
+
+  //console.log('Checking orthogonals for: ' + wordinfo.word, 'Direction: ' + wordinfo.xy, wordinfo);
+
+  if (xdir) {
+    x = ps;
+    y = ay;
+  } else {
+    x = ax;
+    y = ps;
+  }
+
+  var owords = []; // List of valid orthogonal words created with this move
+  var wscore = 0;  // Word score
+  var oscore = 0;  // Orthogonal created words score
+
+  var lcount = 0;
+  var lscores = wordinfo.lscrs;
+  var wordmult = 1;
+  var bonus, lscr, lseq, ows;
+
+  while (ps < max) {
+    // Bonus of newly placed tile
+    bonus = g_boardmults[x][y];
+    wordmult *= g_wmults[bonus];
+    if (g_board[x][y] === '') {
+      lscr = lscores[seqc];      // Score of letter in sequence
+      lseq = seq.charAt(seqc++); // The letter itself
+
+      // Calculate the orthogonal word score
+      ows = getOrthWordScore(lseq, lscr, x, y, dx, dy);
+
+      // An invalid orthogonal word was created?
+      if (ows.score === -1) return -1;
+
+      if (ows.score > 0) owords.push(ows.word);
+
+      lscr *= g_lmults[bonus];
+      wscore += lscr;
+      oscore += ows.score;
+
+      //console.log('***', ows.word, 'x=' + x, 'y=' + y, 'wordmult=' + wordmult, 'lscr=' + lscr, 'wscore=' + wscore, 'oscore=' + oscore, 'seq=' + seq, 'seqc=' + seqc, 'lcount=' + lcount);
+    } else {
+      // Add score of existing tile on board
+      //console.log('*** Existing', g_board[x][y], wscore + ' + (' + g_boardpoints[x][y] + ' * ' + g_lmults[bonus] + ')');
+      wscore += g_boardpoints[x][y] * g_lmults[bonus];
+    }
+    x += dx;
+    y += dy;
+    ++ps;
+
+    // All letters and possible created words have been checked?
+    if (++lcount === wordinfo.word.length) break;
+  }
+
+  //console.log('*** End loop', 'wordmult=' + wordmult, 'lscr=' + lscr, 'wscore=' + wscore, 'oscore=' + oscore, 'seq=' + seq, 'seqc=' + seqc, 'lcount=' + lcount);
+
+  //console.log('Word: ' + wordinfo.word, 'Mult: ' + wordmult);
+  wscore *= wordmult;
+
+  if (seq.length === g_racksize) wscore += g_allLettersBonus;
+
+  wordinfo.owords = owords;
+  return wscore + oscore;
+}
+
+//------------------------------------------------------------------------------
+function onPlayerClear() {
+  g_bui.cancelPlayerPlacement();
+}
+
+//------------------------------------------------------------------------------
+function onPlayerMove() {
+  var passed = self.passed;
+  if (passed) {
+    ++g_passes; // Increase consecutive opponent passes
+    if (g_passes >= g_maxpasses) {
+      announceWinner();
+      return;
+    }
+  }
+
+  var boardinfo = g_bui.getBoard();
+  //console.log('onPlayerMove', boardinfo);
+  g_board = boardinfo.board;
+  g_boardpoints = boardinfo.boardp;
+
+  if (!passed) {
+    var placement = g_bui.getPlayerPlacement();
+    var pinfo = checkValidPlacement(placement);
+    var pstr = pinfo.played;
+    if (pstr === '') {
+      g_bui.prompt(t('Sorry, ') + pinfo.msg);
+      return;
+    }
+
+    //console.log('Player placement chars: ' + pstr);
+    g_bui.acceptPlayerPlacement();
+    g_board_empty = false; // Placement made
+    g_passes = 0; // Reset consecutive passes
+
+    if (pstr.length === g_racksize) g_pscore += g_allLettersBonus;
+
+    g_pscore += pinfo.score;
+    g_bui.setPlayerScore(pinfo.score, g_pscore);
+
+    g_bui.addToHistory(pinfo.words, 1);
+    //console.log('Removing player chars: ' + pstr);
+    g_bui.removefromPlayerRack(pstr);
+    var pletters = g_bui.getPlayerRack();
+    //console.log('Left on player rack: ' + pletters);
+    pletters = takeLetters(pletters);
+    if (pletters === '') {
+      // All tiles were played and nothing left in the tile pool
+      announceWinner();
+      return;
+    }
+    //console.log('Setting player rack to: ' + pletters);
+    g_bui.setPlayerRack(pletters);
+    g_bui.setTilesLeft(g_letpool.length);
+  } else {
+    // Put back whatever was placed on the board
+    g_bui.cancelPlayerPlacement();
+    //console.log('After cancel, left on player rack: ' + g_bui.getPlayerRack());
+  }
+
+  var ostr = g_bui.getOpponentRack();
+  g_opponent_has_joker = ostr.search('\\*') !== -1;
+  g_playlevel = g_bui.getPlayLevel();
+
+  if (DEBUG) console.log('Opponent rack has: ' + ostr);
+
+  var play_word;
+  if (g_board_empty) {
+    var start = g_bui.getStartXY();
+    play_word = findFirstMove(ostr, start.y);
+  } else {
+    play_word = findBestMove(ostr);
+  }
+
+  //console.log('Opponent word is: ' + play_word.word);
+
+  var animCallback = function() {
+    g_bui.makeTilesFixed();
+    //g_bui.hideBusy();
+    // Create the array of word and created orthogonal words created by
+    // opponent move.
+    var words = play_word.owords;
+    words.push(play_word.word);
+
+    // And send it to the played history window
+    g_bui.addToHistory(words, 2);
+
+    var score = play_word.score;
+    g_oscore += score;
+    if (play_word.seq.length === g_racksize) g_oscore += g_allLettersBonus;
+    g_bui.setOpponentScore(score, g_oscore);
+
+    var played = play_word.seq;
+
+    var letters_used = '';
+    for (var i = 0; i < played.length; ++i) {
+      var pltr = played.charAt(i);
+      if (ostr.search(pltr) > -1) letters_used += pltr;
+      else letters_used += '*';
+    }
+    g_bui.removefromOpponenentRack(letters_used);
+
+    // Get letters from pool as number of missing letters
+    var letters_left = g_bui.getOpponentRack();
+    if (DEBUG) console.log('Opponent rack left with: ' + letters_left);
+    var newLetters = takeLetters(letters_left);
+    if (newLetters === '') {
+      // All tiles taken, nothing left in tile pool
+      announceWinner();
+      return;
+    }
+    if (DEBUG) console.log('After taking letters, opponent rack is: ' + newLetters);
+    g_bui.setOpponentRack(newLetters);
+    g_bui.setTilesLeft(g_letpool.length);
+  };
+
+  if (play_word !== null) {
+    placeOnBoard(play_word, animCallback);
+    g_passes = 0; // Reset consecutive opponent passes
+  } else {
+    // GA
+    gtag('event', 'Computer Pass', {
+      'event_category': 'Gameplay - Lvl ' + (g_playlevel + 1),
+      'event_label': '[' + g_bui.getOpponentRack() + ']',
+      'value': g_letpool.length
+    });
+
+    //g_bui.hideBusy();
+    ++g_passes; // Increase consecutive opponent passes
+    if (g_passes >= g_maxpasses) {
+      announceWinner();
+    } else {
+      g_bui.prompt(t('I pass, your turn.'));
+      g_bui.makeTilesFixed();
+    }
+
+    return;
+  }
+
+}
+
+//------------------------------------------------------------------------------
+function onPlayerMoved(passed, swapped) {
+  if (passed) {
+    g_bui.cancelPlayerPlacement();
+    g_bui.showBusy();
+  }
+  self.passed = passed;
+  setTimeout(onPlayerMove, 100);
+
+  // GA
+  gtag('event', 'Player ' + (swapped ? 'Swap' : 'Pass'), {
+    'event_category': 'Gameplay - Lvl ' + (g_playlevel + 1),
+    'event_label': '[' + g_bui.getPlayerRack() + ']',
+    'value': g_letpool.length
+  });
+}
+
+//------------------------------------------------------------------------------
+function onPlayerSwap() {
+  // If there were any tiles from the player's rack on the board, put them
+  // back on the rack.
+  var tilesLeft = g_letpool.length;
+  if (tilesLeft === 0) {
+    g_bui.prompt(t('Sorry, no tiles left to swap.'));
+    return;
+  }
+  g_bui.cancelPlayerPlacement();
+  g_bui.showSwapModal(tilesLeft);
+}
+
+//------------------------------------------------------------------------------
+function onPlayerSwapped(keep, swap) {
+  //console.log('onPlayerSwapped', keep, swap);
+  if (swap.length === 0) {
+    g_bui.setPlayerRack(keep);
+    // Initialize REDISP again
+    g_bui.makeTilesFixed();
+    return;
+  }
+
+  for (var i = 0; i < swap.length; ++i) {
+    g_letpool.push(swap.charAt(i));
+  }
+
+  shufflePool();
+
+  g_bui.setPlayerRack(takeLetters(keep));
+
+  onPlayerMoved(true, true);
+}
+
+//------------------------------------------------------------------------------
+function placeOnBoard(word, animCallback) {
+  //console.log('placeOnBoard', word);
+  var lcount = 0;
+  var seqlen = word.seq.length;
+  var dx = 1;
+  var dy = 0;
+  if (word.xy === 'y') {
+    dx = 0;
+    dy = 1;
+  }
+  var x = word.ax;
+  var y = word.ay;
+  var placements = [];
+  var ltr, lscr;
+  while (lcount < seqlen) {
+    if (g_board[x][y] === '') {
+      ltr = word.seq.charAt(lcount);
+      lscr = word.lscrs[lcount++];
+      placements.push({
+        'x': x,
+        'y': y,
+        'ltr': ltr,
+        'lscr': lscr
+      });
+      //g_bui.opponentPlay(x, y, ltr, lscr);
+      //console.log('placeOnBoard', ltr, lscr);
+      g_board[x][y] = ltr;
+      g_boardpoints[x][y] = lscr;
+    }
+    x += dx;
+    y += dy;
+  }
+  g_bui.hideBusy();
+  g_bui.playOpponentMove(placements, animCallback);
+  g_board_empty = false;
+}
+
+//------------------------------------------------------------------------------
+function shufflePool() {
+  var total = g_letpool.length;
+  for (var i = 0; i < total; ++i) {
+    var rnd = Math.floor((Math.random() * total));
+    var c = g_letpool[i];
+    g_letpool[i] = g_letpool[rnd];
+    g_letpool[rnd] = c;
+  }
+}
+
+//------------------------------------------------------------------------------
+function takeLetters(existing) {
+  var poolsize = g_letpool.length;
+  if (poolsize === 0) return existing;
+  var needed = g_racksize - existing.length;
+  if (needed > poolsize) needed = poolsize;
+  var letters = g_letpool.slice(0, needed).join('');
+  g_letpool.splice(0, needed);
+  return letters + existing;
 }
 
 window['init'] = init;

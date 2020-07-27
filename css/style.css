@@ -49,12 +49,16 @@ body {
 a {
   cursor: pointer;
 }
+a:hover,
+a:focus {
+  color: #b00;
+}
+a:active {
+  color: #e00;
+}
 a:hover img {
   -webkit-filter: brightness(0.85);
   filter: brightness(0.85);
-}
-a:focus {
-  outline: 1px dotted #00e; /* -webkit-link */
 }
 
 select {
@@ -217,23 +221,24 @@ td.player-1 {
 }
 
 /* Racks */
+#drag .opponent,
+#drag .player {
+  margin: 0 auto;
+}
 #drag .opponent td,
 #drag .player td {
   border: none;
 }
 #drag .opponent td .drag {
-  background-color: #000;
-  opacity: 0.4;
-  -webkit-transition: background-color 0.3s, opacity 0.3s;
-  transition: background-color 0.3s, opacity 0.3s;
+  background-color: #e7ab83;
+  color: #e7ab83;
+  -webkit-transition: background-color 0.3s, color 0.3s;
+  transition: background-color 0.3s, color 0.3s;
 }
 #drag .opponent td.on .drag,
 #drag .opponent td .drag[style] {
   background-color: #fff;
-  opacity: 0.9;
-}
-#drag .player {
-  margin: 0 auto;
+  color: #000;
 }
 #toggle {
   min-width: 137px;
