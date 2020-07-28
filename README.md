@@ -54,6 +54,7 @@ Corrections and comments are welcome by [sending an email](mailto:feedback@vietb
 - Removed hardcoded `g_vowels` since AI doesn't rely on that anymore
 - Fixed computer sometimes starting off the star
 - Fixed incorrect scoring in many cases
+- Fixed JS error when clicking Pass repeatedly (button disabled while animating tiles)
 
 ## Dependencies for local build
 
