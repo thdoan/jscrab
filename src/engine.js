@@ -84,8 +84,9 @@ function init(iddiv) {
   g_bui.create(iddiv, g_boardwidth, g_boardheight, g_letscore, g_racksize);
 
   g_bui.setPlayerRack(my_letters);
-  g_bui.setOpponentRack(comp_letters);
+  ///g_bui.setOpponentRack(comp_letters);
   //g_bui.setOpponentRack('bmủtxnnt');
+  g_bui.setOpponentRack('xxxxxxxx');
   //g_bui.setOpponentRack('banhxnnt');
   //g_bui.setOpponentRack('hkòngnnt');
   g_bui.setTilesLeft(g_letpool.length);
@@ -121,10 +122,10 @@ function announceWinner() {
   g_oscore -= odeduct;
   g_pscore -= pdeduct;
 
-  var html = t('After deducting points of unplaced tiles, the score is...');
+  var html = t('Game over. The score is...');
   html += '<ul><li>';
   html += t('You: ') + g_pscore + '</li><li>' + t('Computer: ') + g_oscore + '</li></ul>';
-  var msg = t('It&rsquo;s a draw!');
+  var msg = t('It&rsquo;s a tie!');
   if (g_oscore > g_pscore) msg = t('Computer wins.');
   else if (g_oscore < g_pscore) msg = t('You win!');
   html += '<font size="+2">' + msg + '</font>';
