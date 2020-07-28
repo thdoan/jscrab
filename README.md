@@ -55,6 +55,7 @@ Corrections and comments are welcome by [sending an email](mailto:feedback@vietb
 - Fixed computer sometimes starting off the star
 - Fixed incorrect scoring in many cases
 - Fixed JS error when clicking Pass repeatedly (button disabled while animating tiles)
+- Updated code to be HTML5 compliant
 
 ## Dependencies for local build
 

@@ -41,9 +41,11 @@ function setStorage(sKey, sValue) {
   style.innerHTML = '.drag{font-family:\'' + (sFamily.indexOf('Maven')===0 ? 'Maven Pro' : sFamily) + '\', Arial, sans-serif}';
   document.head.appendChild(style);
   // Load translation
+  var sLang = getStorage('lang')==='vi' ? 'vi' : 'en';
   var script = document.createElement('script');
-  script.src = 'lang/' + (getStorage('lang')==='vi' ? 'vi' : 'en') + '_translate.js';
+  script.src = 'lang/' + sLang + '_translate.js';
   document.head.appendChild(script);
+  document.documentElement.lang = sLang;
 })();
 </script>
 <link rel="stylesheet" href="css/style.css">

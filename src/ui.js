@@ -235,13 +235,13 @@ function RedipsUI() {
     var hr = '<tr class="ruler"><td colspan="2"></td></tr>';
     var html = '<table><tr><td><div id="board"></div>';
 
-    html += '</td><td class="score">';
+    html += '</td><td id="score">';
     html += '<table class="gameinfo">';
 
     html += '<tr class="heading"><th colspan="2">';
     html += t('Words Played') + '</th></tr>';
-    html += '<tr><td colspan="2" align="left">';
-    html += '<div class="scroller" id="history">';
+    html += '<tr><td colspan="2">';
+    html += '<div id="history">';
     html += '</div></td></tr>';
     html += hr;
 
@@ -304,8 +304,7 @@ function RedipsUI() {
     if (DEBUG) html += '<td class="mark"><button id="toggle" class="obutton" onclick="g_bui.toggleORV()"></button></td>';
 
     for (var i = 0; i < racksize; ++i) {
-      html += '<td id="' + self.oppRackId + i;
-      html += '" holds=""></td>';
+      html += '<td id="' + self.oppRackId + i + '"></td>';
     }
     html += '</tr></table>';
 
@@ -319,7 +318,7 @@ function RedipsUI() {
     for (var i = 0; i < by; ++i) {
       html += '<tr>';
       for (var j = 0; j < bx; ++j) {
-        html += '<td bgcolor="' + self.cellbg + '" id="c' + j + '_' + i + '" ';
+        html += '<td id="c' + j + '_' + i + '" ';
         mult = '';
         mult = (j === st.x && i === st.y) ? 'ST' : mults[self.boardm[j][i]];
         if (mult !== '') mult = 'class="' + mult + '"';
@@ -333,8 +332,7 @@ function RedipsUI() {
     // Player's rack
     html += '<table class="player"><tr>';
     for (var i = 0; i < racksize; ++i) {
-      html += '<td id="' + self.plrRackId + i;
-      html += '" holds=""></td>';
+      html += '<td id="' + self.plrRackId + i + '"></td>';
     }
     //---------------------------
 
@@ -405,7 +403,7 @@ function RedipsUI() {
   };
 
   self.showBusy = function() {
-    showModal('<center>' + t('Computer thinking, please wait...') + '</center>');
+    showModal(t('Computer thinking, please wait...'));
   };
 
   self.hideBusy = function() {
@@ -466,8 +464,7 @@ function RedipsUI() {
   self.showSwapModal = function(tilesLeft) {
     var divs = [];
     var id;
-    var html = '<center><div id="drags">';
-    html += '<table id="swaptable"><tr>';
+    var html = '<div id="drags"><table id="swaptable"><tr>';
     for (var i = 0; i < self.racksize; ++i) {
       id = self.plrRackId + i;
       var rcell = el(id);
@@ -479,16 +476,14 @@ function RedipsUI() {
 
     var rackplen = self.getPlayerRack().length;
     var maxswap = rackplen < tilesLeft ? rackplen : tilesLeft;
-    //alert( rackplen +" "+ tilesLeft + " " + maxswap)
     html += '<table><tr class="trash">';
     for (var i = 0; i < maxswap; ++i) {
       html += '<td class="swapit" id="swap' + i + '"></td>';
     }
-    html += '</tr></table>';
-    html += '</div><button class="button" onclick="g_bui.onSwap()">' + t('OK') + '</button></center>';
+    html += '</tr></table></div>';
 
     // Display the HTML in the modal window
-    showModal(html);
+    self.prompt(html, '<button class="button" onclick="g_bui.onSwap()">' + t('OK') + '</button>');
 
     // And then fill the DOM in the modal window with the existing letter
     // divs from the players rack
@@ -567,6 +562,7 @@ function RedipsUI() {
     };
   };
 
+  /*
   self.opponentPlay = function(x, y, lt, lts) {
     // TODO: add animation, etc.
     var cell = el(self.boardId + x + '_' + y);
@@ -585,6 +581,7 @@ function RedipsUI() {
     cell.innerHTML = html;
     cell.style.backgroundColor = '#ff0'; // Yellow
   };
+  */
 
   self.playOpponentMove = function(placements, callback) {
     // Placements is an array of letter placement information for the
@@ -923,7 +920,7 @@ function RedipsUI() {
       for (var y = 0; y < self.by; ++y) {
         var id = self.boardId + x + '_' + y;
         var obj = el(id);
-        obj.style.backgroundColor = self.cellbg;
+        //obj.style.backgroundColor = self.cellbg;
         var letter = '';
         var points = 0;
         if (obj.holds !== '') {
@@ -941,10 +938,12 @@ function RedipsUI() {
   };
 
   self.prompt = function(msg, button) {
-    var html = msg + '<br><center>';
-    html += button || '<button class="button" onclick="hideModal()">' + t('OK') + '</button>';
-    html += '</center>';
-    showModal(html);
+    showModal(
+      msg +
+      '<div class="buttons">' +
+      (button || '<button class="button" onclick="hideModal()">' + t('OK') + '</button>') +
+      '</div>'
+    );
   };
 }
 

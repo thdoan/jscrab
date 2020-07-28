@@ -60,6 +60,9 @@ a:hover img {
   -webkit-filter: brightness(0.85);
   filter: brightness(0.85);
 }
+a.link {
+  display: inline-block;
+}
 
 select {
   width: 79px;
@@ -162,38 +165,38 @@ html.loaded #app {
   filter: grayscale(1);
 }
 
+.buttons {
+  margin-top: 1rem;
+  text-align: center;
+}
+
 /*** Game Table ***/
 
 table.board {
   table-layout: fixed;
 }
-
-td.DL {
+table.board td {
+  background-color: #e0e0b0;
+}
+table.board td.DL {
   background-image: url(../pics/DL.png);
   background-repeat: no-repeat;
 }
-td.DW {
+table.board td.DW {
   background-image: url(../pics/DW.png);
   background-repeat: no-repeat;
 }
-td.TL {
+table.board td.TL {
   background-image: url(../pics/TL.png);
   background-repeat: no-repeat;
 }
-td.TW {
+table.board td.TW {
   background-image: url(../pics/TW.png);
   background-repeat: no-repeat;
 }
-td.ST {
+table.board td.ST {
   background-image: url(../pics/ST.png);
   background-repeat: no-repeat;
-}
-
-td.player-0 {
-  background: #f1fefe;
-}
-td.player-1 {
-  background: #fefef1;
 }
 
 /* Drag container */
@@ -303,45 +306,47 @@ td.swapit {
 
 /*** Game Info ***/
 
-a.link {
-  display: inline-block;
-}
-
-td.score {
+#score {
   position: relative;
   background: #fafafa;
+  background: -webkit-gradient(linear, left top, left bottom, from(#f7fef7), to(#fafafa));
+  background: linear-gradient(#f7fef7, #fafafa);
   border-radius: 4px;
   vertical-align: top;
 }
-
-table.gameinfo {
+#score table.gameinfo {
   text-align: right;
 }
 
-.scroller {
-  width: 100%;
-  height: 250px;
-  background: #f7fef7;
-  font-size: 14px;
-  overflow: auto;
-}
-
-tr.heading {
+#score tr.heading {
   background: #f5f5dc; /* beige */
   color: #c39b3c; /* page bg color luminosity 50% */
   text-align: center;
   text-transform: uppercase;
 }
-tr.highlight {
+#score tr.highlight {
   background: #fefeba;
 }
-tr.ruler {
+#score tr.ruler {
   background: #adadad;
 }
 
+#history {
+  width: 100%;
+  height: 250px;
+  font-size: 14px;
+  overflow: auto;
+  text-align: left;
+}
 #history table {
   width: 100%;
   border-collapse: collapse;
+}
+#history tr.player-0 {
+  color: #499b33;
+}
+#history tr.player-1 {
+  color: #cd5c5c;
 }
 #history td {
   height: 32px;
@@ -432,9 +437,6 @@ tr.ruler {
   border-bottom: 2px solid #000;
   border-right: 1px solid #204095;
   content: '';
-}
-#modal-content .button {
-  margin-top: 1rem;
 }
 
 /* VDict */

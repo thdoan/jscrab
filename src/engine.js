@@ -84,9 +84,9 @@ function init(iddiv) {
   g_bui.create(iddiv, g_boardwidth, g_boardheight, g_letscore, g_racksize);
 
   g_bui.setPlayerRack(my_letters);
-  ///g_bui.setOpponentRack(comp_letters);
+  g_bui.setOpponentRack(comp_letters);
   //g_bui.setOpponentRack('bmủtxnnt');
-  g_bui.setOpponentRack('xxxxxxxx');
+  //g_bui.setOpponentRack('xxxxxxxx');
   //g_bui.setOpponentRack('banhxnnt');
   //g_bui.setOpponentRack('hkòngnnt');
   g_bui.setTilesLeft(g_letpool.length);
@@ -128,7 +128,7 @@ function announceWinner() {
   var msg = t('It&rsquo;s a tie!');
   if (g_oscore > g_pscore) msg = t('Computer wins.');
   else if (g_oscore < g_pscore) msg = t('You win!');
-  html += '<font size="+2">' + msg + '</font>';
+  html += '<h3>' + msg + '</h3>';
   g_bui.prompt(html, '<button class="button" onclick="location.reload()">' + t('Play Again') + '</button>');
 
   // GA
@@ -435,7 +435,7 @@ function findFirstMove(opponent_rack, fy) {
   // word played are identical.
   best_word['seq'] = best_word['word'];
 
-  //g_bui.opponentPlay(fx, fy, alet, aletscr);
+  //g_bui.opponentPlay(7, 7, alet, aletscr);
   //console.log('findFirstMove', best_word);
   return best_word;
 }
