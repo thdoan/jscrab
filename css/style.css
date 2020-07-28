@@ -109,8 +109,8 @@ html.loaded #app {
   text-shadow: 1px 1px 0px #aade7c;
   white-space: nowrap;
 }
-.button:hover,
-.button:focus {
+.button:not([disabled]):hover,
+.button:not([disabled]):focus {
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #5cb811), color-stop(1, #77d42a));
   background: linear-gradient(to bottom, #5cb811 5%, #77d42a 100%);
   background-color: #5cb811;
@@ -144,8 +144,8 @@ html.loaded #app {
   padding: 0px;
   text-align: center;
 }
-.obutton:hover,
-.obutton:focus {
+.obutton:not([disabled]):hover,
+.obutton:not([disabled]):focus {
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #ffab23), color-stop(1, #ffec64));
   background: linear-gradient(to bottom, #ffab23 5%, #ffec64 100%);
   background-color: #ffab23;
@@ -153,6 +153,13 @@ html.loaded #app {
 .obutton:active {
   position: relative;
   top: 1px;
+}
+
+.button[disabled],
+.obutton[disabled] {
+  cursor: default;
+  -webkit-filter: grayscale(1);
+  filter: grayscale(1);
 }
 
 /*** Game Table ***/

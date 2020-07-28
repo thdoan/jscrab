@@ -334,7 +334,7 @@ function RedipsUI() {
     html += '<button id="play" class="button" onclick="onPlayerMoved(false)">' + t('Play') + '</button></td>';
 
     html += '<td class="mark">';
-    html += '<button class="obutton" onclick="onPlayerMoved(true)">' + t('Pass') + '</button></td>';
+    html += '<button id="pass" class="obutton" onclick="onPlayerMoved(true)">' + t('Pass') + '</button></td>';
 
     html += '<td class="mark">';
     html += '<button class="obutton" onclick="onPlayerClear()">' + t('Clear') + '</button></td>';

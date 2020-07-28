@@ -1087,6 +1087,7 @@ function onPlayerMove() {
     if (DEBUG) console.log('After taking letters, opponent rack is: ' + newLetters);
     g_bui.setOpponentRack(newLetters);
     g_bui.setTilesLeft(g_letpool.length);
+    el('pass').disabled = false;
   };
 
   if (play_word !== null) {
@@ -1117,6 +1118,7 @@ function onPlayerMove() {
 //------------------------------------------------------------------------------
 function onPlayerMoved(passed, swapped) {
   if (passed) {
+    el('pass').disabled = true;
     g_bui.cancelPlayerPlacement();
     g_bui.showBusy();
   }
