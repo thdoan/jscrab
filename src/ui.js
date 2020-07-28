@@ -255,8 +255,8 @@ function RedipsUI() {
     html += '<tr><td>' + t('Tileset:') + '</td><td>' + sSelect + '</td></tr>';
     html += hr;
 
-    html += '<tr><td>' + t('Computer\'s last score:') + '</td><td id="loscore">0</td></tr>';
-    html += '<tr class="highlight"><td>' + t('Computer\'s total score:') + '</td>';
+    html += '<tr><td>' + t('Computer&rsquo;s last score:') + '</td><td id="loscore">0</td></tr>';
+    html += '<tr class="highlight"><td>' + t('Computer&rsquo;s total score:') + '</td>';
     html += '<td id="oscore">0</td></tr>';
     html += hr;
 
@@ -372,7 +372,7 @@ function RedipsUI() {
   self.toggleORV = function() {
     // Toggle opponent rack visibility
     self.showOpRack = 1 - self.showOpRack;
-    dget('toggle').textContent = self.showOpRack ? t('Hide computer\'s rack') : t('Show computer\'s rack');
+    dget('toggle').innerHTML = self.showOpRack ? t('Hide computer&rsquo;s rack') : t('Show computer&rsquo;s rack');
     for (var i = 0; i < self.racksize; ++i) {
       dget(self.oppRackId + i).classList.toggle('on', self.showOpRack);
     }

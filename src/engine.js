@@ -124,7 +124,7 @@ function announceWinner() {
   var html = t('After deducting points of unplaced tiles, the score is...');
   html += '<ul><li>';
   html += t('You: ') + g_pscore + '</li><li>' + t('Computer: ') + g_oscore + '</li></ul>';
-  var msg = t('It\'s a draw!');
+  var msg = t('It&rsquo;s a draw!');
   if (g_oscore > g_pscore) msg = t('Computer wins.');
   else if (g_oscore < g_pscore) msg = t('You win!');
   html += '<font size="+2">' + msg + '</font>';
