@@ -1016,7 +1016,7 @@ function onPlayerMove() {
 
     g_bui.addToHistory(pinfo.words, 1);
     //console.log('Removing player chars: ' + pstr);
-    g_bui.removefromPlayerRack(pstr);
+    g_bui.removeFromPlayerRack(pstr);
     var pletters = g_bui.getPlayerRack();
     //console.log('Left on player rack: ' + pletters);
     pletters = takeLetters(pletters);
@@ -1074,7 +1074,7 @@ function onPlayerMove() {
       if (ostr.search(pltr) > -1) letters_used += pltr;
       else letters_used += '*';
     }
-    g_bui.removefromOpponenentRack(letters_used);
+    g_bui.removeFromOpponenentRack(letters_used);
 
     // Get letters from pool as number of missing letters
     var letters_left = g_bui.getOpponentRack();
@@ -1149,22 +1149,18 @@ function onPlayerSwap() {
 
 //------------------------------------------------------------------------------
 function onPlayerSwapped(keep, swap) {
-  //console.log('onPlayerSwapped', keep, swap);
+  console.log('onPlayerSwapped', keep, swap);
   if (swap.length === 0) {
     g_bui.setPlayerRack(keep);
     // Initialize REDISP again
     g_bui.makeTilesFixed();
     return;
   }
-
   for (var i = 0; i < swap.length; ++i) {
     g_letpool.push(swap.charAt(i));
   }
-
   shufflePool();
-
   g_bui.setPlayerRack(takeLetters(keep));
-
   onPlayerMoved(true, true);
 }
 

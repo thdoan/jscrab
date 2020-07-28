@@ -222,14 +222,6 @@ table.board td.ST {
   text-align: center;
 }
 
-#drags td {
-  width: 32px;
-  height: 32px;
-  border: 1px solid #fff;
-  font-size: 10pt;
-  text-align: center;
-}
-
 /* Racks */
 #drag .opponent,
 #drag .player {
@@ -299,9 +291,18 @@ sup > small {
 }
 
 /* Swap modal */
-td.swapit {
-  background-image: url(../pics/trash.png);
-  background-repeat: no-repeat;
+#swaptable td {
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+}
+#swaptable .drag {
+  cursor: pointer !important;
+}
+#swaptable td.to-swap .drag {
+  background: #1a1a1a;
+  border-color: #be74d2;
+  color: #fff;
 }
 
 /*** Game Info ***/
@@ -406,10 +407,6 @@ td.swapit {
 #modal-container.on {
   opacity: 1;
 }
-#modal-container.on:not(:focus-within) { /* CSS focus trap */
-  color: #000001;
-  transition: color 0.01s linear;
-}
 #modal-content {
   position: relative;
   min-width: 240px;
@@ -443,7 +440,9 @@ td.swapit {
 #suggestresult,
 #wordresult {
   font-size: 95%;
-  margin-bottom: -20px;
+}
+#suggestresult > ul {
+  margin-top: 0;
 }
 #suggestresult #suggestionlist {
   list-style: none;

@@ -27,6 +27,7 @@ var translation_map = {
   'Pass': 'Bỏ Lượt',
   'Play Again': 'Chơi Lại',
   'Play': 'Chơi',
+  'Select the letters you want to swap': 'Chọn những chữ bạn muốn đổi',
   'Show computer&rsquo;s rack': 'Hiện khay chữ của máy',
   'Show definition': 'Hiển thị định nghĩa',
   'Sorry, ': 'Xin lỗi, ',

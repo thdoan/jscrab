@@ -87,6 +87,10 @@ function showModal(html, width) {
     g_cache['modalMask'].classList.add('on');
     g_cache['modalContainer'].classList.add('on');
   }, 0);
+  // Set focus trap
+  [].forEach.call(g_cache['app'].querySelectorAll('a[href], button'), function(el) {
+    el.tabIndex = -1;
+  });
 }
 function hideModal() {
   g_cache['modalContainer'].classList.remove('on');
@@ -95,6 +99,10 @@ function hideModal() {
     g_cache['modalContainer'].style.display = 'none';
     g_cache['modalMask'].style.display = 'none';
   }, 300); // Sync with transition time
+  // Remove focus trap
+  [].forEach.call(g_cache['app'].querySelectorAll('a[href], button'), function(el) {
+    el.tabIndex = 0;
+  });
 }
 
 // Main UI logic
@@ -117,54 +125,9 @@ function RedipsUI() {
   self.hcount = 0;     // Play history count
   self.showOpRack = 1; // 0=hidden, 1=visible
 
-  self.wordInfo = function(word) {
-    if (!window.g_defs) {
-      alert(t('Word definitions not enabled.'));
-      return;
-    }
-
-    var link = new RegExp('\\{([a-z]+)=.+\\}');
-    var jump = new RegExp('<([a-z]+)=.+>');
-    var lword = word;
-
-    // Try to get definition locally first
-    if (word in g_defs) {
-
-      var mj;
-      while ((mj = g_defs[lword].match(jump)) !== null) {
-        lword = mj[1];
-        if (!(lword in g_defs)) {
-          // Shouldn't happen
-          alert(t('Dictionary inconsistency detected.'));
-          return;
-        }
-      }
-      var html = g_defs[lword];
-      var ml = html.match(link);
-      if (ml !== null) {
-        var hword = ml[1];
-        html = html.replace(link, '<a class="link" title="' + t('Show definition') + '" aria-label="' + t('Show definition') + '" onclick="g_bui.wordInfo(\'' + hword + '\')">' + hword + '</a>');
-      }
-      html = word.toUpperCase() + ': ' + html;
-      self.prompt(html);
-
-      // If it doesn't exist, look it up online
-    } else {
-
-      getJsonp('https://m.vdict.com/mobile/dictjson?fromapp=1&word=' + encodeURIComponent(word) + '&dict=2', function() {
-        g_def = g_def.replace('href="#"', 'onclick="el(\'audio\').play()" title="' + t('Listen to pronunciation') + '"');
-        g_def = g_def.replace(' Suggestions:', '');
-        g_def = g_def.replace(/">(.+?) not found/, '"><b>$1</b> not found');
-        self.prompt(g_def);
-
-        // GA
-        gtag('event', word, {
-          'event_category': 'Definition',
-          'event_label': g_def.indexOf('</b> not found') < 0 ? 'Found' : 'Not Found'
-        });
-      });
-
-    }
+  self.acceptPlayerPlacement = function() {
+    self.newplays = {};
+    self.makeTilesFixed();
   };
 
   self.addToHistory = function(words, player) {
@@ -206,26 +169,50 @@ function RedipsUI() {
     }
   };
 
-  self.levelUp = function() {
-    if (self.level < g_maxwpoints.length) ++self.level;
-    el('level').textContent = self.level;
-    el('level').title = t('Computer can score up to ') + g_maxwpoints[self.level - 1] + t(' points per turn');
-    setStorage('level', self.level);
+  self.animDone = function() {
+    --self.animTiles;
+    self.playSound();
+    //console.log('Animations left: ' + self.animTiles);
+    if (self.animTiles === 0) {
+      // Last opponent tile animated to its position; return original
+      // show/hide state of tiles set to visible before animation.
+      /*
+      if (self.showOpRack === 0) {
+        for (var i = 0; i < self.displayedcells.length; ++i) {
+          //self.displayedcells[i].style.display = 'none';
+        }
+      }
+      */
+      self.animCallback();
+    }
   };
 
-  self.levelDn = function() {
-    if (self.level > 1) --self.level;
-    el('level').textContent = self.level;
-    el('level').title = t('Computer can score up to ') + g_maxwpoints[self.level - 1] + t(' points per turn');
-    setStorage('level', self.level);
-  };
-
-  self.getPlayLevel = function() {
-    return self.level - 1;
-  };
-
-  self.playSound = function() {
-    g_cache['sound'].play();
+  self.cancelPlayerPlacement = function() {
+    var placement = self.getPlayerPlacement();
+    var divs = [];
+    var id;
+    for (var i = 0; i < placement.length; ++i) {
+      var pl = placement[i];
+      id = self.boardId + pl.x + '_' + pl.y;
+      var cell = el(id);
+      //if (cell.firstChild==null || typeof(cell.firstChild)=="undefined") alert("baaaaa");
+      divs.push(cell.firstChild);
+      cell.holds = '';
+      cell.innerHTML = '';
+    }
+    var count = 0;
+    for (var i = 0; i < self.racksize; ++i) {
+      id = self.plrRackId + i;
+      var rcell = el(id);
+      if (rcell.holds === '' && count < divs.length) {
+        var div = divs[count++];
+        // Joker tile - remove previously selected letter from tile?
+        if (div.holds.points === 0) div.innerHTML = '';
+        rcell.appendChild(div);
+        rcell.holds = self.hcopy(div.holds);
+      }
+    }
+    self.newplays = [];
   };
 
   self.create = function(iddiv, bx, by, scores, racksize) {
@@ -375,13 +362,66 @@ function RedipsUI() {
     self.initRedips();
   };
 
-  self.toggleORV = function() {
-    // Toggle opponent rack visibility
-    self.showOpRack = 1 - self.showOpRack;
-    el('toggle').innerHTML = self.showOpRack ? t('Hide computer&rsquo;s rack') : t('Show computer&rsquo;s rack');
-    for (var i = 0; i < self.racksize; ++i) {
-      el(self.oppRackId + i).classList.toggle('on', self.showOpRack);
+  self.fixPlayerTiles = function() {
+    for (var i = 0; i < self.racks[1].length; ++i) {
+      var idp = self.plrRackId + i;
+      var divp = el(idp).firstChild;
+      if (divp) self.rd.enableDrag(false, divp);
     }
+  };
+
+  self.getBoard = function() {
+    var board = [];
+    var boardp = [];
+    for (var x = 0; x < self.bx; ++x) {
+      board[x] = [];
+      boardp[x] = [];
+      for (var y = 0; y < self.by; ++y) {
+        var id = self.boardId + x + '_' + y;
+        var obj = el(id);
+        //obj.style.backgroundColor = self.cellbg;
+        var letter = '';
+        var points = 0;
+        if (obj.holds !== '') {
+          letter = obj.holds.letter;
+          points = obj.holds.points;
+        }
+        board[x][y] = letter;
+        boardp[x][y] = points;
+      }
+    }
+    return {
+      'board': board,
+      'boardp': boardp
+    };
+  };
+
+  self.getOpponentRack = function() {
+    return self.racks[2];
+  };
+
+  self.getPlayerPlacement = function() {
+    var placement = [];
+    var played = self.newplays;
+    for (var l in played) {
+      var sc = l.substr(1);
+      var co = sc.split('_');
+      placement.push({
+        'ltr': played[l].letter,
+        'lsc': played[l].points,
+        'x': +co[0],
+        'y': +co[1]
+      });
+    }
+    return placement;
+  };
+
+  self.getPlayerRack = function() {
+    return self.racks[1];
+  };
+
+  self.getPlayLevel = function() {
+    return self.level - 1;
   };
 
   self.getStartXY = function() {
@@ -402,119 +442,8 @@ function RedipsUI() {
     };
   };
 
-  self.showBusy = function() {
-    showModal(t('Computer thinking, please wait...'));
-  };
-
   self.hideBusy = function() {
     hideModal();
-  };
-
-  self.onSwap = function() {
-    var id;
-    var keep = '';
-    for (var i = 0; ; ++i) {
-      id = 'swap_candidate' + i;
-      var swapc = el(id);
-      if (swapc === null) break;
-      if (swapc.firstChild) keep += swapc.firstChild.holds.letter;
-    }
-
-    var swap = '';
-    for (var i = 0; ; ++i) {
-      id = 'swap' + i;
-      var swp = el(id);
-      if (swp === null) break;
-      if (swp.firstChild) swap += swp.firstChild.holds.letter;
-    }
-
-    //alert( "keep:"+keep+" swap:"+swap );
-    // Either I'm not using REDIPS correctly or having the two tile swapping
-    // tables somehow messes up its internal table monitoring mechanism.
-    // Without the two lines below, that tell REDIPS to forget about the
-    // swap racks and reread the board and player/opponent rack tables, the
-    // move animation thinks the target table is the swap rack instead of
-    // the board table, causing havoc.
-    el('swaptable').innerHTML = '';
-    self.initRedips();
-
-    hideModal();
-    onPlayerSwapped(keep, swap);
-  };
-
-  self.onSelLetter = function(ltr) {
-    var holds = {
-      'letter': ltr,
-      'points': 0
-    };
-    self.newplays[self.bdropCellId] = holds;
-    var cell = el(self.bdropCellId);
-    cell.holds = self.hcopy(holds);
-    var html = '';
-    //html += '<div class="drag t1">';
-    html += ltr.toUpperCase() + '<sup><small>&nbsp;</small></sup>';
-    //html += '</div>';
-    //cell.innerHTML = html;
-    var div = cell.firstChild;
-    div.holds = self.hcopy(holds);
-    div.innerHTML = html;
-    hideModal();
-  };
-
-  self.showSwapModal = function(tilesLeft) {
-    var divs = [];
-    var id;
-    var html = '<div id="drags"><table id="swaptable"><tr>';
-    for (var i = 0; i < self.racksize; ++i) {
-      id = self.plrRackId + i;
-      var rcell = el(id);
-      if (rcell.holds === '') continue;
-      divs.push(rcell.firstChild);
-      html += '<td class="swapc" id="swap_candidate' + i + '"></td>';
-    }
-    html += '</tr></table>';
-
-    var rackplen = self.getPlayerRack().length;
-    var maxswap = rackplen < tilesLeft ? rackplen : tilesLeft;
-    html += '<table><tr class="trash">';
-    for (var i = 0; i < maxswap; ++i) {
-      html += '<td class="swapit" id="swap' + i + '"></td>';
-    }
-    html += '</tr></table></div>';
-
-    // Display the HTML in the modal window
-    self.prompt(html, '<button class="button" onclick="g_bui.onSwap()">' + t('OK') + '</button>');
-
-    // And then fill the DOM in the modal window with the existing letter
-    // divs from the players rack
-    for (var i = 0; i < divs.length; ++i) {
-      id = 'swap_candidate' + i;
-      var swapc = el(id);
-      swapc.appendChild(divs[i]);
-    }
-
-    self.rd.init('drags');
-  };
-
-  self.showLettersModal = function(bdropCellId) {
-    self.bdropCellId = bdropCellId;
-    var rlen = 6;
-    var llen = g_letters.length;
-    var html = '';
-    for (var i = 0; i < llen; ++i) {
-      var ltr = g_letters[i][0];
-      if (ltr !== '*') {
-        if (html !== '' && i % rlen === 0) html += '</tr><tr>'
-        html += '<td><button class="obutton" onclick="g_bui.onSelLetter(\'' + ltr + '\')">';
-        html += (ltr === ' ' ? '&nbsp;' : ltr.toUpperCase()) + '</button></td>';
-      }
-    }
-    for (var i = llen;
-      (i - 1) % rlen !== 0; ++i) {
-      html += '<td></td>';
-    }
-    html = '<table id="letters"><tr>' + html + '</tr></table>';
-    showModal(html);
   };
 
   self.initRedips = function() {
@@ -560,6 +489,83 @@ function RedipsUI() {
       // Tile lifted from playing board
       if (id.charAt(0) === self.boardId) delete self.newplays[id];
     };
+  };
+
+  self.levelDn = function() {
+    if (self.level > 1) --self.level;
+    el('level').textContent = self.level;
+    el('level').title = t('Computer can score up to ') + g_maxwpoints[self.level - 1] + t(' points per turn');
+    setStorage('level', self.level);
+  };
+
+  self.levelUp = function() {
+    if (self.level < g_maxwpoints.length) ++self.level;
+    el('level').textContent = self.level;
+    el('level').title = t('Computer can score up to ') + g_maxwpoints[self.level - 1] + t(' points per turn');
+    setStorage('level', self.level);
+  };
+
+  self.makeTilesFixed = function() {
+    self.rd.enableDrag(false, '#drag div');
+    for (var i = 0; i < self.racks[1].length; ++i) {
+      var idp = self.plrRackId + i;
+      var ido = self.oppRackId + i;
+      var divo = el(ido).firstChild;
+      if (divo) self.rd.enableDrag(false, divo);
+      var divp = el(idp).firstChild;
+      if (divp) self.rd.enableDrag(true, divp);
+    }
+  };
+
+  self.onSelLetter = function(ltr) {
+    var holds = {
+      'letter': ltr,
+      'points': 0
+    };
+    self.newplays[self.bdropCellId] = holds;
+    var cell = el(self.bdropCellId);
+    cell.holds = self.hcopy(holds);
+    var html = '';
+    //html += '<div class="drag t1">';
+    html += ltr.toUpperCase() + '<sup><small>&nbsp;</small></sup>';
+    //html += '</div>';
+    //cell.innerHTML = html;
+    var div = cell.firstChild;
+    div.holds = self.hcopy(holds);
+    div.innerHTML = html;
+    hideModal();
+  };
+
+  self.onSwap = function(cancel) {
+    var keep = '';
+    var swap = '';
+
+    if (cancel) {
+      keep = self.getPlayerRack();
+    } else {
+      for (var i = 0; ; ++i) {
+        var swapc = el('swap-candidate' + i);
+        if (!swapc) break;
+        if (swapc.firstChild) {
+          if (swapc.firstChild && swapc.classList.contains('to-swap')) swap += swapc.firstChild.holds.letter;
+          else keep += swapc.firstChild.holds.letter;
+        }
+      }
+    }
+
+    console.log('onSwap', keep, swap);
+
+    // Either I'm not using REDIPS correctly or having the two tile swapping
+    // tables somehow messes up its internal table monitoring mechanism.
+    // Without the two lines below, that tell REDIPS to forget about the
+    // swap racks and reread the board and player/opponent rack tables, the
+    // move animation thinks the target table is the swap rack instead of
+    // the board table, causing havoc.
+    //el('swaptable').innerHTML = '';
+    //self.initRedips();
+
+    hideModal();
+    onPlayerSwapped(keep, swap);
   };
 
   /*
@@ -712,42 +718,25 @@ function RedipsUI() {
     }
   };
 
-  self.animDone = function() {
-    --self.animTiles;
-    self.playSound();
-    //console.log('Animations left: ' + self.animTiles);
-    if (self.animTiles === 0) {
-      // Last opponent tile animated to its position; return original
-      // show/hide state of tiles set to visible before animation.
-      /*
-      if (self.showOpRack === 0) {
-        for (var i = 0; i < self.displayedcells.length; ++i) {
-          //self.displayedcells[i].style.display = 'none';
-        }
-      }
-      */
-      self.animCallback();
-    }
+  self.playSound = function() {
+    g_cache['sound'].play();
   };
 
-  self.fixPlayerTiles = function() {
-    for (var i = 0; i < self.racks[1].length; ++i) {
-      var idp = self.plrRackId + i;
-      var divp = el(idp).firstChild;
-      if (divp) self.rd.enableDrag(false, divp);
-    }
+  self.prompt = function(msg, button) {
+    showModal(
+      msg +
+      '<div class="buttons">' +
+      (button || '<button class="button" onclick="hideModal()">' + t('OK') + '</button>') +
+      '</div>'
+    );
   };
 
-  self.makeTilesFixed = function() {
-    self.rd.enableDrag(false, '#drag div');
-    for (var i = 0; i < self.racks[1].length; ++i) {
-      var idp = self.plrRackId + i;
-      var ido = self.oppRackId + i;
-      var divo = el(ido).firstChild;
-      if (divo) self.rd.enableDrag(false, divo);
-      var divp = el(idp).firstChild;
-      if (divp) self.rd.enableDrag(true, divp);
-    }
+  self.removeFromOpponenentRack = function(letters) {
+    self.removeFromRack(2, letters);
+  };
+
+  self.removeFromPlayerRack = function(letters) {
+    self.removeFromRack(1, letters);
   };
 
   self.removeFromRack = function(pl, letters) {
@@ -773,97 +762,6 @@ function RedipsUI() {
 
     //if (pl === 1) console.log('removeFromRack leaves: ' + rack);
     self.racks[pl] = rack.join('');
-  };
-
-  self.setTilesLeft = function(left) {
-    el('tleft').textContent = left;
-  };
-
-  self.setPlayerScore = function(last, total) {
-    el('lpscore').textContent = last;
-    el('pscore').textContent = total;
-  };
-
-  self.setOpponentScore = function(last, total) {
-    el('loscore').textContent = last;
-    el('oscore').textContent = total;
-  };
-
-  self.removefromPlayerRack = function(letters) {
-    self.removeFromRack(1, letters);
-  };
-
-  self.removefromOpponenentRack = function(letters) {
-    self.removeFromRack(2, letters);
-  };
-
-  self.setPlayerRack = function(letters) {
-    self.setLetters(1, letters);
-    if (self.firstrack) {
-      self.firstrack = false;
-      self.initRedips();
-    }
-  };
-
-  self.setOpponentRack = function(letters) {
-    self.setLetters(2, letters);
-  };
-
-  self.getPlayerRack = function() {
-    return self.racks[1];
-  };
-
-  self.getOpponentRack = function() {
-    return self.racks[2];
-  };
-
-  self.cancelPlayerPlacement = function() {
-    var placement = self.getPlayerPlacement();
-    var divs = [];
-    var id;
-    for (var i = 0; i < placement.length; ++i) {
-      var pl = placement[i];
-      id = self.boardId + pl.x + '_' + pl.y;
-      var cell = el(id);
-      //if (cell.firstChild==null || typeof(cell.firstChild)=="undefined") alert("baaaaa");
-      divs.push(cell.firstChild);
-      cell.holds = '';
-      cell.innerHTML = '';
-    }
-    var count = 0;
-    for (var i = 0; i < self.racksize; ++i) {
-      id = self.plrRackId + i;
-      var rcell = el(id);
-      if (rcell.holds === '' && count < divs.length) {
-        var div = divs[count++];
-        // Joker tile - remove previously selected letter from tile?
-        if (div.holds.points === 0) div.innerHTML = '';
-        rcell.appendChild(div);
-        rcell.holds = self.hcopy(div.holds);
-      }
-    }
-    self.newplays = [];
-  };
-
-  self.getPlayerPlacement = function() {
-    var placement = [];
-    var played = self.newplays;
-    for (var l in played) {
-      var sc = l.substr(1);
-      var co = sc.split('_');
-      placement.push({
-        'ltr': played[l].letter,
-        'lsc': played[l].points,
-        'x': +co[0],
-        'y': +co[1]
-      });
-    }
-    return placement;
-  };
-
-  self.acceptPlayerPlacement = function() {
-    self.newplays = {};
-    self.makeTilesFixed();
   };
 
   self.setLetters = function(player, letters) {
@@ -907,44 +805,142 @@ function RedipsUI() {
     for (i in cells) {
       var div = cells[i].firstChild;
       div.holds = self.hcopy(cells[i].holds);
-      //if (player==2) self.rd.enableDrag( false, div );
+      //if (player===2) self.rd.enableDrag(false, div);
     }
   };
 
-  self.getBoard = function() {
-    var board = [];
-    var boardp = [];
-    for (var x = 0; x < self.bx; ++x) {
-      board[x] = [];
-      boardp[x] = [];
-      for (var y = 0; y < self.by; ++y) {
-        var id = self.boardId + x + '_' + y;
-        var obj = el(id);
-        //obj.style.backgroundColor = self.cellbg;
-        var letter = '';
-        var points = 0;
-        if (obj.holds !== '') {
-          letter = obj.holds.letter;
-          points = obj.holds.points;
-        }
-        board[x][y] = letter;
-        boardp[x][y] = points;
+  self.setPlayerRack = function(letters) {
+    self.setLetters(1, letters);
+    if (self.firstrack) {
+      self.firstrack = false;
+      self.initRedips();
+    }
+  };
+
+  self.setPlayerScore = function(last, total) {
+    el('lpscore').textContent = last;
+    el('pscore').textContent = total;
+  };
+
+  self.setOpponentRack = function(letters) {
+    self.setLetters(2, letters);
+  };
+
+  self.setOpponentScore = function(last, total) {
+    el('loscore').textContent = last;
+    el('oscore').textContent = total;
+  };
+
+  self.setTilesLeft = function(left) {
+    el('tleft').textContent = left;
+  };
+
+  self.showBusy = function() {
+    showModal(t('Computer thinking, please wait...'));
+  };
+
+  self.showLettersModal = function(bdropCellId) {
+    self.bdropCellId = bdropCellId;
+    var rlen = 6;
+    var llen = g_letters.length;
+    var html = '';
+    for (var i = 0; i < llen; ++i) {
+      var ltr = g_letters[i][0];
+      if (ltr !== '*') {
+        if (html !== '' && i % rlen === 0) html += '</tr><tr>'
+        html += '<td><button class="obutton" onclick="g_bui.onSelLetter(\'' + ltr + '\')">';
+        html += (ltr === ' ' ? '&nbsp;' : ltr.toUpperCase()) + '</button></td>';
       }
     }
-    return {
-      'board': board,
-      'boardp': boardp
-    };
+    for (var i = llen;
+      (i - 1) % rlen !== 0; ++i) {
+      html += '<td></td>';
+    }
+    html = '<table id="letters"><tr>' + html + '</tr></table>';
+    showModal(html);
   };
 
-  self.prompt = function(msg, button) {
-    showModal(
-      msg +
-      '<div class="buttons">' +
-      (button || '<button class="button" onclick="hideModal()">' + t('OK') + '</button>') +
-      '</div>'
-    );
+  self.showSwapModal = function(tilesLeft) {
+    var divs = [];
+    var html = '<table id="swaptable" title="' + t('Select the letters you want to swap') + '"><tr>';
+    for (var i = 0; i < self.racksize; ++i) {
+      var rcell = el(self.plrRackId + i);
+      if (rcell.holds === '') continue;
+      divs.push(rcell.firstChild);
+      html += '<td id="swap-candidate' + i + '" onclick="this.classList.toggle(\'to-swap\')"></td>';
+    }
+    html += '</tr></table>';
+
+    // Display the HTML in the modal window
+    self.prompt(html, '<button class="button" onclick="g_bui.onSwap()">' + t('Swap') + ' & ' + t('Pass') + '</button>');
+
+    // And then fill the DOM in the modal window with the existing letter
+    // divs from the players rack
+    for (var i = 0; i < divs.length; ++i) {
+      self.rd.enableDrag(false, divs[i]); // Disable drag in order to select
+      el('swap-candidate' + i).appendChild(divs[i]);
+    }
   };
+
+  self.toggleORV = function() {
+    // Toggle opponent rack visibility
+    self.showOpRack = 1 - self.showOpRack;
+    el('toggle').innerHTML = self.showOpRack ? t('Hide computer&rsquo;s rack') : t('Show computer&rsquo;s rack');
+    for (var i = 0; i < self.racksize; ++i) {
+      el(self.oppRackId + i).classList.toggle('on', self.showOpRack);
+    }
+  };
+
+  self.wordInfo = function(word) {
+    if (!window.g_defs) {
+      alert(t('Word definitions not enabled.'));
+      return;
+    }
+
+    var link = new RegExp('\\{([a-z]+)=.+\\}');
+    var jump = new RegExp('<([a-z]+)=.+>');
+    var lword = word;
+
+    // Try to get definition locally first
+    if (word in g_defs) {
+
+      var mj;
+      while ((mj = g_defs[lword].match(jump)) !== null) {
+        lword = mj[1];
+        if (!(lword in g_defs)) {
+          // Shouldn't happen
+          alert(t('Dictionary inconsistency detected.'));
+          return;
+        }
+      }
+      var html = g_defs[lword];
+      var ml = html.match(link);
+      if (ml !== null) {
+        var hword = ml[1];
+        html = html.replace(link, '<a class="link" title="' + t('Show definition') + '" aria-label="' + t('Show definition') + '" onclick="g_bui.wordInfo(\'' + hword + '\')">' + hword + '</a>');
+      }
+      html = word.toUpperCase() + ': ' + html;
+      self.prompt(html);
+
+      // If it doesn't exist, look it up online
+    } else {
+
+      getJsonp('https://m.vdict.com/mobile/dictjson?fromapp=1&word=' + encodeURIComponent(word) + '&dict=2', function() {
+        g_def = g_def.replace('href="#"', 'onclick="el(\'audio\').play()" title="' + t('Listen to pronunciation') + '"');
+        g_def = g_def.replace(' Suggestions:', '');
+        g_def = g_def.replace(/">(.+?) not found/, '"><b>$1</b> not found');
+        self.prompt(g_def);
+
+        // GA
+        gtag('event', word, {
+          'event_category': 'Definition',
+          'event_label': g_def.indexOf('</b> not found') < 0 ? 'Found' : 'Not Found'
+        });
+      });
+
+    }
+  };
+
 }
 
 var g_bui = new RedipsUI();

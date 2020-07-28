@@ -4,20 +4,18 @@
 
 // Close the modal properly
 function closeModal() {
-  var elButton = g_cache['modalContent'].querySelector('.button');
-  if (elButton) elButton.click();
-  else hideModal();
+  if (el('swaptable')) {
+    g_bui.onSwap(true);
+  } else {
+    var elButton = g_cache['modalContent'].querySelector('.button');
+    if (elButton) elButton.click();
+    else hideModal();
+  }
 }
 
 // Handle modal interactions
 function handleHideModal(e) {
   if (e.target && e.target.id === 'modal-inner') closeModal();
-}
-
-// Handle focus trap
-function handleTrapFocus() {
-  var elControl = g_cache['modalContent'].querySelector('input, button');
-  if (elControl) elControl.focus();
 }
 
 // Handle keyboard shortcuts
@@ -50,8 +48,6 @@ window.addEventListener('load', function() {
     // Close modal by clicking on its shadow
     g_cache['modalMask'].addEventListener('click', closeModal);
     g_cache['modalInner'].addEventListener('click', handleHideModal);
-    // Trap focus (https://css-tricks.com/a-css-approach-to-trap-focus-inside-of-an-element/)
-    g_cache['modalContainer'].addEventListener('transitionend', handleTrapFocus);
   } else {
     // Sad faces to randomly show
     var aEmojis = [

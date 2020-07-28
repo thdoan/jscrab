@@ -4,7 +4,7 @@ This is a Vietnamese Scrabble-type word game implemented in pure JavaScript and 
 
 The code comprises an engine (*engine.js*) that does the game logic and a user interface (*ui.js*) that renders the board and manages user interactions. This design allows one to easily create alternative user interfaces. The code is also designed to be easily localized to other languages.
 
-The fast game play is made possible by leveraging Regular Expressions to conduct searches. The current UI makes use of the excellent [REDIPS.drag](https://github.com/dbunic/REDIPS_drag) drag-and-drop library. Other credits go to [Kushagra Gour](https://css-tricks.com/a-css-approach-to-trap-focus-inside-of-an-element/) for the modal focus trap CSS solution, [Hồ Ngọc Đức](https://www.informatik.uni-leipzig.de/~duc/software/misc/wordlist.html) for the original 22K word list (continuously being updated) and [VDict](https://vdict.com/) for the word definitions.
+The fast game play is made possible by leveraging Regular Expressions to conduct searches. The current UI makes use of the excellent [REDIPS.drag](https://github.com/dbunic/REDIPS_drag) drag-and-drop library. Other credits go to [Hồ Ngọc Đức](https://www.informatik.uni-leipzig.de/~duc/software/misc/wordlist.html) for the original 22K word list (continuously being updated) and [VDict](https://vdict.com/) for the word definitions.
 
 Corrections and comments are welcome by [sending an email](mailto:feedback@vietboard.org?subject=Vietboard) or [creating an Issue](https://github.com/thdoan/vietboard/issues).
 
@@ -56,6 +56,7 @@ Corrections and comments are welcome by [sending an email](mailto:feedback@vietb
 - Fixed incorrect scoring in many cases
 - Fixed JS error when clicking Pass repeatedly (button disabled while animating tiles)
 - Updated code to be HTML5 compliant
+- Redesigned swap modal dialog
 
 ## Dependencies for local build
 
