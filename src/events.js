@@ -31,12 +31,12 @@ document.addEventListener('keydown', handleKeyDown);
 window.addEventListener('load', function() {
   // Cache elements
   g_cache = {
-    'app': dget('app'),
-    'modalMask': dget('modal-mask'),
-    'modalContainer': dget('modal-container'),
-    'modalInner': dget('modal-inner'),
-    'modalContent': dget('modal-content'),
-    'sound': dget('sound')
+    'app': el('app'),
+    'modalMask': el('modal-mask'),
+    'modalContainer': el('modal-container'),
+    'modalInner': el('modal-inner'),
+    'modalContent': el('modal-content'),
+    'sound': el('sound')
   };
   // Check browser support
   if (Array.prototype.indexOf

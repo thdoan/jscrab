@@ -2,14 +2,14 @@
 // 1. redipsdrag.js has already been included
 // 2. g_boardm exists and its init method returns the bonus layout (defined in bonuses.js)
 
-// Get element
-function dget(id) {
-  return document.getElementById(id) || document.querySelector(id);
-}
-
 // VDict callback function
 function cb(data) {
   g_def = data.result;
+}
+
+// Get element
+function el(id) {
+  return document.getElementById(id) || document.querySelector(id);
 }
 
 // Native JavaScript JSONP implementation
@@ -20,7 +20,7 @@ function getJsonp(sUrl, callback) {
     sCallback = 'handleJsonp' + nTimestamp,
     sId = 'getjson-' + nTimestamp,
     cleanUp = function() {
-      dget(sId).remove();
+      el(sId).remove();
       delete window[sCallback];
     },
     js = document.createElement('script');
@@ -144,7 +144,7 @@ function RedipsUI() {
     } else {
 
       getJsonp('https://m.vdict.com/mobile/dictjson?fromapp=1&word=' + encodeURIComponent(word) + '&dict=2', function() {
-        g_def = g_def.replace('href="#"', 'onclick="dget(\'audio\').play()" title="' + t('Listen to pronunciation') + '"');
+        g_def = g_def.replace('href="#"', 'onclick="el(\'audio\').play()" title="' + t('Listen to pronunciation') + '"');
         g_def = g_def.replace(' Suggestions:', '');
         g_def = g_def.replace(/">(.+?) not found/, '"><b>$1</b> not found');
         self.prompt(g_def);
@@ -173,7 +173,7 @@ function RedipsUI() {
     }
     html += '</table>';
     self.hlines += html;
-    var div = dget('history');
+    var div = el('history');
     div.innerHTML = self.hlines;
     div.scrollTop = self.hcount * 100;
 
@@ -185,13 +185,13 @@ function RedipsUI() {
           gtag('event', 'Player Move', {
             'event_category': 'Gameplay - Lvl ' + (g_playlevel + 1),
             'event_label': words.join(', '),
-            'value': +dget('lpscore').textContent
+            'value': +el('lpscore').textContent
           });
         } else {
           gtag('event', 'Computer Move', {
             'event_category': 'Gameplay - Lvl ' + (g_playlevel + 1),
             'event_label': words.join(', '),
-            'value': +dget('loscore').textContent
+            'value': +el('loscore').textContent
           });
         }
       }, 100);
@@ -200,15 +200,15 @@ function RedipsUI() {
 
   self.levelUp = function() {
     if (self.level < g_maxwpoints.length) ++self.level;
-    dget('level').textContent = self.level;
-    dget('level').title = t('Computer can score up to ') + g_maxwpoints[self.level - 1] + t(' points per turn');
+    el('level').textContent = self.level;
+    el('level').title = t('Computer can score up to ') + g_maxwpoints[self.level - 1] + t(' points per turn');
     setStorage('level', self.level);
   };
 
   self.levelDn = function() {
     if (self.level > 1) --self.level;
-    dget('level').textContent = self.level;
-    dget('level').title = t('Computer can score up to ') + g_maxwpoints[self.level - 1] + t(' points per turn');
+    el('level').textContent = self.level;
+    el('level').title = t('Computer can score up to ') + g_maxwpoints[self.level - 1] + t(' points per turn');
     setStorage('level', self.level);
   };
 
@@ -345,19 +345,19 @@ function RedipsUI() {
     html += '</tr></table>';
     html += '</div>';
 
-    dget(iddiv).innerHTML = html;
+    el(iddiv).innerHTML = html;
 
     // Initialize custom DOM "holds" property
     for (var i = 0; i < racksize; ++i) {
       var idp = self.plrRackId + i;
       var ido = self.oppRackId + i;
-      dget(idp).holds = '';
-      dget(ido).holds = '';
+      el(idp).holds = '';
+      el(ido).holds = '';
     }
     for (var i = 0; i < by; ++i) {
       for (var j = 0; j < bx; ++j) {
         var idc = self.boardId + j + '_' + i;
-        dget(idc).holds = '';
+        el(idc).holds = '';
       }
     }
 
@@ -372,9 +372,9 @@ function RedipsUI() {
   self.toggleORV = function() {
     // Toggle opponent rack visibility
     self.showOpRack = 1 - self.showOpRack;
-    dget('toggle').innerHTML = self.showOpRack ? t('Hide computer&rsquo;s rack') : t('Show computer&rsquo;s rack');
+    el('toggle').innerHTML = self.showOpRack ? t('Hide computer&rsquo;s rack') : t('Show computer&rsquo;s rack');
     for (var i = 0; i < self.racksize; ++i) {
-      dget(self.oppRackId + i).classList.toggle('on', self.showOpRack);
+      el(self.oppRackId + i).classList.toggle('on', self.showOpRack);
     }
   };
 
@@ -409,7 +409,7 @@ function RedipsUI() {
     var keep = '';
     for (var i = 0; ; ++i) {
       id = 'swap_candidate' + i;
-      var swapc = dget(id);
+      var swapc = el(id);
       if (swapc === null) break;
       if (swapc.firstChild) keep += swapc.firstChild.holds.letter;
     }
@@ -417,7 +417,7 @@ function RedipsUI() {
     var swap = '';
     for (var i = 0; ; ++i) {
       id = 'swap' + i;
-      var swp = dget(id);
+      var swp = el(id);
       if (swp === null) break;
       if (swp.firstChild) swap += swp.firstChild.holds.letter;
     }
@@ -429,7 +429,7 @@ function RedipsUI() {
     // swap racks and reread the board and player/opponent rack tables, the
     // move animation thinks the target table is the swap rack instead of
     // the board table, causing havoc.
-    dget('swaptable').innerHTML = '';
+    el('swaptable').innerHTML = '';
     self.initRedips();
 
     hideModal();
@@ -442,7 +442,7 @@ function RedipsUI() {
       'points': 0
     };
     self.newplays[self.bdropCellId] = holds;
-    var cell = dget(self.bdropCellId);
+    var cell = el(self.bdropCellId);
     cell.holds = self.hcopy(holds);
     var html = '';
     //html += '<div class="drag t1">';
@@ -462,7 +462,7 @@ function RedipsUI() {
     html += '<table id="swaptable"><tr>';
     for (var i = 0; i < self.racksize; ++i) {
       id = self.plrRackId + i;
-      var rcell = dget(id);
+      var rcell = el(id);
       if (rcell.holds === '') continue;
       divs.push(rcell.firstChild);
       html += '<td class="swapc" id="swap_candidate' + i + '"></td>';
@@ -486,7 +486,7 @@ function RedipsUI() {
     // divs from the players rack
     for (var i = 0; i < divs.length; ++i) {
       id = 'swap_candidate' + i;
-      var swapc = dget(id);
+      var swapc = el(id);
       swapc.appendChild(divs[i]);
     }
 
@@ -561,7 +561,7 @@ function RedipsUI() {
 
   self.opponentPlay = function(x, y, lt, lts) {
     // TODO: add animation, etc.
-    var cell = dget(self.boardId + x + '_' + y);
+    var cell = el(self.boardId + x + '_' + y);
     cell.holds = {
       'letter': lt,
       'points': lts
@@ -613,7 +613,7 @@ function RedipsUI() {
         // Expose joker letter value in new rack
         newrack = newrack.replace('*', l);
         var orcellid = self.oppRackId + jpos;
-        var rcell = dget(orcellid);
+        var rcell = el(orcellid);
         var html = '<div class="drag t2">' + l.toUpperCase();
         html += '<sup><small>&nbsp;</small></sup>';
         html += '</div>';
@@ -648,11 +648,11 @@ function RedipsUI() {
         var opid = self.oppRackId + i;
         // And the target cell information
         var cellId = self.boardId + move.x + '_' + move.y;
-        var orcell = dget(opid);
+        var orcell = el(opid);
         orcell.style.display = '';
         self.displayedcells.push(orcell);
         var div = orcell.firstChild;
-        var cell = dget(cellId);
+        var cell = el(cellId);
         div.holds = {
           'letter': move.ltr,
           'points': move.ltscr
@@ -728,7 +728,7 @@ function RedipsUI() {
   self.fixPlayerTiles = function() {
     for (var i = 0; i < self.racks[1].length; ++i) {
       var idp = self.plrRackId + i;
-      var divp = dget(idp).firstChild;
+      var divp = el(idp).firstChild;
       if (divp) self.rd.enableDrag(false, divp);
     }
   };
@@ -738,9 +738,9 @@ function RedipsUI() {
     for (var i = 0; i < self.racks[1].length; ++i) {
       var idp = self.plrRackId + i;
       var ido = self.oppRackId + i;
-      var divo = dget(ido).firstChild;
+      var divo = el(ido).firstChild;
       if (divo) self.rd.enableDrag(false, divo);
-      var divp = dget(idp).firstChild;
+      var divp = el(idp).firstChild;
       if (divp) self.rd.enableDrag(true, divp);
     }
   };
@@ -771,17 +771,17 @@ function RedipsUI() {
   };
 
   self.setTilesLeft = function(left) {
-    dget('tleft').textContent = left;
+    el('tleft').textContent = left;
   };
 
   self.setPlayerScore = function(last, total) {
-    dget('lpscore').textContent = last;
-    dget('pscore').textContent = total;
+    el('lpscore').textContent = last;
+    el('pscore').textContent = total;
   };
 
   self.setOpponentScore = function(last, total) {
-    dget('loscore').textContent = last;
-    dget('oscore').textContent = total;
+    el('loscore').textContent = last;
+    el('oscore').textContent = total;
   };
 
   self.removefromPlayerRack = function(letters) {
@@ -819,7 +819,7 @@ function RedipsUI() {
     for (var i = 0; i < placement.length; ++i) {
       var pl = placement[i];
       id = self.boardId + pl.x + '_' + pl.y;
-      var cell = dget(id);
+      var cell = el(id);
       //if (cell.firstChild==null || typeof(cell.firstChild)=="undefined") alert("baaaaa");
       divs.push(cell.firstChild);
       cell.holds = '';
@@ -828,7 +828,7 @@ function RedipsUI() {
     var count = 0;
     for (var i = 0; i < self.racksize; ++i) {
       id = self.plrRackId + i;
-      var rcell = dget(id);
+      var rcell = el(id);
       if (rcell.holds === '' && count < divs.length) {
         var div = divs[count++];
         // Joker tile - remove previously selected letter from tile?
@@ -876,7 +876,7 @@ function RedipsUI() {
 
     for (var i = 0; i < self.racksize; ++i) {
       var id = ifprfx + i;
-      var rcell = dget(id);
+      var rcell = el(id);
       // Remove the existing drag div?
       if (rcell.firstChild) rcell.removeChild(rcell.firstChild);
       var ltr = i < letters.length ? letters.charAt(i) : '';
@@ -914,7 +914,7 @@ function RedipsUI() {
       boardp[x] = [];
       for (var y = 0; y < self.by; ++y) {
         var id = self.boardId + x + '_' + y;
-        var obj = dget(id);
+        var obj = el(id);
         obj.style.backgroundColor = self.cellbg;
         var letter = '';
         var points = 0;
