@@ -47,22 +47,30 @@ function randInt(nMin, nMax) {
 
 // Set language
 function setLang(sLang) {
-  setStorage('lang', sLang);
-  // GA
-  gtag('event', sLang, {
-    'event_category': 'Language'
-  });
-  location.reload();
+  var bConfirm = confirm(t('This will restart the game.'));
+  if (bConfirm) {
+    setStorage('lang', sLang);
+    // GA
+    gtag('event', sLang, {
+      'event_category': 'Language'
+    });
+    location.reload();
+  }
 }
 
 // Set tileset
 function setTileset(elSelect) {
-  setStorage('tileset', elSelect.value);
-  // GA
-  gtag('event', elSelect.value, {
-    'event_category': 'Tileset'
-  });
-  location.reload();
+  var bConfirm = confirm(t('This will restart the game.'));
+  if (bConfirm) {
+    setStorage('tileset', elSelect.value);
+    // GA
+    gtag('event', elSelect.value, {
+      'event_category': 'Tileset'
+    });
+    location.reload();
+  } else {
+    elSelect.selectedIndex = 0;
+  }
 }
 
 // Modal functions
