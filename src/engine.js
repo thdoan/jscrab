@@ -106,6 +106,7 @@ function init(iddiv) {
 
 //------------------------------------------------------------------------------
 function announceWinner() {
+  //console.log('announceWinner');
   var oleft = g_bui.getOpponentRack();
   var pleft = g_bui.getPlayerRack();
 
@@ -981,6 +982,7 @@ function onPlayerClear() {
 
 //------------------------------------------------------------------------------
 function onPlayerMove() {
+  //console.log('onPlayerMove');
   var passed = self.passed;
   if (passed) {
     ++g_passes; // Increase consecutive opponent passes
@@ -1052,7 +1054,6 @@ function onPlayerMove() {
 
   var animCallback = function() {
     g_bui.makeTilesFixed();
-    //g_bui.hideBusy();
     // Create the array of word and created orthogonal words created by
     // opponent move.
     var words = play_word.owords;
@@ -1102,7 +1103,6 @@ function onPlayerMove() {
       'value': g_letpool.length
     });
 
-    //g_bui.hideBusy();
     ++g_passes; // Increase consecutive opponent passes
     if (g_passes >= g_maxpasses) {
       announceWinner();
@@ -1118,13 +1118,14 @@ function onPlayerMove() {
 
 //------------------------------------------------------------------------------
 function onPlayerMoved(passed, swapped) {
+  //console.log('onPlayerMoved', passed, swapped);
   if (passed) {
     el('pass').disabled = true;
     g_bui.cancelPlayerPlacement();
     g_bui.showBusy();
   }
   self.passed = passed;
-  setTimeout(onPlayerMove, 100);
+  setTimeout(onPlayerMove, 350); // Delay has to be after 0.3s transition time
 
   // GA
   gtag('event', 'Player ' + (swapped ? 'Swap' : 'Pass'), {
@@ -1149,7 +1150,7 @@ function onPlayerSwap() {
 
 //------------------------------------------------------------------------------
 function onPlayerSwapped(keep, swap) {
-  console.log('onPlayerSwapped', keep, swap);
+  //console.log('onPlayerSwapped', keep, swap);
   if (swap.length === 0) {
     g_bui.setPlayerRack(keep);
     // Initialize REDISP again
@@ -1197,7 +1198,7 @@ function placeOnBoard(word, animCallback) {
     x += dx;
     y += dy;
   }
-  g_bui.hideBusy();
+  hideModal();
   g_bui.playOpponentMove(placements, animCallback);
   g_board_empty = false;
 }

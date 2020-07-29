@@ -442,10 +442,6 @@ function RedipsUI() {
     };
   };
 
-  self.hideBusy = function() {
-    hideModal();
-  };
-
   self.initRedips = function() {
     self.rd.init();
     self.rd.dropMode = 'single';
@@ -553,7 +549,7 @@ function RedipsUI() {
       }
     }
 
-    console.log('onSwap', keep, swap);
+    //console.log('onSwap', keep, swap);
 
     // Either I'm not using REDIPS correctly or having the two tile swapping
     // tables somehow messes up its internal table monitoring mechanism.
