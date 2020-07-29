@@ -178,25 +178,29 @@ table.board {
 table.board td {
   background-color: #e0e0b0;
 }
-table.board td.DL {
-  background-image: url(../pics/DL.png);
-  background-repeat: no-repeat;
-}
-table.board td.DW {
-  background-image: url(../pics/DW.png);
-  background-repeat: no-repeat;
-}
-table.board td.TL {
-  background-image: url(../pics/TL.png);
-  background-repeat: no-repeat;
-}
+table.board td.ST,
+table.board td.DL,
+table.board td.DW,
+table.board td.TL,
 table.board td.TW {
-  background-image: url(../pics/TW.png);
+  background-position: center;
   background-repeat: no-repeat;
+  background-size: 87%;
 }
 table.board td.ST {
-  background-image: url(../pics/ST.png);
-  background-repeat: no-repeat;
+  background-image: url(../pics/ST.svg);
+}
+table.board td.DL {
+  background-image: url(../pics/DL.svg);
+}
+table.board td.DW {
+  background-image: url(../pics/DW.svg);
+}
+table.board td.TL {
+  background-image: url(../pics/TL.svg);
+}
+table.board td.TW {
+  background-image: url(../pics/TW.svg);
 }
 
 /* Drag container */
