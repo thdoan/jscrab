@@ -85,8 +85,8 @@ function init(iddiv) {
 
   g_bui.setPlayerRack(my_letters);
   g_bui.setOpponentRack(comp_letters);
+  //g_bui.setOpponentRack('qqqqqqqq');
   //g_bui.setOpponentRack('bmủtxnnt');
-  //g_bui.setOpponentRack('xxxxxxxx');
   //g_bui.setOpponentRack('banhxnnt');
   //g_bui.setOpponentRack('hkòngnnt');
   g_bui.setTilesLeft(g_letpool.length);

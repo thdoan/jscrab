@@ -261,7 +261,6 @@ table.board td.ST {
   height: 26px;
   background: #fff;
   border-radius: 4px;
-  cursor: move;
   font-size: 14pt;
   line-height: 1.1;
   margin: 1px auto;
@@ -269,8 +268,8 @@ table.board td.ST {
   text-align: center;
   z-index: 10;
 }
-.opponent .drag {
-  cursor: default;
+.human-computer .drag.t1 {
+  cursor: move;
 }
 
 /* Tile points */
@@ -295,9 +294,6 @@ sup > small {
   width: 32px;
   height: 32px;
   cursor: pointer;
-}
-#swaptable .drag {
-  cursor: pointer !important;
 }
 #swaptable td.to-swap .drag {
   background: #1a1a1a;
@@ -440,6 +436,10 @@ sup > small {
 #suggestresult,
 #wordresult {
   font-size: 95%;
+  -ms-user-select: text;
+  -moz-user-select: text;
+  -webkit-user-select: text;
+  user-select: text;
 }
 #suggestresult > ul {
   margin-top: 0;
@@ -447,9 +447,6 @@ sup > small {
 #suggestresult #suggestionlist {
   list-style: none;
   padding: 0px;
-}
-#wordresult a {
-  cursor: pointer;
 }
 #wordresult h1 {
   display: inline-block;

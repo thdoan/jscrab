@@ -2776,8 +2776,8 @@ REDIPS.drag = (function () {
 				// register event listener for DIV element
 				registerEvents(div[i], enabled);
 				// set styles for DIV element
-				div[i].style.borderStyle = borderStyle;
-				div[i].style.cursor = cursor;
+				//div[i].style.borderStyle = borderStyle;
+				//div[i].style.cursor = cursor;
 				// add enabled property to the DIV element (true or false)
 				div[i].redips.enabled = enabled;
 			}

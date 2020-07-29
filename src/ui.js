@@ -220,7 +220,7 @@ function RedipsUI() {
 
     self.boardm = g_boardm.init(bx, by);
     var hr = '<tr class="ruler"><td colspan="2"></td></tr>';
-    var html = '<table><tr><td><div id="board"></div>';
+    var html = '<table><tr><td><div id="board" class="human-computer"></div>';
 
     html += '</td><td id="score">';
     html += '<table class="gameinfo">';
