@@ -57,6 +57,7 @@ Corrections and comments are welcome by [sending an email](mailto:feedback@vietb
 - Fixed JS error when clicking Pass repeatedly (button disabled while animating tiles)
 - Updated code to be HTML5 compliant
 - Redesigned swap modal dialog
+- Replaced bitmaps with vectors for HiDPI screens
 
 ## Dependencies for local build
 
