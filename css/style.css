@@ -446,7 +446,11 @@ sup > small {
   padding-left: 1rem;
 }
 #wordresult ul.list2 {
+  color: #514c78; /* Ninjawords */
   margin-top: 4px;
+}
+#wordresult li > b {
+  font-weight: normal;
 }
 #wordresult .example-original {
   font-style: italic;
