@@ -23,6 +23,7 @@ var translation_map = {
   'Level:': 'Cấp độ:',
   'Listen to pronunciation': 'Hãy nghe phát âm',
   'no letters were placed.': 'không có chữ nào được sử dụng.',
+  'not found': 'chưa có định nghĩa từ',
   'OK': 'OK',
   'Pass': 'Bỏ Lượt',
   'Play Again': 'Chơi Lại',
