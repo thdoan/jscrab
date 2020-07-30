@@ -1125,7 +1125,8 @@ function onPlayerMoved(passed, swapped) {
     g_bui.showBusy();
   }
   self.passed = passed;
-  setTimeout(onPlayerMove, 350); // Delay has to be after 0.3s transition time
+  clearTimeout(g_bui.timer); // Clear hideModal() 300ms delay
+  setTimeout(onPlayerMove, 100);
 
   // GA
   gtag('event', 'Player ' + (swapped ? 'Swap' : 'Pass'), {

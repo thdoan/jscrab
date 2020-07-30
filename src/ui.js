@@ -95,7 +95,7 @@ function showModal(html, width) {
 function hideModal() {
   g_cache['modalContainer'].classList.remove('on');
   g_cache['modalMask'].classList.remove('on');
-  setTimeout(function() {
+  g_bui.timer = setTimeout(function() {
     g_cache['modalContainer'].style.display = 'none';
     g_cache['modalMask'].style.display = 'none';
   }, 300); // Sync with transition time
