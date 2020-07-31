@@ -921,7 +921,7 @@ function RedipsUI() {
       // If it doesn't exist, look it up online
     } else {
 
-      getJsonp('https://m.vdict.com/mobile/dictjson?fromapp=1&word=' + encodeURIComponent(word) + '&dict=' + (getStorage('lang') === 'vi' ? '3' : '2'), function() {
+      getJsonp('https://m.vdict.com/mobile/dictjson?fromapp=1&word=' + encodeURIComponent(word) + '&dict=2', function() {
         g_def = g_def.replace('href="#"', 'onclick="el(\'audio\').play()" title="' + t('Listen to pronunciation') + '"');
         g_def = g_def.replace(' Suggestions:', '');
         g_def = g_def.replace(/">(.+?) not found/, '"><b>$1</b> ' + t('not found'));
