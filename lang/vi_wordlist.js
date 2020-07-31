@@ -10263,6 +10263,7 @@ var g_wordmap = {
   'dông': 1,
   'dõng': 1,
   'dỏng': 1,
+  'dọng': 1,
   'dộng': 1,
   'đong': 1,
   'đóng': 1,

@@ -892,48 +892,39 @@ function RedipsUI() {
       alert(t('Word definitions not enabled.'));
       return;
     }
-
-    var link = new RegExp('\\{([a-z]+)=.+\\}');
-    var jump = new RegExp('<([a-z]+)=.+>');
-    var lword = word;
-
-    // Try to get definition locally first
     if (word in g_defs) {
-
-      var mj;
-      while ((mj = g_defs[lword].match(jump)) !== null) {
-        lword = mj[1];
-        if (!(lword in g_defs)) {
-          // Shouldn't happen
-          alert(t('Dictionary inconsistency detected.'));
-          return;
+      // Try to get definition locally first
+      var html = '<div id="wordresult"><div style="text-align:center"><h1>' + word + '</h1></div>';
+      for (var type in g_defs[word]) {
+        html += '<div class="phanloai">' + (type || '&nbsp;') + '</div>';
+        for (var i = 0, entry; i < g_defs[word][type].length; ++i) {
+          entry = g_defs[word][type][i];
+          html += '<ul class="list1"><li>' + entry['definition'];
+          if (entry['examples']) {
+            for (var j = 0; j < entry['examples'].length; ++j) {
+              for (var example in entry['examples'][j]) {
+                html += '<ul class="list2"><li><span class="example-original">' + example + '</span><br>' + entry['examples'][j][example] + '</li></ul>';
+              }
+            }
+          }
+          html += '</li></ul>';
         }
       }
-      var html = g_defs[lword];
-      var ml = html.match(link);
-      if (ml !== null) {
-        var hword = ml[1];
-        html = html.replace(link, '<a class="link" title="' + t('Show definition') + '" aria-label="' + t('Show definition') + '" onclick="g_bui.wordInfo(\'' + hword + '\')">' + hword + '</a>');
-      }
-      html = word.toUpperCase() + ': ' + html;
+      html += '</div>';
       self.prompt(html);
-
-      // If it doesn't exist, look it up online
     } else {
-
+      // If it doesn't exist, look it up online
       getJsonp('https://m.vdict.com/mobile/dictjson?fromapp=1&word=' + encodeURIComponent(word) + '&dict=2', function() {
         g_def = g_def.replace('href="#"', 'onclick="el(\'audio\').play()" title="' + t('Listen to pronunciation') + '"');
         g_def = g_def.replace(' Suggestions:', '');
         g_def = g_def.replace(/">(.+?) not found/, '"><b>$1</b> ' + t('not found'));
         self.prompt(g_def);
-
         // GA
         gtag('event', word, {
           'event_category': 'Definition',
           'event_label': g_def.indexOf('</b> not found') < 0 ? 'Found' : 'Not Found'
         });
       });
-
     }
   };
 
