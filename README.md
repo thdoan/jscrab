@@ -58,6 +58,7 @@ Corrections and comments are welcome by [sending an email](mailto:feedback@vietb
 - Updated code to be HTML5 compliant
 - Redesigned swap modal dialog
 - Replaced bitmaps with vectors for HiDPI screens
+- Introduced randomness to make computer more human
 
 ## Dependencies for local build
 

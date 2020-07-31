@@ -360,14 +360,49 @@ function findBestWord(letters, ax, ay, dirs) {
   var bestword = {
     'score': -1
   };
-  if (!dirs) dirs = ['y'];//['x', 'y'];
+  var threshold;
+  if (!dirs) dirs = ['x', 'y'];
   for (var dir in dirs) {
+    // Introduce some randomness so computer is more human
+    switch (g_playlevel) {
+      case 0: // Level 1
+        threshold = randFloat(50, 100, 16);
+        break;
+      case 1: // Level 2
+        threshold = randFloat(55, 100, 16);
+        break;
+      case 2: // Level 3
+        threshold = randFloat(60, 100, 16);
+        break;
+      case 3: // Level 4
+        threshold = randFloat(65, 100, 16);
+        break;
+      case 4: // Level 5
+        threshold = randFloat(70, 100, 16);
+        break;
+      case 5: // Level 6
+        threshold = randFloat(75, 100, 16);
+        break;
+      case 6: // Level 7
+        threshold = randFloat(80, 100, 16);
+        break;
+      case 7: // Level 8
+        threshold = randFloat(85, 100, 16);
+        break;
+      case 8: // Level 9
+        threshold = randFloat(90, 100, 16);
+        break;
+      case 9: // Level 10
+        threshold = randFloat(95, 100, 16);
+        break;
+    }
+    if (Math.random() > threshold / 100) continue;
     var xy = dirs[dir];
     var regex = getRegex(xy, ax, ay, letters.join(''));
     //console.log('findBestWord', 'ax=' + ax, 'ay=' + ay, 'xy=' + xy, 'regex=' + ((regex && regex.rgx) || null));
     if (regex !== null) {
       var word = getBestScore(regex, letters, ax, ay);
-      if (bestscore < word.score) {
+      if (word.score > bestscore) {
         bestscore = word.score;
         bestword = word;
       }

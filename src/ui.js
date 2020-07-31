@@ -40,6 +40,11 @@ function getJsonp(sUrl, callback) {
   document.head.appendChild(js);
 }
 
+// https://snipplr.com/view/37687/random-number-float-generator/
+function randFloat(nMin, nMax, nDecimals) {
+  return parseFloat(Math.min(nMin + (Math.random() * (nMax - nMin)), nMax).toFixed(nDecimals || 0));
+}
+
 // Return a random integer between nMin and nMax (inclusive)
 function randInt(nMin, nMax) {
   return Math.floor(Math.random() * (nMax - nMin + 1) + nMin);
@@ -491,6 +496,7 @@ function RedipsUI() {
     if (self.level > 1) --self.level;
     el('level').textContent = self.level;
     el('level').title = t('Computer can score up to ') + g_maxwpoints[self.level - 1] + t(' points per turn');
+    g_playlevel = self.level - 1;
     setStorage('level', self.level);
   };
 
@@ -498,6 +504,7 @@ function RedipsUI() {
     if (self.level < g_maxwpoints.length) ++self.level;
     el('level').textContent = self.level;
     el('level').title = t('Computer can score up to ') + g_maxwpoints[self.level - 1] + t(' points per turn');
+    g_playlevel = self.level - 1;
     setStorage('level', self.level);
   };
 
