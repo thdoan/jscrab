@@ -144,7 +144,7 @@ function RedipsUI() {
       var word = words[i];
       html += '<tr class="player-' + player + '">';
       html += '<td>' + word.toUpperCase() + '</td><td>';
-      html += '<a class="link" title="' + t('Show definition') + '" aria-label="' + t('Show definition') + '" onclick="g_bui.wordInfo(\'' + word + '\')"><img src="pics/info.svg" alt=""></a>';
+      html += '<a class="link" title="' + t('Show definition') + '" aria-label="' + t('Show definition') + '" onclick="g_bui.wordInfo(\'' + word + '\')"><img src="pics/info.svg" width="22" height="22" alt=""></a>';
       html += '</td></tr>';
     }
     html += '</table>';
@@ -240,9 +240,9 @@ function RedipsUI() {
     html += '<tr><td>' + t('Level:') + '</td><td>';
     html += '<span id="level" title="' + t('Computer can score up to ') + g_maxwpoints[g_playlevel] + t(' points per turn') + '">' + (g_playlevel + 1) + '</span>';
     html += '&nbsp;<a class="link" title="' + t('Increase difficulty') + '" aria-label="' + t('Increase difficulty') + '" onclick="g_bui.levelUp()">';
-    html += '<img src="pics/up.png" alt=""></a>';
+    html += '<img src="pics/up.png" width="22" height="22" alt=""></a>';
     html += '<a class="link" title="' + t('Decrease difficulty') + '" aria-label="' + t('Decrease difficulty') + '" onclick="g_bui.levelDn()">';
-    html += '<img src="pics/dn.png" alt=""></a></td>';
+    html += '<img src="pics/dn.png" width="22" height="22" alt=""></a></td>';
 
     var sTileset = g_tilesets.indexOf(g_tileset) > -1 ? g_tileset : t('Default');
     var sSelect = '<select title="' + sTileset + '" onchange="setTileset(this)"><option>' + sTileset + '</option>';
