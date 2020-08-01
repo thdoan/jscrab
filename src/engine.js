@@ -341,7 +341,7 @@ function findBestMove(opponent_rack) {
       // ax,ay given the current set of letters
       var word = findBestWord(letters, ax, ay);
       if (DEBUG && word.score > -1) console.log('Found word: ' + word.word + ' (' + word.score + ')');
-      if (board_best_score < word.score) {
+      if (word.score > board_best_score) {
         // If this is better than all the board placements so far,
         // update the best word information
         board_best_score = word.score;
@@ -413,17 +413,49 @@ function findBestWord(letters, ax, ay, dirs) {
 }
 
 //------------------------------------------------------------------------------
-function findFirstMove(opponent_rack, fy) {
+function findFirstMove(opponent_rack, mid) {
   // Try to find the best move horizontally or vertically along the star axis
   var letters;
   var anchor;
   var alet;
   var aletscr;
-  var best_word = {
-    'score': -1
+  var best_word = { 'score': -1 };
+  var selword = { 'score': -1 };
+  // Try starting from every position along the x star axis
+  var scanX = function() {
+    for (var j = 0, x; j < mid + 1; ++j) {
+      x = j;
+      // Simulate a first letter already existing on the board
+      g_board[x][mid] = alet;
+      g_boardpoints[x][mid] = aletscr;
+      // Find best move along the star axis
+      selword = findBestWord(letters, x + 1, mid, ['x']);
+      if (selword['score'] > best_word['score'] && selword['ps'] + selword['word'].length > mid) {
+        best_word = selword;
+        best_word['aletscr'] = aletscr;
+      }
+      // Remove traces from board for next candidate
+      g_board[x][mid] = '';
+      g_boardpoints[x][mid] = 0;
+    }
   };
-  var selword = {
-    'score': -1
+  // Try starting from every position along the y star axis
+  var scanY = function() {
+    for (var j = 0, y; j < mid + 1; ++j) {
+      y = j;
+      // Simulate a first letter already existing on the board
+      g_board[mid][y] = alet;
+      g_boardpoints[mid][y] = aletscr;
+      // Find best move along the star axis
+      selword = findBestWord(letters, mid, y + 1, ['y']);
+      if (selword['score'] > best_word['score'] && selword['ps'] + selword['word'].length > mid) {
+        best_word = selword;
+        best_word['aletscr'] = aletscr;
+      }
+      // Remove traces from board for next candidate
+      g_board[mid][y] = '';
+      g_boardpoints[mid][y] = 0;
+    }
   };
 
   // Place each letter on the star to find the best word
@@ -432,26 +464,16 @@ function findFirstMove(opponent_rack, fy) {
     anchor = i;
     alet = letters[anchor];
     aletscr = g_letscore[alet];
-
     // The new rack is what is left after we remove the candidate letter from
     // the starting rack and place it on the board.
     letters.splice(anchor, 1);
-
-    // Try starting from every position along the x star axis
-    for (var j = 0, _x; j < fy + 1; ++j) {
-      _x = j;
-      // Simulate a first letter already existing on the board
-      g_board[_x][fy] = alet;
-      g_boardpoints[_x][fy] = aletscr;
-      // Find best move along the star axis
-      selword = findBestWord(letters, _x + 1, fy, ['x']);
-      if (selword['score'] > best_word['score'] && selword['ps'] + selword['word'].length > fy) {
-        best_word = selword;
-        best_word['aletscr'] = aletscr;
-      }
-      // Remove traces from board for next candidate
-      g_board[_x][fy] = '';
-      g_boardpoints[_x][fy] = 0;
+    // Find best word along x and y axis
+    if (Math.random() < 0.5) {
+      scanX();
+      scanY();
+    } else {
+      scanY();
+      scanX();
     }
   }
 
