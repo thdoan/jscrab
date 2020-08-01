@@ -14,13 +14,8 @@ var g_defs = {
       {
         'definition': 'unlucky, unfortunate, be cornered',
         'examples': [
-          { 'vận bĩ': '' }
-        ]
-      },
-      {
-        'definition': 'after a storm comes a calm; after black clouds, clear weather',
-        'examples': [
-          { 'bĩ cực thái lai': '' }
+          { 'vận bĩ': 'ill luck' },
+          { 'bĩ cực thái lai': 'after a storm comes a calm; after black clouds, clear weather' }
         ]
       }
     ]
