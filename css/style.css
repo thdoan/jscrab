@@ -470,12 +470,12 @@ sup > small {
   padding: 6px;
 }
 #wordresult #play {
-  width: 25px;
+  width: 24px;
   height: 24px;
-  background: url(../pics/btn_play.png) no-repeat;
+  background: url(../pics/play.svg) no-repeat;
+  background-size: 24px;
   display: inline-block;
-  margin-left: 2px;
-  outline: none;
+  margin-left: 4px;
   vertical-align: text-bottom;
 }
 #wordresult #play:hover {
