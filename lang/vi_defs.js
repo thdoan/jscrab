@@ -158,6 +158,31 @@ var g_defs = {
       }
     ]
   },
+  'de': {
+    'verb': [
+      {
+        'definition': 'back,reverse',
+        'examples': [
+          { 'de vào / ra': 'to reverse in/out; to back in/out' },
+          { 'de xe tông vào cột đèn': 'to reverse the truck into a lamp-post' },
+          { 'gài số de': 'to go into reverse' },
+          { 'thấy giá niêm yết là tôi de ra ngay (hết dám mua )': 'when I saw the price, I backed out of buying it' },
+        ]
+      }
+    ]
+  },
+  'cạc': {
+    'noun': [
+      {
+        'definition': 'card',
+        'examples': [
+          { 'cạc âm thanh': 'audio card; sound card' },
+          { 'cạc bộ nhớ': 'memory card' },
+          { 'cạc mạng': 'network card' },
+        ]
+      }
+    ]
+  },
   'ậc': {
     'verb': [
       {
