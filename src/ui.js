@@ -144,7 +144,7 @@ function RedipsUI() {
       var word = words[i];
       html += '<tr class="player-' + player + '">';
       html += '<td>' + word.toUpperCase() + '</td><td>';
-      html += '<a class="link" title="' + t('Show definition') + '" aria-label="' + t('Show definition') + '" onclick="g_bui.wordInfo(\'' + word + '\')"><img src="pics/info.png" alt=""></a>';
+      html += '<a class="link" title="' + t('Show definition') + '" aria-label="' + t('Show definition') + '" onclick="g_bui.wordInfo(\'' + word + '\')"><img src="pics/info.svg" alt=""></a>';
       html += '</td></tr>';
     }
     html += '</table>';
