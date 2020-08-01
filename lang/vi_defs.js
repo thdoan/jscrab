@@ -163,10 +163,10 @@ var g_defs = {
       {
         'definition': 'back,reverse',
         'examples': [
-          { 'De vào / ra': 'To reverse in/out; to back in/out' },
-          { 'De xe tông vào cột đèn': 'To reverse the truck into a lamp-post' },
-          { 'Gài số de': 'To go into reverse' },
-          { 'Thấy giá niêm yết là tôi de ra ngay (hết dám mua )': 'When I saw the price, I backed out of buying it' },
+          { 'de vào / ra': 'to reverse in/out; to back in/out' },
+          { 'de xe tông vào cột đèn': 'to reverse the truck into a lamp-post' },
+          { 'gài số de': 'to go into reverse' },
+          { 'thấy giá niêm yết là tôi de ra ngay (hết dám mua )': 'when I saw the price, I backed out of buying it' },
         ]
       }
     ]
