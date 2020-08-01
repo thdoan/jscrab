@@ -122,5 +122,43 @@ var g_defs = {
         ]
       }
     ]
+  },
+  'mế': {
+    '': [
+      {
+        'definition': 'old woman'
+      }
+    ]
+  },
+  'gâu': {
+    '': [
+      {
+        'definition': 'the bark of dogs'
+      }
+    ]
+  },
+  'gấc': {
+    '': [
+      {
+        'definition': 'baby jackfruit, spiny bitter gourd '
+      }
+    ]
+  },
+  'nui': {
+    '': [
+      {
+        'definition': 'noodles '
+      }
+    ]
+  },
+  'ậc': {
+    'verb': [
+      {
+        'definition': 'onomatopoeia; to gurgle',
+        'examples': [
+          { 'nước mắt ậc ậc trong mắt anh ấy': 'tears welled up in his eyes' }
+        ]
+      }
+    ]
   }
 };
