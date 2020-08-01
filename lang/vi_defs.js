@@ -146,6 +146,18 @@ var g_defs = {
       }
     ]
   },
+  'thui': {
+    'adj': [
+      {
+        'definition': 'black'
+      }
+    ],
+    'verb': [
+      {
+        'definition': 'burn, scorch, scar, parch, inflame, singe, barbecue',
+      }
+    ]
+  },
   'ậc': {
     'verb': [
       {
