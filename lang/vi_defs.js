@@ -135,14 +135,14 @@ var g_defs = {
   'gấc': {
     '': [
       {
-        'definition': 'baby jackfruit, spiny bitter gourd '
+        'definition': 'baby jackfruit, spiny bitter gourd'
       }
     ]
   },
   'nui': {
     '': [
       {
-        'definition': 'noodles '
+        'definition': 'noodles'
       }
     ]
   },
