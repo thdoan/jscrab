@@ -224,6 +224,7 @@ function RedipsUI() {
     if (self.created) return;
 
     self.boardm = g_boardm.init(bx, by);
+    var arrow = '<picture><source type="image/webp" srcset="pics/arrow.webp"><img src="pics/arrow.png" width="22" height="22" alt=""></picture>';
     var hr = '<tr class="ruler"><td colspan="2"></td></tr>';
     var html = '<table><tr><td><div id="board" class="human-computer"></div>';
 
@@ -238,11 +239,9 @@ function RedipsUI() {
     html += hr;
 
     html += '<tr><td>' + t('Level:') + '</td><td>';
-    html += '<span id="level" title="' + t('Computer can score up to ') + g_maxwpoints[g_playlevel] + t(' points per turn') + '">' + (g_playlevel + 1) + '</span>';
-    html += '&nbsp;<a class="link" title="' + t('Increase difficulty') + '" aria-label="' + t('Increase difficulty') + '" onclick="g_bui.levelUp()">';
-    html += '<img src="pics/up.png" width="22" height="22" alt=""></a>';
-    html += '<a class="link" title="' + t('Decrease difficulty') + '" aria-label="' + t('Decrease difficulty') + '" onclick="g_bui.levelDn()">';
-    html += '<img src="pics/dn.png" width="22" height="22" alt=""></a></td>';
+    html += '<span id="level" title="' + t('Computer can score up to ') + g_maxwpoints[g_playlevel] + t(' points per turn') + '">' + (g_playlevel + 1) + '</span>&nbsp;';
+    html += '<a class="link up" title="' + t('Increase difficulty') + '" aria-label="' + t('Increase difficulty') + '" onclick="g_bui.levelUp()">' + arrow + '</a>';
+    html += '<a class="link down" title="' + t('Decrease difficulty') + '" aria-label="' + t('Decrease difficulty') + '" onclick="g_bui.levelDn()">' + arrow + '</a></td>';
 
     var sTileset = g_tilesets.indexOf(g_tileset) > -1 ? g_tileset : t('Default');
     var sSelect = '<select title="' + sTileset + '" onchange="setTileset(this)"><option>' + sTileset + '</option>';

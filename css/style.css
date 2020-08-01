@@ -60,7 +60,8 @@ a:hover img {
   -webkit-filter: brightness(0.85);
   filter: brightness(0.85);
 }
-a.link {
+a.link,
+picture {
   display: inline-block;
 }
 
@@ -303,6 +304,10 @@ sup > small {
 #score table.gameinfo {
   text-align: right;
 }
+#score table.gameinfo td {
+  padding-left: 4px;
+  padding-right: 4px;
+}
 
 #score tr.heading {
   background: #f5f5dc; /* beige */
@@ -334,23 +339,26 @@ sup > small {
 #history tr.player-1 {
   color: #cd5c5c;
 }
-#history td {
-  height: 32px;
-}
 #history td:first-child {
   width: 99%;
 }
 #history img {
   display: block;
-  margin: 3px;
+  margin: 3px 0;
 }
 
 #level {
   width: 31px;
   cursor: help;
   display: inline-block;
-  font-size: 28px;
+  font: normal 28px/1 'Trebuchet MS', sans-serif;
+  letter-spacing: -1px;
   text-align: left;
+}
+a.down img {
+  -ms-transform: scaleY(-1);
+  -webkit-transform: scaleY(-1);
+  transform: scaleY(-1);
 }
 
 #oscore,
