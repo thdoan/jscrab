@@ -2,10 +2,10 @@ var g_defs = {
   'ba': {
     '': [
       {
-        'definition': 'three ~ số ba'
+        'definition': 'three'
       },
       {
-        'definition': 'father ~ bố, cha'
+        'definition': 'father'
       }
     ]
   },
@@ -180,6 +180,16 @@ var g_defs = {
           { 'cạc bộ nhớ': 'memory card' },
           { 'cạc mạng': 'network card' },
         ]
+      }
+    ]
+  },
+  'vĩ': {
+    '': [
+      {
+        'definition': 'tall'
+      },
+      {
+        'definition': 'fiddle bow'
       }
     ]
   },
