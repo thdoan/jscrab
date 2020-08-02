@@ -14771,7 +14771,6 @@ var g_wordmap = {
   'ít lời': 1,
   'ít nhất': 1,
   'ít nhiều': 1,
-  'ít nhứt': 1,
   'ít nói': 1,
   'ít nữa': 1,
   'ít oi': 1,
