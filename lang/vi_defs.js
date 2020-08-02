@@ -193,6 +193,13 @@ var g_defs = {
       }
     ]
   },
+  'vu': {
+    '': [
+      {
+        'definition': 'to accuse falsely'
+      }
+    ]
+  },
   'ậc': {
     'verb': [
       {
