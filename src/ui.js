@@ -115,7 +115,7 @@ function RedipsUI() {
   var self = this;
 
   self.created = false;
-  self.racksize = 7;
+  //self.racksize = 7;
   self.plrRackId = 'pl';
   self.oppRackId = 'op';
   self.boardId = 'c';
@@ -124,7 +124,7 @@ function RedipsUI() {
   self.racks[1] = [];
   self.racks[2] = [];
   self.firstrack = true;
-  self.cellbg = '#e0e0b0';
+  //self.cellbg = '#e0e0b0';
   self.level = getStorage('level') || 1; // Playing level
   self.hlines = '';    // Play hisory lines
   self.hcount = 0;     // Play history count
