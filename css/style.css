@@ -353,7 +353,6 @@ sup > small {
 }
 #score table.gameinfo {
   width: 100%;
-  height: 166px;
   border-collapse: collapse;
   text-align: right;
 }
@@ -428,11 +427,11 @@ a.down img {
 }
 
 #footer {
-  height: 64px;
+  height: 60px;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
   font-size: 12px;
-  line-height: 2;
+  line-height: 1.8;
   padding: 0.5rem;
 }
 
