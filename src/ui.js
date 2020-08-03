@@ -222,26 +222,25 @@ function RedipsUI() {
 
   self.create = function(iddiv, bx, by, scores, racksize) {
     if (self.created) return;
-
     self.boardm = g_boardm.init(bx, by);
+
     var arrow = '<picture><source type="image/webp" srcset="pics/arrow.webp"><img src="pics/arrow.png" width="22" height="22" alt=""></picture>';
     var hr = '<tr class="ruler"><td colspan="2"></td></tr>';
-    var html = '<table><tr><td><div id="board" class="human-computer"></div>';
 
-    html += '</td><td id="score">';
-    html += '<table class="gameinfo">';
-
-    html += '<tr class="heading"><th colspan="2">';
-    html += t('Words Played') + '</th></tr>';
-    html += '<tr><td colspan="2">';
-    html += '<div id="history">';
-    html += '</div></td></tr>';
-    html += hr;
-
-    html += '<tr><td>' + t('Level:') + '</td><td>';
-    html += '<span id="level" title="' + t('Computer can score up to ') + g_maxwpoints[g_playlevel] + t(' points per turn') + '">' + (g_playlevel + 1) + '</span>&nbsp;';
-    html += '<a class="link up" title="' + t('Increase difficulty') + '" aria-label="' + t('Increase difficulty') + '" onclick="g_bui.levelUp()">' + arrow + '</a>';
-    html += '<a class="link down" title="' + t('Decrease difficulty') + '" aria-label="' + t('Decrease difficulty') + '" onclick="g_bui.levelDn()">' + arrow + '</a></td>';
+    // Gameboard
+    var html = '<div id="board" class="human-computer"></div>';
+    // Scoreboard
+    html +=
+      '<div id="score"><div class="container">' +
+      '<h1><span style="color:#cd5c5c">Viet</span><span style="color:#499b33">board</span><sup>beta</sup></h1>' +
+      '<h2 class="heading">' + t('Words Played') + '</h2>' +
+      '<div id="history"></div>' +
+      '<table class="gameinfo">' +
+      hr +
+      '<tr class="level"><td>' + t('Level:') + '</td><td>' +
+      '<span id="level" title="' + t('Computer can score up to ') + g_maxwpoints[g_playlevel] + t(' points per turn') + '">' + (g_playlevel + 1) + '</span>&nbsp;' +
+      '<a class="link up" title="' + t('Increase difficulty') + '" aria-label="' + t('Increase difficulty') + '" onclick="g_bui.levelUp()">' + arrow + '</a>' +
+      '<a class="link down" title="' + t('Decrease difficulty') + '" aria-label="' + t('Decrease difficulty') + '" onclick="g_bui.levelDn()">' + arrow + '</a></td></tr>';
 
     var sTileset = g_tilesets.indexOf(g_tileset) > -1 ? g_tileset : t('Default');
     var sSelect = '<select title="' + sTileset + '" onchange="setTileset(this)"><option>' + sTileset + '</option>';
@@ -251,32 +250,26 @@ function RedipsUI() {
       sSelect += '<option>' + g_tilesets[i] + '</option>';
     }
     sSelect += '</select>';
-    html += '<tr><td>' + t('Tileset:') + '</td><td>' + sSelect + '</td></tr>';
-    html += hr;
 
-    html += '<tr><td>' + t('Computer&rsquo;s last score:') + '</td><td id="loscore">0</td></tr>';
-    html += '<tr class="highlight"><td>' + t('Computer&rsquo;s total score:') + '</td>';
-    html += '<td id="oscore">0</td></tr>';
-    html += hr;
-
-    html += '<tr><td>' + t('Your last score:') + '</td><td id="lpscore">0</td></tr>';
-    html += '<tr class="highlight"><td>' + t('Your total score:') + '</td>';
-    html += '<td id="pscore">0</td></tr>';
-    html += hr;
-
-    html += '<tr><td>' + t('Tiles left:') + '</td><td id="tleft"></td></tr>';
-    html += hr;
-
-    html += '</table>';
     html +=
+      '<tr><td>' + t('Tileset:') + '</td><td>' + sSelect + '</td></tr>' +
+      hr +
+      '<tr><td>' + t('Computer&rsquo;s last score:') + '</td><td id="loscore">0</td></tr>' +
+      '<tr class="highlight"><td>' + t('Computer&rsquo;s total score:') + '</td><td id="oscore">0</td></tr>' +
+      hr +
+      '<tr><td>' + t('Your last score:') + '</td><td id="lpscore">0</td></tr>' +
+      '<tr class="highlight"><td>' + t('Your total score:') + '</td><td id="pscore">0</td></tr>' +
+      hr +
+      '<tr><td>' + t('Tiles left:') + '</td><td id="tleft"></td></tr>' +
+      hr +
+      '</table>' +
       '<div id="footer">' +
       (getStorage('lang') === 'vi' ?
         '<a href="javascript:setLang(\'en\')">' + t('English') + '</a> | ' + t('Vietnamese') :
         t('English') + ' | <a href="javascript:setLang(\'vi\')">' + t('Vietnamese') + '</a>') + '<br>' +
       t('Feedback?') + ' <a href="mailto:feedback@vietboard.org?subject=Vietboard">feedback@vietboard.org</a>' +
-      '</div>';
+      '</div></div></div>';
 
-    html += '</td></tr></table>';
     g_cache['app'].innerHTML = html;
 
     self.scores = scores;

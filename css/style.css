@@ -66,14 +66,16 @@ picture {
 }
 
 select {
-  width: 79px;
+  width: 114px;
   background: none;
   border: none;
   cursor: pointer;
 }
 
 #app {
+  display: table;
   opacity: 0; /* Prevent FOUC */
+  margin: 0 auto;
   text-align: center;
 }
 html.loaded #app {
@@ -172,6 +174,11 @@ html.loaded #app {
 }
 
 /*** Game Table ***/
+
+#board {
+  display: table-cell;
+  padding-right: 4px;
+}
 
 table.board {
   table-layout: fixed;
@@ -295,38 +302,92 @@ sup > small {
 
 #score {
   position: relative;
+  width: 284px;
+  min-width: 284px;
   background: #fafafa;
   background: -webkit-gradient(linear, left top, left bottom, from(#f7fef7), to(#fafafa));
   background: linear-gradient(#f7fef7, #fafafa);
   border-radius: 4px;
+  display: table-cell;
   vertical-align: top;
 }
+#score .container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  display: -ms-flexbox;
+  display: -webkit-box;
+  display: flex;
+  -ms-flex-flow: column;
+  -webkit-box-direction: normal;
+  -webkit-box-orient: vertical;
+  flex-flow: column;
+  padding: 0 2px;
+}
+#score h1 {
+  height: 48px;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  font-size: 26px;
+  margin: 0;
+  padding: 0.5rem;
+}
+#score h1 sup { /* beta */
+  color: #999;
+  font-size: 16px;
+  font-weight: normal;
+  line-height: 25px;
+  margin-left: 2px;
+  vertical-align: text-top;
+}
+#score h2 {
+  height: 20px;
+  background: #f5f5dc; /* beige */
+  color: #c39b3c; /* page bg color luminosity 50% */
+  font-size: 16px;
+  line-height: 20px;
+  margin: 0;
+  text-transform: uppercase;
+}
 #score table.gameinfo {
+  width: 100%;
+  height: 166px;
+  border-collapse: collapse;
   text-align: right;
 }
-#score table.gameinfo td {
+#score table.gameinfo td:first-child {
   padding-left: 4px;
+}
+#score table.gameinfo td:last-child {
   padding-right: 4px;
 }
 
-#score tr.heading {
-  background: #f5f5dc; /* beige */
-  color: #c39b3c; /* page bg color luminosity 50% */
-  text-align: center;
-  text-transform: uppercase;
+#score tr {
+  height: 21px;
 }
 #score tr.highlight {
   background: #fefeba;
 }
+#score tr.level {
+  height: 30px;
+}
 #score tr.ruler {
+  height: 2px;
   background: #adadad;
 }
 
 #history {
   width: 100%;
-  height: 250px;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  -ms-flex: 1;
+  -webkit-box-flex: 1;
+  flex: 1;
   font-size: 14px;
   overflow: auto;
+  padding: 4px;
   text-align: left;
 }
 #history table {
@@ -344,7 +405,7 @@ sup > small {
 }
 #history img {
   display: block;
-  margin: 3px 0;
+  margin: 3px 0 0 10px;
 }
 
 #level {
@@ -367,9 +428,8 @@ a.down img {
 }
 
 #footer {
-  position: absolute;
-  bottom: 0px;
-  width: 100%;
+  height: 64px;
+  -webkit-box-sizing: border-box;
   box-sizing: border-box;
   font-size: 12px;
   line-height: 2;
@@ -414,6 +474,7 @@ a.down img {
   border-right: 1px solid rgba(0,0,0,0.8);
   -webkit-box-shadow: 0px 3px 15px rgba(0,0,0,0.3);
   box-shadow: 0px 3px 15px rgba(0,0,0,0.3);
+  -webkit-box-sizing: border-box;
   box-sizing: border-box;
   display: inline-block;
   padding: 1rem;
@@ -490,16 +551,4 @@ a.down img {
 }
 #wordresult #play span {
   display: none;
-}
-
-@media (max-width: 665px) {
-  #footer {
-    position: static;
-  }
-}
-
-@media (max-height: 628px) and (orientation: landscape) {
-  #footer {
-    line-height: 1.6;
-  }
 }
