@@ -193,10 +193,101 @@ var g_defs = {
       }
     ]
   },
+  'tị': {
+    '': [
+      {
+        'definition': 'envious'
+      },
+      {
+        'definition': '(horoscope) snake'
+      }
+    ]
+  },
   'vu': {
     '': [
       {
         'definition': 'to accuse falsely'
+      }
+    ]
+  },
+  'mỳ': {
+    '': [
+      {
+        'definition': 'noodles'
+      }
+    ]
+  },
+  'mậu': {
+    '': [
+      {
+        'definition': 'the fifth stem of Heaven'
+      }
+    ]
+  },
+  'xị': {
+    '': [
+      {
+        'definition': '(of face) swollen'
+      }
+    ]
+  },
+  'bẽn': {
+    'adj': [
+      {
+        'definition': 'shy, timid; ashamed'
+      }
+    ]
+  },
+  'uy': {
+    '': [
+      {
+        'definition': 'authority, prestige',
+        'examples': [
+          { 'ra uy': 'show the authority' }
+        ]
+      }
+    ]
+  },
+  'méc': {
+    'verb': [
+      {
+        'definition': 'to sneak on',
+        'examples': [
+          { 'nó méc với thầy giáo về đứa bạn tốt nhất của nó': 'she sneaked on her best friend to the teacher' }
+        ]
+      }
+    ]
+  },
+  'xe': {
+    '': [
+      {
+        'definition': 'car; lorry; motorcycle',
+        'examples': [
+          {
+            'ông phải đưa xe đến đây mới được': 'you will have to bring your motorcycle here'
+          },
+          { 'lái xe vào ga ra / ra đường': 'to steer the car into the garage/out onto the main road' },
+          { 'thắng xe không ăn': 'the brakes of the vehicle failed' }
+        ]
+      },
+      {
+        'definition': 'traffic',
+        'examples': [
+          {
+            'hôm nay xe không đông': 'here is not much traffic today'
+          },
+          { 'coi chừng xe khi băng qua đường': 'watch out for traffic when crossing' }
+        ]
+      }
+    ]
+  },
+  'bòm': {
+    'verb': [
+      {
+        'definition': 'plop',
+        'examples': [
+          { 'rơi bòm xuống nước': 'fall plop into the water' }
+        ]
       }
     ]
   },
