@@ -306,7 +306,6 @@ table.board td .drag,
   justify-content: center;
   line-height: 1.1;
   opacity: 0.9;
-  padding-bottom: 2px;
   text-align: center;
   z-index: 10;
 }
@@ -334,10 +333,19 @@ table.board td .drag,
   border: 2px solid #cd5c5c; /* indianred */
 }
 
+.tile {
+  width: 41px;
+  height: 42px;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 2px;
+}
+.tile .drag {
+  height: 100%;
+}
+
 /* Swap modal */
 #swaptable td {
-  width: 32px;
-  height: 32px;
   cursor: pointer;
 }
 #swaptable td.to-swap .drag {

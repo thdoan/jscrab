@@ -862,7 +862,7 @@ function RedipsUI() {
       var rcell = el(self.plrRackId + i);
       if (rcell.holds === '') continue;
       divs.push(rcell.firstChild);
-      html += '<td id="swap-candidate' + i + '" onclick="this.classList.toggle(\'to-swap\')"></td>';
+      html += '<td id="swap-candidate' + i + '" class="tile" onclick="this.classList.toggle(\'to-swap\')"></td>';
     }
     html += '</tr></table>';
 
