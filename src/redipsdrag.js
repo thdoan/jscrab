@@ -1392,12 +1392,14 @@ REDIPS.drag = (function () {
 	 * @memberOf REDIPS.drag#
 	 */
 	resetStyles = function (el) {
-		// reset top and left styles
-		el.style.top  = '';
-		el.style.left = '';
 		// reset position and z-index style (if not set or default value for position style is "static")
 		el.style.position = '';
 		el.style.zIndex = '';
+		// reset positional styles
+		el.style.top  = '';
+		el.style.left = '';
+		el.style.width = '';
+		el.style.height = '';
 	};
 
 
@@ -1503,6 +1505,9 @@ REDIPS.drag = (function () {
 				if (obj.setCapture) {
 					obj.setCapture();
 				}
+				// set dimensions or else element will be at 100% (player)
+				obj.style.width = obj.offsetWidth + 'px';
+				obj.style.height = obj.offsetHeight + 'px';
 				// set style to fixed to allow dragging DIV object
 				obj.style.position = 'fixed';
 				// call calculate cells for case where moved element changed cell dimension
@@ -1888,6 +1893,7 @@ REDIPS.drag = (function () {
 				}
 				// set current cell (for easier access in test below)
 				cell_current = tables[table].rows[row].cells[cell];
+				console.log(tables, table, cell);
 				// if current cell contain nested table(s) then set currentCell.containTable property
 				// needed in handlerOnMouseMove() - see around line 1070
 				if (cell_current.childNodes.length > 0 && cell_current.getElementsByTagName('table').length > 0) {
@@ -3754,6 +3760,9 @@ REDIPS.drag = (function () {
 		// calculate delta x and delta y
 		dx = x2 - x1;
 		dy = y2 - y1;
+    // set dimensions or else element will be at 100% (opponent)
+    p.obj.style.width = p.obj.offsetWidth + 'px';
+    p.obj.style.height = p.obj.offsetHeight + 'px';
 		// set style to fixed to allow moving DIV object
 		p.obj.style.position = 'fixed';
 		// if line is more horizontal

@@ -59,6 +59,7 @@ Corrections and comments are welcome by [sending an email](mailto:feedback@vietb
 - Redesigned swap modal dialog
 - Replaced bitmaps with vectors for HiDPI screens
 - Introduced randomness to make computer more human
+- Enhanced desktop gameboard to be fluid (scales to window size)
 
 ## Dependencies for local build
 

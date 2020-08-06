@@ -38,7 +38,7 @@ function setStorage(sKey, sValue) {
   link.href = 'https://fonts.googleapis.com/css2?family=' + sFamily + '&display=swap';
   document.head.appendChild(link);
   var style = document.createElement('style');
-  style.innerHTML = '.drag{font-family:\'' + (sFamily.indexOf('Maven')===0 ? 'Maven Pro' : sFamily) + '\', Arial, sans-serif}';
+  style.textContent = '.drag{font-family:\'' + (sFamily.indexOf('Maven')===0 ? 'Maven Pro' : sFamily) + '\', Arial, sans-serif}';
   // Load bonus tiles
   var aBonusTiles = [
     ['ST', 'be74d2'], // Inverse of player tile
@@ -49,14 +49,14 @@ function setStorage(sKey, sValue) {
   ];
   var sSvg = '<svg width="50" height="50" version="1.1" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg"><path d="m49.913 18.967c-0.28268-0.85924-1.2317-1.7819-9.1735-2.7538-3.1633-0.38736-6.2996-0.63386-7.5178-0.71838-0.4442-1.1903-1.6086-4.2328-2.9143-7.2542-3.2912-7.5993-4.4824-8.2402-5.3439-8.2402-0.85476 0-2.0528 0.64091-5.3708 8.2543-1.3192 3.0214-2.497 6.0781-2.9546 7.2542-1.2115 0.077469-4.3074 0.30989-7.4371 0.67612-7.8813 0.93671-8.837 1.9016-9.1197 2.7327-0.047113 0.14086-0.080765 0.2958-0.080765 0.47892 0 0.94375 0.94225 2.6552 5.9025 7.4162 2.3489 2.2537 4.7584 4.3807 5.7006 5.2047-0.30287 1.2396-1.0567 4.423-1.6893 7.6979-0.76053 3.8947-1.0297 6.2189-1.0297 7.6486 0 1.5776 0.32979 2.0565 0.67977 2.3383 0.71342 0.55639 1.9922 0.76064 9.0052-3.3806 2.7931-1.648 5.4785-3.3947 6.5217-4.0849 1.0297 0.68317 3.6882 2.4087 6.4477 4.0356 6.9256 4.099 8.2514 3.944 8.9447 3.4792 0.41055-0.27468 0.77399-0.74655 0.77399-2.4087 0-1.4438-0.26922-3.775-1.0163-7.6486-0.63939-3.3172-1.4134-6.5781-1.7162-7.8318 0.93552-0.80994 3.3113-2.8946 5.6333-5.1061 4.9132-4.6976 5.842-6.3739 5.842-7.3176-0.0067-0.17607-0.03365-0.32398-0.08749-0.47188" stroke-width=".068849" fill="%23__COLOR__"/>';
   var sSvgText = '<text x="50%" y="58%" dominant-baseline="middle" text-anchor="middle" fill="%23fff" font-family="Trebuchet MS, sans-serif" font-size="15px" font-weight="bold" letter-spacing="-.5px">__TEXT__</text>';
-  var sHtml = '';
+  var sCss = '';
   for (var i=0; i<aBonusTiles.length; ++i) {
-    sHtml += 'table.board td.' + aBonusTiles[i][0] + '{background-image:url(\'data:image/svg+xml;utf8,' +
+    sCss += 'table.board td.' + aBonusTiles[i][0] + '{background-image:url(\'data:image/svg+xml;utf8,' +
       sSvg.replace('__COLOR__', aBonusTiles[i][1]) +
       (i>0 ? sSvgText.replace('__TEXT__', aBonusTiles[i][0]) : '') +
       '</svg>\')}';
   }
-  style.innerHTML += sHtml;
+  style.textContent += sCss;
   document.head.appendChild(style);
   // Load translation
   var sLang = getStorage('lang')==='vi' ? 'vi' : 'en';

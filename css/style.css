@@ -73,6 +73,7 @@ select {
 }
 
 #app {
+  width: 55%;
   display: table;
   opacity: 0; /* Prevent FOUC */
   margin: 0 auto;
@@ -173,9 +174,17 @@ html.loaded #app {
   text-align: center;
 }
 
+.mark .button,
+.mark .obutton {
+  width: 90%;
+  font-size: calc(10px + 0.15vw);
+}
+
 /*** Game Table ***/
 
 #board {
+  width: calc(100% - 288px); /* 284 + 4px gap */
+  min-width: 530px;
   display: table-cell;
   padding-right: 4px;
 }
@@ -196,9 +205,37 @@ table.board td.TW {
   background-size: 87%;
 }
 
+/* Scalable square cells - https://stackoverflow.com/a/22835903/452587 */
+table.board td,
+#drag .opponent td[id],
+#drag .player td[id] {
+  position: relative;
+  width: 6.666666666666667%; /* 100 / 15 */
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 2px;
+}
+table.board td:after,
+#drag .opponent td[id]:after,
+#drag .player td[id]:after {
+  content: '';
+  display: block;
+  margin-top: calc(100% + 1px);
+}
+table.board td .drag,
+#drag .opponent td[id] .drag,
+#drag .player td[id] .drag {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: calc(100% - 4px);
+  height: calc(100% - 4px);
+}
+
 /* Drag container */
 
 #drag {
+  width: 100%;
   background: #3a3a3a;
   border-radius: 4px;
   display: table;
@@ -206,17 +243,15 @@ table.board td.TW {
 #drag img {
   margin: 1px;
 }
-
 #drag table {
+  width: 100%;
   border-collapse: collapse;
 }
-
+#drag > table {
+  position: relative;
+}
 #drag td {
-  width: 32px;
-  height: 32px;
   border: 1px solid #fff;
-  font-size: 10pt;
-  text-align: center;
 }
 
 /* Racks */
@@ -254,14 +289,24 @@ table.board td.TW {
 /* Drag objects (tiles) */
 
 .drag {
-  width: 26px;
-  height: 26px;
+  -ms-flex-align: center;
+  -webkit-box-align: center;
+  align-items: center;
   background: #fff;
   border-radius: 4px;
-  font-size: 14pt;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  display: -ms-flexbox;
+  display: -webkit-box;
+  display: flex;
+  font-size: 18px;
+  font-size: calc(14px + 0.3vw);
+  -ms-flex-pack: center;
+  -webkit-box-pack: center;
+  justify-content: center;
   line-height: 1.1;
-  margin: 1px auto;
   opacity: 0.9;
+  padding-bottom: 2px;
   text-align: center;
   z-index: 10;
 }
@@ -270,7 +315,10 @@ table.board td.TW {
 }
 
 /* Tile points */
-sup > small {
+.drag sup {
+  margin-top: -33%;
+}
+.drag sup > small {
   font-size: 10px;
   letter-spacing: -1px;
   margin-left: 1px;
