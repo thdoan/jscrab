@@ -11,11 +11,11 @@ body {
 
 header {
   h1 {
-    color: #3a3a3a;
+    color: #8d702a;
     font-size: 70px;
   }
   h2 {
-    color: #b99337;
+    color: #a58231;
   }
 }
 
@@ -38,4 +38,15 @@ a {
   padding: 0;
   text-align: center;
   text-transform: uppercase;
+}
+
+@media only screen and (max-width: 767px) {
+  header {
+    a {
+      &.button {
+        background-color: #b99337;
+        color: #fff;
+      }
+    }
+  }
 }
