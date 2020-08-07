@@ -12,11 +12,8 @@ window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', '{{ site.google_analytics }}');
-// Events
-function domReady(callback) {
-  document.readyState==='interactive' || document.readyState==='complete' ? callback() : document.addEventListener('DOMContentLoaded', callback);
-}
-domReady(function() {
+// Prevent FOUC
+window.addEventListener('load', function() {
   document.getElementById('header').className = 'loaded';
 });
 </script>
