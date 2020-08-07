@@ -10,6 +10,11 @@ body {
 }
 
 header {
+  opacity: 0; /* Prevent FOUC */
+  &.loaded {
+    opacity: 1;
+    transition: opacity 0.3s;
+  }
   h1 {
     color: #8d702a;
     font-size: 70px;
