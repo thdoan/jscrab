@@ -45,6 +45,43 @@ var g_defs = {
       }
     ]
   },
+  'ùn': {
+    'verb': [
+      {
+        'definition': 'heap or pile up, accumulate, cram, crowd, huddle, pack together'
+      },
+      {
+        'definition': 'come in great quantity'
+      }
+    ]
+  },
+  'tịch': {
+    'verb': [
+      {
+        'definition': '(of Buddhist monk) die, pass away'
+      },
+      {
+        'definition': 'short for'
+      }
+    ]
+  },
+  'lở': {
+    '': [
+      {
+        'definition': 'have a skin eruption, rash, eczema'
+      },
+      {
+        'definition': 'crash down, tumble down, collapse, break out, fall down, fall in, crumble, cave in'
+      }
+    ]
+  },
+  'mó': {
+    'verb': [
+      {
+        'definition': 'to touch; to interfere with something'
+      }
+    ]
+  },
   'ỉn': {
     'noun': [
       {
@@ -133,14 +170,14 @@ var g_defs = {
     ]
   },
   'gấc': {
-    '': [
+    'noun': [
       {
         'definition': 'baby jackfruit, spiny bitter gourd'
       }
     ]
   },
   'nui': {
-    '': [
+    'noun': [
       {
         'definition': 'noodles'
       }
@@ -204,14 +241,14 @@ var g_defs = {
     ]
   },
   'vu': {
-    '': [
+    'verb': [
       {
         'definition': 'to accuse falsely'
       }
     ]
   },
   'mỳ': {
-    '': [
+    'noun': [
       {
         'definition': 'noodles'
       }
@@ -254,6 +291,33 @@ var g_defs = {
         'definition': 'to sneak on',
         'examples': [
           { 'nó méc với thầy giáo về đứa bạn tốt nhất của nó': 'she sneaked on her best friend to the teacher' }
+        ]
+      }
+    ]
+  },
+  'lõ': {
+    'adj': [
+      {
+        'definition': 'scraggy',
+        'examples': [
+          { 'gầy lõ': 'as thin as a rake, a bag of bones' }
+        ]
+      }
+    ]
+  },
+  'địu': {
+    'verb': [
+      {
+        'definition': 'carry a child on one hip with a cloth band'
+      }
+    ]
+  },
+  'mẩn': {
+    'noun': [
+      {
+        'definition': 'rash',
+        'examples': [
+          { 'một số người cứ ăn dâu tây là bị mẩn': 'some people break out into a rash if they eat strawberries' }
         ]
       }
     ]
