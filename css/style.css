@@ -176,7 +176,7 @@ html.loaded #app {
 .mark .button,
 .mark .obutton {
   width: 90%;
-  font-size: calc(10px + 0.15vw);
+  font-size: calc(12px + 0.15vw);
 }
 
 /*** Game Table ***/

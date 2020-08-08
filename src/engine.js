@@ -396,7 +396,8 @@ function findBestWord(letters, ax, ay, dirs) {
         threshold = randFloat(95, 100, 16);
         break;
     }
-    if (Math.random() > threshold / 100) continue;
+    //if (Math.random() > threshold / 100) continue;
+    if (0) continue;
     var xy = dirs[dir];
     var regex = getRegex(xy, ax, ay, letters.join(''));
     //console.log('findBestWord', 'ax=' + ax, 'ay=' + ay, 'xy=' + xy, 'regex=' + ((regex && regex.rgx) || null));
