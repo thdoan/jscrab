@@ -27,9 +27,12 @@ window.addEventListener('load', function() {
 
 <header id="header">
   <div class="inner">
-    <a href="{{ '/' | absolute_url }}">
-      <h1>{{ site.title | default: site.github.repository_name }}</h1>
-    </a>
+    <h1>
+      <a href="{{ '/' | absolute_url }}">
+        <img src="play/pics/logo.svg" alt="Vietboard" aria-label="Vietboard">
+        <!-- {{ site.title | default: site.github.repository_name }} -->
+      </a>
+    </h1>
     <h2>{{ site.description | default: site.github.project_tagline }}</h2>
     {% if site.github.is_project_page %}
     <a href="{{ site.github.repository_url }}" class="button"><small>View project on</small> GitHub</a>
