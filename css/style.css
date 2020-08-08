@@ -83,7 +83,7 @@ select {
 html.loaded #app {
   opacity: 1;
   -webkit-transition: opacity 0.6s;
-  transition: opacity 0.6s;
+  transition: opacity 0.6s; /* 0.3s spinner + 0.3s */
 }
 #app > p {
   font-size: 110%;

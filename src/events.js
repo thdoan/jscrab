@@ -2,6 +2,15 @@
  * EVENTS
  */
 
+// Animate icon
+function animateIcon(elIcon) {
+  var nTick = 0;
+  var nTimer = setInterval(function() {
+    elIcon.style.filter = 'brightness(' + randFloat(0.85, 1, 2) + ') hue-rotate(' + randInt(0, 360) + 'deg)';
+    if (++nTick === 20) clearInterval(nTimer);
+  }, 100);
+}
+
 // Close the modal properly
 function closeModal() {
   if (el('swaptable')) {

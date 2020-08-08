@@ -232,7 +232,7 @@ function RedipsUI() {
     // Scoreboard
     html +=
       '<div id="score"><div class="container">' +
-      '<h1><img src="pics/icon.svg" alt=""> <span class="opponent">Viet</span><span class="player">board</span> <sup>beta</sup></h1>' +
+      '<h1><img src="pics/icon.svg" alt="" onload="animateIcon(this)"> <span class="opponent">Viet</span><span class="player">board</span> <sup>beta</sup></h1>' +
       '<h2 class="heading">' + t('Words Played') + '</h2>' +
       '<div id="history"></div>' +
       '<table class="gameinfo">' +
