@@ -76,7 +76,7 @@ select {
   width: 55%;
   display: table;
   opacity: 0; /* Prevent FOUC */
-  margin: 0 auto;
+  margin: 0px auto;
   text-align: center;
 }
 html.loaded #app {
@@ -93,7 +93,7 @@ html.loaded #app {
   font-size: 72px;
 }
 #app > table {
-  margin: 0 auto;
+  margin: 0px auto;
 }
 
 /*** Buttons ***/
@@ -211,6 +211,7 @@ table.board td,
 #drag .player td[id] {
   position: relative;
   width: 6.666666666666667%; /* 100 / 15 */
+  min-width: 35px;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
   padding: 2px;
@@ -257,7 +258,7 @@ table.board td .drag,
 /* Racks */
 #drag .opponent,
 #drag .player {
-  margin: 0 auto;
+  margin: 0px auto;
 }
 #drag .opponent td,
 #drag .player td {
@@ -380,23 +381,34 @@ table.board td .drag,
   -webkit-box-direction: normal;
   -webkit-box-orient: vertical;
   flex-flow: column;
-  padding: 0 2px;
+  padding: 0px 2px;
 }
 #score h1 {
   height: 48px;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
   font-size: 26px;
-  margin: 0;
+  margin: 0px;
   padding: 0.5rem;
+}
+#score h1 img {
+  width: 24px;
+  margin-right: 4px;
+  vertical-align: bottom;
 }
 #score h1 sup { /* beta */
   color: #999;
-  font-size: 16px;
+  font-size: 12px;
   font-weight: normal;
-  line-height: 25px;
-  margin-left: 2px;
+  line-height: 22px;
+  margin-left: -2px;
   vertical-align: text-top;
+}
+#score h1 .opponent {
+  color: #cd5c5c;
+}
+#score h1 .player {
+  color: #499b33;
 }
 #score h2 {
   height: 20px;
@@ -404,7 +416,7 @@ table.board td .drag,
   color: #c39b3c; /* page bg color luminosity 50% */
   font-size: 16px;
   line-height: 20px;
-  margin: 0;
+  margin: 0px;
   text-transform: uppercase;
 }
 #score table.gameinfo {
@@ -459,7 +471,7 @@ table.board td .drag,
 }
 #history img {
   display: block;
-  margin: 3px 0 0 10px;
+  margin: 3px 0px 0px 10px;
 }
 
 #level {
@@ -558,7 +570,7 @@ a.down img {
   user-select: text;
 }
 #suggestresult > ul {
-  margin-top: 0;
+  margin-top: 0px;
 }
 #suggestresult #suggestionlist {
   list-style: none;
@@ -587,7 +599,7 @@ a.down img {
   border-radius: 4px;
   display: block;
   font-weight: bold;
-  margin: 6px 0;
+  margin: 6px 0px;
   padding: 6px;
 }
 #wordresult #play {
