@@ -20,7 +20,8 @@ header {
     color: #8d702a;
     font-size: 70px;
     img {
-      filter: brightness(0.65);
+      filter: drop-shadow(2px 4px 6px #8d702a);
+      background: rgba(255, 255, 255, 0.9);
     }
   }
   h2 {
