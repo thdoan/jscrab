@@ -73,13 +73,27 @@ select {
 }
 
 #app {
+  position: relative;
   display: table;
-  -webkit-filter: drop-shadow(2px 4px 6px #8d702a);
-  filter: drop-shadow(2px 4px 6px #8d702a);
   opacity: 0; /* Prevent FOUC */
   margin: 0px auto;
   text-align: center;
 }
+/* NOTE: We need to add shadow to pseudo-element because 'filter' messes up REDIPS.drag. */
+#app:after {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #3a3a3a;
+  border-radius: 8px;
+  content: '';
+  -webkit-filter: drop-shadow(2px 4px 6px #8d702a);
+  filter: drop-shadow(2px 4px 6px #8d702a);
+  z-index: -1;
+}
+
 html.loaded #app {
   opacity: 1;
   -webkit-transition: opacity 0.6s;
