@@ -74,6 +74,8 @@ select {
 
 #app {
   display: table;
+  -webkit-filter: drop-shadow(2px 4px 6px #8d702a);
+  filter: drop-shadow(2px 4px 6px #8d702a);
   opacity: 0; /* Prevent FOUC */
   margin: 0px auto;
   text-align: center;
@@ -175,15 +177,25 @@ html.loaded #app {
 
 .mark .button,
 .mark .obutton {
-  width: 90%;
+  width: 23%;
   font-size: calc(12px + 0.15vw);
+  margin: 0 1%;
 }
 
-/*** Game Table ***/
+#toggle {
+  width: 98%;
+  min-width: 138px;
+}
+
+/*** Gameboard ***/
 
 #board {
+  width: calc(100vh - 12vw);
+  min-width: 530px;
+  background: #3a3a3a;
+  border-radius: 8px 0 0 8px;
   display: table-cell;
-  padding-right: 4px;
+  padding: 0 4px;
 }
 
 table.board {
@@ -232,12 +244,6 @@ table.board td .drag,
 
 /* Drag container */
 
-#drag {
-  width: calc(100vh - 12vw);
-  min-width: 530px;
-  background: #3a3a3a;
-  border-radius: 4px;
-}
 #drag img {
   margin: 1px;
 }
@@ -259,8 +265,9 @@ table.board td .drag,
 #drag .player td {
   border: none;
 }
+#drag .opponent td:first-child,
 #drag .player td:last-child {
-  padding-right: 4px;
+  padding: 2px;
 }
 #drag .opponent td .drag {
   background-color: #e7ab83;
@@ -272,10 +279,6 @@ table.board td .drag,
 #drag .opponent td .drag[style] {
   background-color: #fff;
   color: #000;
-}
-#toggle {
-  width: 96%;
-  min-width: 138px;
 }
 
 #redips_clone {
@@ -350,7 +353,7 @@ table.board td .drag,
   color: #fff;
 }
 
-/*** Game Info ***/
+/*** Scoreboard ***/
 
 #score {
   position: relative;
@@ -358,7 +361,7 @@ table.board td .drag,
   background: #fafafa;
   background: -webkit-gradient(linear, left top, left bottom, from(#f7fef7), to(#fafafa));
   background: linear-gradient(#f7fef7, #fafafa);
-  border-radius: 4px;
+  border-radius: 0 8px 8px 0;
   display: table-cell;
   vertical-align: top;
 }

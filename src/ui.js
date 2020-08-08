@@ -321,20 +321,12 @@ function RedipsUI() {
     }
     //---------------------------
 
-    html += '<td class="mark">';
-    html += '<button class="button" onclick="onPlayerMoved(false)">' + t('Play') + '</button></td>';
-
-    html += '<td class="mark">';
-    html += '<button id="pass" class="obutton" onclick="onPlayerMoved(true)">' + t('Pass') + '</button></td>';
-
-    html += '<td class="mark">';
-    html += '<button class="obutton" onclick="onPlayerClear()">' + t('Clear') + '</button></td>';
-
-    html += '<td class="mark">';
-    html += '<button class="obutton" onclick="onPlayerSwap()">' + t('Swap') + '</button></td>';
-
-    html += '</tr></table>';
-    html += '</div>';
+    html += '<td class="mark">' +
+      '<button class="button" onclick="onPlayerMoved(false)">' + t('Play') + '</button>' +
+      '<button id="pass" class="obutton" onclick="onPlayerMoved(true)">' + t('Pass') + '</button>' +
+      '<button class="obutton" onclick="onPlayerClear()">' + t('Clear') + '</button>' +
+      '<button class="obutton" onclick="onPlayerSwap()">' + t('Swap') + '</button>' +
+      '</td></tr></table></div>';
 
     el(iddiv).innerHTML = html;
 
