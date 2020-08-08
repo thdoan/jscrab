@@ -284,8 +284,9 @@ function RedipsUI() {
     //---------------------------
     // Opponent's rack
 
-    html += '<table class="opponent"><tr>';
-    if (DEBUG) html += '<td class="mark"><button id="toggle" class="obutton" onclick="g_bui.toggleORV()"></button></td>';
+    html += '<table class="opponent"><tr><td class="mark">';
+    if (DEBUG) html += '<button id="toggle" class="obutton" onclick="g_bui.toggleORV()"></button>';
+    html += '</td>';
 
     for (var i = 0; i < racksize; ++i) {
       html += '<td id="' + self.oppRackId + i + '"></td>';
@@ -321,7 +322,7 @@ function RedipsUI() {
     //---------------------------
 
     html += '<td class="mark">';
-    html += '<button id="play" class="button" onclick="onPlayerMoved(false)">' + t('Play') + '</button></td>';
+    html += '<button class="button" onclick="onPlayerMoved(false)">' + t('Play') + '</button></td>';
 
     html += '<td class="mark">';
     html += '<button id="pass" class="obutton" onclick="onPlayerMoved(true)">' + t('Pass') + '</button></td>';

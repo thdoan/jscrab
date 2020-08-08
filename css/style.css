@@ -73,7 +73,6 @@ select {
 }
 
 #app {
-  width: 55%;
   display: table;
   opacity: 0; /* Prevent FOUC */
   margin: 0px auto;
@@ -110,7 +109,7 @@ html.loaded #app {
   color: #303108;
   cursor: pointer;
   display: inline-block;
-  font: bold 12px/1 'Trebuchet MS', Arial, sans-serif;
+  font: bold 12px/1.4 'Trebuchet MS', Arial, sans-serif;
   padding: 6px 9px;
   text-decoration: none;
   text-shadow: 1px 1px 0px #aade7c;
@@ -138,7 +137,7 @@ html.loaded #app {
   color: #333;
   cursor: pointer;
   display: inline-block;
-  font: bold 12px/1 'Trebuchet MS', Arial, sans-serif;
+  font: bold 12px/1.4 'Trebuchet MS', Arial, sans-serif;
   padding: 6px 6px;
   text-decoration: none;
   text-shadow: 1px 1px 0px #ffee66;
@@ -183,8 +182,6 @@ html.loaded #app {
 /*** Game Table ***/
 
 #board {
-  width: calc(100% - 288px); /* 284 + 4px gap */
-  min-width: 530px;
   display: table-cell;
   padding-right: 4px;
 }
@@ -236,20 +233,18 @@ table.board td .drag,
 /* Drag container */
 
 #drag {
-  width: 100%;
+  width: calc(100vh - 12vw);
+  min-width: 530px;
   background: #3a3a3a;
   border-radius: 4px;
-  display: table;
 }
 #drag img {
   margin: 1px;
 }
-#drag table {
-  width: 100%;
-  border-collapse: collapse;
-}
 #drag > table {
   position: relative;
+  width: 100%;
+  border-collapse: collapse;
 }
 #drag td {
   border: 1px solid #fff;
@@ -264,6 +259,9 @@ table.board td .drag,
 #drag .player td {
   border: none;
 }
+#drag .player td:last-child {
+  padding-right: 4px;
+}
 #drag .opponent td .drag {
   background-color: #e7ab83;
   color: #e7ab83;
@@ -276,11 +274,8 @@ table.board td .drag,
   color: #000;
 }
 #toggle {
+  width: 96%;
   min-width: 138px;
-  margin-right: 2px;
-}
-#play {
-  margin-left: 2px;
 }
 
 #redips_clone {
@@ -359,7 +354,6 @@ table.board td .drag,
 
 #score {
   position: relative;
-  width: 284px;
   min-width: 284px;
   background: #fafafa;
   background: -webkit-gradient(linear, left top, left bottom, from(#f7fef7), to(#fafafa));
