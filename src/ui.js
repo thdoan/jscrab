@@ -184,6 +184,8 @@ function RedipsUI() {
       elStatus['updateTimeout'] = setTimeout(function() {
         elStatus.classList.remove('marquee');
         if (player === 0) {
+          el('score-player').textContent = el('pscore').textContent;
+          elStatus.textContent = t('You') + ' ' + t('scored ') + el('lpscore').textContent + ' ' + t(' points for ') + words.join(', ').toUpperCase();
           gtag('event', 'Player Move', {
             'event_category': 'Gameplay - Lvl ' + (g_playlevel + 1),
             'event_label': words.join(', '),
@@ -192,16 +194,16 @@ function RedipsUI() {
         } else {
           el('score-opponent').textContent = el('oscore').textContent;
           elStatus.textContent = t('Computer') + ' ' + t('scored ') + el('loscore').textContent + ' ' + t(' points for ') + words.join(', ').toUpperCase();
-          clearTimeout(elStatus['delayTimeout']);
-          elStatus['delayTimeout'] = setTimeout(function() {
-            startMarquee(elStatus);
-          }, 3000);
           gtag('event', 'Computer Move', {
             'event_category': 'Gameplay - Lvl ' + (g_playlevel + 1),
             'event_label': words.join(', '),
             'value': +el('loscore').textContent
           });
         }
+        clearTimeout(elStatus['delayTimeout']);
+        elStatus['delayTimeout'] = setTimeout(function() {
+          startMarquee(elStatus);
+        }, 3000);
         elStatus.classList.remove('transition');
       }, 100);
     }
