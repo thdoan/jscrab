@@ -235,13 +235,13 @@ html.loaded #app {
   font: normal 180%/1 'Maven Pro', Arial, sans-serif;
 }
 #score-opponent {
-  background: #303a3b linear-gradient(-80deg, #621e1e, #001e22);
+  background: #303a3b linear-gradient(-80deg, #8c2b2b, #001e22); /* #cd5c5c luminosity * 0.625 */
   -webkit-box-shadow: 1px -1px 1px 0 #555 inset, 0 0 1em 0 rgba(0, 0, 0, 0.6) inset;
   box-shadow: 1px -1px 1px 0 #555 inset, 0 0 1em 0 rgba(0, 0, 0, 0.6) inset;
   text-shadow: 0 0 0.5em #cd5c5c;
 }
 #score-player {
-  background: #303a3b linear-gradient(80deg, #2e6020, #001e22);
+  background: #303a3b linear-gradient(80deg, #2e6020, #001e22); /* #499b33 luminosity * 0.625 */
   -webkit-box-shadow: -1px -1px 1px 0 #555 inset, 0 0 1em 0 rgba(0, 0, 0, 0.6) inset;
   box-shadow: -1px -1px 1px 0 #555 inset, 0 0 1em 0 rgba(0, 0, 0, 0.6) inset;
   text-shadow: 0 0 0.5em #499b33;
