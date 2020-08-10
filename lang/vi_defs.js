@@ -155,6 +155,22 @@ var g_defs = {
       }
     ]
   },
+  'ria': {
+    'noun': [
+      {
+        'definition': 'rim; edge; border; margin; brink; hem; rim; shore; bank; side; strand',
+        'examples': [
+          { 'ria rừng': 'margin/border/skirt of woods' },
+        ]
+      },
+      {
+        'definition': 'moustache; (of animals) whisker',
+        'examples': [
+          { 'ria quặp xuống': 'a walrus moustache' },
+        ]
+      }
+    ]
+  },
   'mế': {
     '': [
       {
@@ -308,7 +324,7 @@ var g_defs = {
   'địu': {
     'verb': [
       {
-        'definition': 'carry a child on one hip with a cloth band'
+        'definition': 'carry a child on one&rsquo;s hip with a cloth band'
       }
     ]
   },
