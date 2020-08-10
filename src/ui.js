@@ -7,6 +7,28 @@ function cb(data) {
   g_def = data.result;
 }
 
+// Debounce window resizing
+function debounce(fn) {
+  var nTimer;
+  return function() {
+    var that = this,
+      aArgs = arguments,
+      delayed = function() {
+        fn.apply(that, aArgs);
+        this['debounced'] = undefined;
+      };
+    clearTimeout(nTimer);
+    nTimer = setTimeout(delayed, 100);
+    if (this['debounced']) {
+      clearTimeout(nTimer);
+      fn.apply(this, aArgs);
+      this['debounced'] = undefined;
+    } else {
+      this['debounced'] = true;
+    }
+  };
+}
+
 // Get element
 function el(id) {
   return document.getElementById(id) || document.querySelector(id);

@@ -24,13 +24,10 @@ function setStorage(sKey, sValue) {
     return true;
   } else return false;
 }
-// Toggle mobile layout
-function toggleMobile() {
+(function() {
+  // Toggle mobile layout
   window.g_isMobile = window.outerWidth < window.outerHeight;
   document.documentElement.classList.toggle('mobile', g_isMobile);
-}
-(function() {
-  toggleMobile();
   // Load tileset
   window.g_tilesets = [
     'Dancing Script',
