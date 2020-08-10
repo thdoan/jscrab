@@ -121,7 +121,7 @@ function announceWinner() {
 
   var html = t('Game over. The score is...');
   html += '<ul><li>';
-  html += t('You: ') + g_pscore + '</li><li>' + t('Computer: ') + g_oscore + '</li></ul>';
+  html += t('You') + ': ' + g_pscore + '</li><li>' + t('Computer') + ': ' + g_oscore + '</li></ul>';
   var msg = t('It&rsquo;s a tie!');
   if (g_oscore > g_pscore) msg = t('Computer wins.');
   else if (g_oscore < g_pscore) msg = t('You win!');

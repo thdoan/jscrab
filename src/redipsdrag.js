@@ -1893,7 +1893,7 @@ REDIPS.drag = (function () {
 				}
 				// set current cell (for easier access in test below)
 				cell_current = tables[table].rows[row].cells[cell];
-				console.log(tables, table, cell);
+				//console.log(tables, table, cell);
 				// if current cell contain nested table(s) then set currentCell.containTable property
 				// needed in handlerOnMouseMove() - see around line 1070
 				if (cell_current.childNodes.length > 0 && cell_current.getElementsByTagName('table').length > 0) {

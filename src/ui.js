@@ -153,10 +153,14 @@ function RedipsUI() {
     div.innerHTML = self.hlines;
     div.scrollTop = self.hcount * 100;
 
-    // GA
+    // GA and update scoreboard
     if (words.length > 0) {
+      var elStatus = el('status');
+      elStatus.classList.add('transition'); // 100ms
       // Delay required to get actual score
-      setTimeout(function() {
+      clearTimeout(elStatus['updateTimeout']);
+      elStatus['updateTimeout'] = setTimeout(function() {
+        elStatus.classList.remove('marquee');
         if (player === 0) {
           gtag('event', 'Player Move', {
             'event_category': 'Gameplay - Lvl ' + (g_playlevel + 1),
@@ -164,12 +168,19 @@ function RedipsUI() {
             'value': +el('lpscore').textContent
           });
         } else {
+          el('score-opponent').textContent = el('oscore').textContent;
+          elStatus.textContent = t('Computer') + ' ' + t('scored ') + el('loscore').textContent + ' ' + t(' points for ') + words.join(', ').toUpperCase();
+          clearTimeout(elStatus['delayTimeout']);
+          elStatus['delayTimeout'] = setTimeout(function() {
+            startMarquee(elStatus);
+          }, 3000);
           gtag('event', 'Computer Move', {
             'event_category': 'Gameplay - Lvl ' + (g_playlevel + 1),
             'event_label': words.join(', '),
             'value': +el('loscore').textContent
           });
         }
+        elStatus.classList.remove('transition');
       }, 100);
     }
   };
@@ -229,10 +240,10 @@ function RedipsUI() {
 
     // Gameboard
     var html = '<div id="board" class="human-computer"></div>';
-    // Scoreboard
+    // Game info
     html +=
       '<div id="score"><div class="container">' +
-      '<h1><img src="pics/icon.svg" alt="" onload="animateIcon(this)"> <span class="opponent">Viet</span><span class="player">board</span> <sup>beta</sup></h1>' +
+      '<h1><img src="pics/icon.svg" alt="" onload="spinColors(this,true)"> <span class="opponent">Viet</span><span class="player">board</span> <sup>beta</sup></h1>' +
       '<h2 class="heading">' + t('Words Played') + '</h2>' +
       '<div id="history"></div>' +
       '<table class="gameinfo">' +
@@ -280,14 +291,18 @@ function RedipsUI() {
     self.bx = bx;
     self.by = by;
 
-    html = '<div id="drag">';
+    // Scoreboard
+    html = '<table id="scoreboard"><tr><td id="score-opponent">0</td><td class="spacer"></td><td class="logo"><img src="pics/logo.svg" alt="Vietboard" onload="spinColors(this)"><br><small id="status" onclick="startMarquee(this)"></small></td><td class="spacer"></td><td id="score-player">0</td></tr></table>';
+    html += '<div id="drag">';
     //---------------------------
     // Opponent's rack
 
-    html += '<table class="opponent"><tr><td class="mark">';
-    if (DEBUG) html += '<button id="toggle" class="obutton" onclick="g_bui.toggleORV()"></button>';
-    html += '</td>';
-
+    html += '<table class="opponent"><tr>';
+    if (!g_isMobile) {
+      html += '<td class="mark">';
+      if (DEBUG) html += '<button id="toggle" class="obutton" onclick="g_bui.toggleORV()"></button>';
+      html += '</td>';
+    }
     for (var i = 0; i < racksize; ++i) {
       html += '<td id="' + self.oppRackId + i + '"></td>';
     }
@@ -321,7 +336,8 @@ function RedipsUI() {
     }
     //---------------------------
 
-    html += '<td class="mark">' +
+    if (g_isMobile) html += '</tr><tr>';
+    html += '<td class="mark"' + (g_isMobile ? ' colspan="8"' : '') + '>' +
       '<button class="button" onclick="onPlayerMoved(false)">' + t('Play') + '</button>' +
       '<button id="pass" class="obutton" onclick="onPlayerMoved(true)">' + t('Pass') + '</button>' +
       '<button class="obutton" onclick="onPlayerClear()">' + t('Clear') + '</button>' +
@@ -870,8 +886,9 @@ function RedipsUI() {
     }
   };
 
+  // Toggle opponent rack visibility
   self.toggleORV = function() {
-    // Toggle opponent rack visibility
+    if (!el('toggle')) return;
     self.showOpRack = 1 - self.showOpRack;
     el('toggle').innerHTML = self.showOpRack ? t('Hide computer&rsquo;s rack') : t('Show computer&rsquo;s rack');
     for (var i = 0; i < self.racksize; ++i) {

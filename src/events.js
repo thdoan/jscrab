@@ -2,15 +2,6 @@
  * EVENTS
  */
 
-// Animate icon
-function animateIcon(elIcon) {
-  var nTick = 0;
-  var nTimer = setInterval(function() {
-    elIcon.style.filter = 'brightness(' + randFloat(0.85, 1, 2) + ') hue-rotate(' + randInt(0, 360) + 'deg)';
-    if (++nTick === 20) clearInterval(nTimer);
-  }, 100);
-}
-
 // Close the modal properly
 function closeModal() {
   if (el('swaptable')) {
@@ -31,6 +22,25 @@ function handleHideModal(e) {
 function handleKeyDown(e) {
   // Close modal on Escape
   if (e.key === 'Escape') closeModal();
+}
+
+// Activate marquee in status
+function startMarquee(elStatus) {
+  if (elStatus.classList.contains('marquee')) return;
+  elStatus.classList.toggle('marquee', elStatus.offsetWidth < elStatus.scrollWidth);
+  clearTimeout(elStatus['marqueeTimeout']);
+  elStatus['marqueeTimeout'] = setTimeout(function() {
+    elStatus.classList.remove('marquee');
+  }, 4000); // Animation time
+}
+
+// Cycle through icon/logo colors
+function spinColors(elIcon, bBrightness) {
+  var nTick = 0;
+  var nTimer = setInterval(function() {
+    elIcon.style.filter = (bBrightness ? 'brightness(' + randFloat(0.85, 1, 2) + ') ' : '') + 'hue-rotate(' + randInt(0, 360) + 'deg)';
+    if (++nTick === 20) clearInterval(nTimer);
+  }, 100);
 }
 
 document.addEventListener('keydown', handleKeyDown);
@@ -83,3 +93,5 @@ window.addEventListener('load', function() {
   // Fade in
   document.documentElement.classList.replace('loading', 'loaded');
 });
+
+window.addEventListener('resize', toggleMobile);
