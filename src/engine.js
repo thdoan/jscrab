@@ -83,7 +83,8 @@ function init(iddiv) {
 
   g_bui.create(iddiv, g_boardwidth, g_boardheight, g_letscore, g_racksize);
 
-  g_bui.setPlayerRack(my_letters);
+  //g_bui.setPlayerRack(my_letters);
+  g_bui.setPlayerRack('aaaaaa *');
   g_bui.setOpponentRack(comp_letters);
   g_bui.setTilesLeft(g_letpool.length);
 
@@ -201,7 +202,10 @@ function checkValidPlacement(placement) {
     } else if ((miny > 0 && g_board[minx][miny - 1] !== '') || (miny < mby - 1 && g_board[minx][miny + 1] !== '')) {
       dy = 1;
     } else {
-      lplayed = '<strong>' + lplayed.toUpperCase() + '</strong>';
+      if (lplayed === ' ') lplayed = '<em>space</em>';
+      else if (lplayed === '*') lplayed = '<em>blank</em>';
+      else lplayed = lplayed.toUpperCase();
+      lplayed = '<strong>' + lplayed + '</strong>';
       var msg = lplayed + t(' is not connected to a word.');
       return {
         'played': '',
