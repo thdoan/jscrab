@@ -83,8 +83,7 @@ function init(iddiv) {
 
   g_bui.create(iddiv, g_boardwidth, g_boardheight, g_letscore, g_racksize);
 
-  //g_bui.setPlayerRack(my_letters);
-  g_bui.setPlayerRack('aaaaaa *');
+  g_bui.setPlayerRack(my_letters);
   g_bui.setOpponentRack(comp_letters);
   g_bui.setTilesLeft(g_letpool.length);
 
