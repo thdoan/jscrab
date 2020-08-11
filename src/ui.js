@@ -251,7 +251,7 @@ function RedipsUI() {
       if (rcell.holds === '' && count < divs.length) {
         var div = divs[count++];
         // Joker tile - remove previously selected letter from tile?
-        if (div.holds.points === 0) div.innerHTML = '';
+        if (div.holds.points === 0) div.innerHTML = '&nbsp;';
         rcell.appendChild(div);
         rcell.holds = self.hcopy(div.holds);
       }
@@ -559,7 +559,7 @@ function RedipsUI() {
     cell.holds = self.hcopy(holds);
     var html = '';
     //html += '<div class="drag t1">';
-    if (ltr !== '*') html += ltr.toUpperCase();
+    html += (ltr !== '*') ? ltr.toUpperCase() : '&nbsp;';
     //html += '</div>';
     //cell.innerHTML = html;
     var div = cell.firstChild;
@@ -826,6 +826,8 @@ function RedipsUI() {
         if (ltr !== '*') {
           var char = upper.charAt(i);
           html += (char === ' ' ? '&nbsp;&nbsp;' : char) + '<sup><small>' + self.scores[ltr] + '</small></sup>';
+        } else {
+          html += '&nbsp;';
         }
         html += '</div>';
         rcell.innerHTML = html;
