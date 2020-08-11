@@ -60,6 +60,7 @@ Corrections and comments are welcome by [sending an email](mailto:feedback@vietb
 - Replaced bitmaps with vectors for HiDPI screens
 - Introduced randomness to make computer more human
 - Enhanced desktop gameboard to be fluid (scales to window size)
+- Added responsive design for mobile devices
 
 ## Dependencies for local build
 

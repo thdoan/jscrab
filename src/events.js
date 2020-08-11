@@ -48,7 +48,7 @@ function spinColors(elIcon, bBrightness) {
 }
 
 // Toggle mobile layout
-function toggleMobile(e) {
+function toggleMobile() {
   g_isMobile = window.outerWidth < window.outerHeight;
   document.documentElement.classList.toggle('mobile', g_isMobile);
   var elPlayerButtons = el('#drag .player td.mark');
@@ -75,6 +75,8 @@ function toggleMobile(e) {
     elPlayerButtons.removeAttribute('colspan');
     el('#drag .player tr:last-child').remove();
   }
+  // Adjust modal position
+  centerModal();
 }
 
 document.addEventListener('keydown', handleKeyDown);

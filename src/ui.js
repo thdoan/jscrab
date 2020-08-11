@@ -101,24 +101,28 @@ function setTileset(elSelect) {
 }
 
 // Modal functions
+function centerModal() {
+  g_cache['modalContainer'].style.marginTop = '-' + ((g_cache['modalContainer'].clientHeight - 13) / 2) + 'px'; // 13px for the titlebar
+}
 function hideModal() {
   g_cache['modalContainer'].classList.remove('on');
   g_cache['modalMask'].classList.remove('on');
   g_bui.timer = setTimeout(function() {
     g_cache['modalContainer'].style.display = 'none';
     g_cache['modalMask'].style.display = 'none';
+    g_cache['modalContent'].removeAttribute('class');
   }, 300); // Sync with transition time
   // Remove focus trap
   [].forEach.call(g_cache['app'].querySelectorAll('a[href], button'), function(el) {
     el.tabIndex = 0;
   });
 }
-function showModal(html, width) {
-  g_cache['modalContent'].innerHTML = html;
+function showModal(sHtml, sClass) {
+  if (sClass) g_cache['modalContent'].classList.add(sClass);
+  g_cache['modalContent'].innerHTML = sHtml;
   g_cache['modalMask'].style.display = 'block';
-  if (parseFloat(width)) g_cache['modalContainer'].style.width = width + 'px';
   g_cache['modalContainer'].style.display = 'block';
-  g_cache['modalContainer'].style.marginTop = '-' + ((g_cache['modalContainer'].clientHeight - 13) / 2) + 'px'; // 13px for the titlebar
+  centerModal();
   setTimeout(function() {
     // Autofocus on first input or button
     var elControl = g_cache['modalContent'].querySelector('input, button');
@@ -875,17 +879,12 @@ function RedipsUI() {
     for (var i = 0; i < llen; ++i) {
       var ltr = g_letters[i][0];
       if (ltr !== '*') {
-        if (html !== '' && i % rlen === 0) html += '</tr><tr>'
-        html += '<td><button class="obutton" onclick="g_bui.onSelLetter(\'' + ltr + '\')">';
-        html += (ltr === ' ' ? '&nbsp;' : ltr.toUpperCase()) + '</button></td>';
+        html += '<button class="obutton" onclick="g_bui.onSelLetter(\'' + ltr + '\')">';
+        html += (ltr === ' ' ? '&nbsp;' : ltr.toUpperCase()) + '</button>';
       }
     }
-    for (var i = llen;
-      (i - 1) % rlen !== 0; ++i) {
-      html += '<td></td>';
-    }
-    html = '<table id="letters"><tr>' + html + '</tr></table>';
-    showModal(html);
+    html = '<div id="letters">' + html + '</div>';
+    showModal(html, 'center');
   };
 
   self.showSwapModal = function(tilesLeft) {

@@ -160,13 +160,6 @@ html.loaded #app {
   text-shadow: 1px 1px 0 #ffee66;
   white-space: nowrap;
 }
-#letters .obutton {
-  width: 32px;
-  height: 32px;
-  line-height: 32px;
-  padding: 0;
-  text-align: center;
-}
 .obutton:not([disabled]):hover,
 .obutton:not([disabled]):focus {
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #ffab23), color-stop(1, #ffec64));
@@ -435,16 +428,6 @@ table.board td .drag,
   height: 100%;
 }
 
-/* Swap modal */
-#swaptable td {
-  cursor: pointer;
-}
-#swaptable td.to-swap .drag {
-  background: #1a1a1a;
-  border-color: #be74d2;
-  color: #fff;
-}
-
 /*** Game Info ***/
 
 #score {
@@ -636,6 +619,9 @@ a.down img {
   padding: 1rem;
   text-align: left;
 }
+#modal-content.center {
+  text-align: center;
+}
 #modal-content:before {
   position: absolute;
   top: -13px;
@@ -648,6 +634,24 @@ a.down img {
   border-bottom: 2px solid #000;
   border-right: 1px solid #204095;
   content: '';
+}
+
+#letters .obutton {
+  width: 32px;
+  height: 32px;
+  line-height: 32px;
+  margin: 1%;
+  padding: 0;
+  text-align: center;
+}
+
+#swaptable td {
+  cursor: pointer;
+}
+#swaptable td.to-swap .drag {
+  background: #1a1a1a;
+  border-color: #be74d2;
+  color: #fff;
 }
 
 /*** VDict ***/
