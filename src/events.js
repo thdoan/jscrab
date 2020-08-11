@@ -6,6 +6,8 @@
 function closeModal() {
   if (el('swaptable')) {
     g_bui.onSwap(true);
+  } else if (el('letters')) {
+    g_bui.onSelLetter('*');
   } else {
     var elButton = g_cache['modalContent'].querySelector('.button');
     if (elButton) elButton.click();

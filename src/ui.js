@@ -101,6 +101,18 @@ function setTileset(elSelect) {
 }
 
 // Modal functions
+function hideModal() {
+  g_cache['modalContainer'].classList.remove('on');
+  g_cache['modalMask'].classList.remove('on');
+  g_bui.timer = setTimeout(function() {
+    g_cache['modalContainer'].style.display = 'none';
+    g_cache['modalMask'].style.display = 'none';
+  }, 300); // Sync with transition time
+  // Remove focus trap
+  [].forEach.call(g_cache['app'].querySelectorAll('a[href], button'), function(el) {
+    el.tabIndex = 0;
+  });
+}
 function showModal(html, width) {
   g_cache['modalContent'].innerHTML = html;
   g_cache['modalMask'].style.display = 'block';
@@ -117,18 +129,6 @@ function showModal(html, width) {
   // Set focus trap
   [].forEach.call(g_cache['app'].querySelectorAll('a[href], button'), function(el) {
     el.tabIndex = -1;
-  });
-}
-function hideModal() {
-  g_cache['modalContainer'].classList.remove('on');
-  g_cache['modalMask'].classList.remove('on');
-  g_bui.timer = setTimeout(function() {
-    g_cache['modalContainer'].style.display = 'none';
-    g_cache['modalMask'].style.display = 'none';
-  }, 300); // Sync with transition time
-  // Remove focus trap
-  [].forEach.call(g_cache['app'].querySelectorAll('a[href], button'), function(el) {
-    el.tabIndex = 0;
   });
 }
 
@@ -231,11 +231,11 @@ function RedipsUI() {
     var placement = self.getPlayerPlacement();
     var divs = [];
     var id;
+    console.log(placement);
     for (var i = 0; i < placement.length; ++i) {
       var pl = placement[i];
       id = self.boardId + pl.x + '_' + pl.y;
       var cell = el(id);
-      //if (cell.firstChild==null || typeof(cell.firstChild)=="undefined") alert("baaaaa");
       divs.push(cell.firstChild);
       cell.holds = '';
       cell.innerHTML = '';
@@ -362,7 +362,7 @@ function RedipsUI() {
 
     if (g_isMobile) html += '</tr><tr>';
     html += '<td class="mark"' + (g_isMobile ? ' colspan="8"' : '') + '>' +
-      '<button class="button" onclick="onPlayerMoved(false)">' + t('Play') + '</button>' +
+      '<button class="button" onclick="onPlayerMoved()">' + t('Play') + '</button>' +
       '<button id="pass" class="obutton" onclick="onPlayerMoved(true)">' + t('Pass') + '</button>' +
       '<button class="obutton" onclick="onPlayerClear()">' + t('Clear') + '</button>' +
       '<button class="obutton" onclick="onPlayerSwap()">' + t('Swap') + '</button>' +
@@ -555,7 +555,7 @@ function RedipsUI() {
     cell.holds = self.hcopy(holds);
     var html = '';
     //html += '<div class="drag t1">';
-    html += ltr.toUpperCase() + '<sup><small>&nbsp;</small></sup>';
+    if (ltr !== '*') html += ltr.toUpperCase();
     //html += '</div>';
     //cell.innerHTML = html;
     var div = cell.firstChild;
