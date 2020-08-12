@@ -36,6 +36,8 @@ body {
   display: table-cell;
   font: normal 16px/1 Calibri, Arial, sans-serif;
   margin: 0;
+  -ms-scroll-chaining: none;
+  overscroll-behavior: none;
   -ms-user-select: none;
   -moz-user-select: none;
   -webkit-user-select: none;
