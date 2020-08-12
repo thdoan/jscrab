@@ -298,9 +298,9 @@ function RedipsUI() {
       hr +
       '<tr><td>' + t('Your last score:') + '</td><td id="lpscore">0</td></tr>' +
       '<tr class="highlight"><td>' + t('Your total score:') + '</td><td id="pscore">0</td></tr>' +
-      hr +
-      '<tr><td>' + t('Tiles left:') + '</td><td id="tleft"></td></tr>' +
-      hr +
+      hr;
+    if (DEBUG) html += '<tr><td>' + t('Tiles left:') + '</td><td id="tleft"></td></tr>' + hr;
+    html +=
       '</table>' +
       '<div id="footer">' +
       (getStorage('lang') === 'vi' ?
@@ -866,7 +866,7 @@ function RedipsUI() {
   };
 
   self.setTilesLeft = function(left) {
-    el('tleft').textContent = left;
+    if (el('tleft')) el('tleft').textContent = left;
   };
 
   self.showBusy = function() {

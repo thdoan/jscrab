@@ -411,6 +411,7 @@ table.board td .drag,
 
 /* Tile points */
 .drag sup {
+  line-height: 1;
   margin-top: -33%;
 }
 .drag sup > small {
@@ -613,8 +614,8 @@ a.down img {
   border-left: 1px solid rgba(0, 0, 0, 0.9);
   border-bottom: 1px solid rgba(0, 0, 0, 0.9);
   border-right: 1px solid rgba(0, 0, 0, 0.8);
-  -webkit-box-shadow: 0 3px 15px rgba(0, 0, 0, 0.5);
-  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.5);
+  -webkit-box-shadow: 0 3px 15px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.4);
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
   display: inline-block;
@@ -756,7 +757,7 @@ html.mobile .drag {
   font-size: calc(18px + 1vw);
 }
 html.mobile .drag sup {
-  margin-top: -40%;
+  margin-top: -45%;
 }
 html.mobile table.board td .drag {
   top: 0;
