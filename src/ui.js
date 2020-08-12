@@ -866,7 +866,8 @@ function RedipsUI() {
   };
 
   self.setTilesLeft = function(left) {
-    if (el('tleft')) el('tleft').textContent = left;
+    if (!el('tleft')) return;
+    el('tleft').innerHTML = '<a href="javascript:g_bui.showTilesLeft()">' + left + '</a>';
   };
 
   self.showBusy = function() {
@@ -909,6 +910,17 @@ function RedipsUI() {
       self.rd.enableDrag(false, divs[i]); // Disable drag in order to select
       el('swap-candidate' + i).appendChild(divs[i]);
     }
+  };
+
+  self.showTilesLeft = function() {
+    var oTilesLeft = g_letpool.sort().reduce(function(accumulator, currentValue) {
+      if (currentValue === '*') currentValue = '<blank>';
+      else if (currentValue === ' ') currentValue = '<space>';
+      accumulator[currentValue] = (accumulator[currentValue] || 0) + 1;
+      return accumulator;
+    }, {});
+    //self.prompt('<pre>' + JSON.stringify(oTilesLeft, null, 4) + '</pre>');
+    alert(JSON.stringify(oTilesLeft).replace(/[{}"]/g, '').replace(/([:,])/g, '$1 '));
   };
 
   // Toggle opponent rack visibility
