@@ -914,13 +914,12 @@ function RedipsUI() {
 
   self.showTilesLeft = function() {
     var oTilesLeft = g_letpool.sort().reduce(function(accumulator, currentValue) {
-      if (currentValue === '*') currentValue = '<blank>';
-      else if (currentValue === ' ') currentValue = '<space>';
+      if (currentValue === '*') currentValue = '&lt;blank&gt;';
+      else if (currentValue === ' ') currentValue = '&lt;space&gt;';
       accumulator[currentValue] = (accumulator[currentValue] || 0) + 1;
       return accumulator;
     }, {});
-    //self.prompt('<pre>' + JSON.stringify(oTilesLeft, null, 4) + '</pre>');
-    alert(JSON.stringify(oTilesLeft).replace(/[{}"]/g, '').replace(/([:,])/g, '$1 '));
+    self.prompt('<div style="line-height:1.2">' + JSON.stringify(oTilesLeft).replace(/[{}"]/g, '').replace(/([:,])/g, '$1 ') + '</div>');
   };
 
   // Toggle opponent rack visibility

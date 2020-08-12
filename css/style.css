@@ -128,7 +128,7 @@ html.loaded #app {
   color: #303108;
   cursor: pointer;
   display: inline-block;
-  font: bold 12px/1.4 'Trebuchet MS', Arial, sans-serif;
+  font: bold 12px/1 'Trebuchet MS', Arial, sans-serif;
   padding: 6px 9px;
   text-decoration: none;
   text-shadow: 1px 1px 0 #aade7c;
@@ -156,7 +156,7 @@ html.loaded #app {
   color: #333;
   cursor: pointer;
   display: inline-block;
-  font: bold 12px/1.4 'Trebuchet MS', Arial, sans-serif;
+  font: bold 12px/1 'Trebuchet MS', Arial, sans-serif;
   padding: 6px 6px;
   text-decoration: none;
   text-shadow: 1px 1px 0 #ffee66;
@@ -183,18 +183,6 @@ html.loaded #app {
 .buttons {
   margin-top: 1rem;
   text-align: center;
-}
-
-.mark .button,
-.mark .obutton {
-  width: 23%;
-  font-size: calc(10px + 0.25vw);
-  margin: 0 1%;
-}
-
-#toggle {
-  width: 98%;
-  min-width: 138px;
 }
 
 /*** Scoreboard ***/
@@ -331,6 +319,18 @@ table.board td:after,
 }
 #drag td {
   border: 1px solid #fff;
+}
+
+#drag .button,
+#drag .obutton {
+  width: 23%;
+  font-size: calc(10px + 0.25vw);
+  line-height: 1.4;
+  margin: 0 1%;
+}
+#drag #toggle {
+  width: 98%;
+  min-width: 138px;
 }
 
 /* Racks */
