@@ -101,28 +101,12 @@ function setTileset(elSelect) {
 }
 
 // Modal functions
-function centerModal() {
-  g_cache['modalContainer'].style.marginTop = '-' + ((g_cache['modalContainer'].clientHeight - 13) / 2) + 'px'; // 13px for the titlebar
-}
-function hideModal() {
-  g_cache['modalContainer'].classList.remove('on');
-  g_cache['modalMask'].classList.remove('on');
-  g_bui.timer = setTimeout(function() {
-    g_cache['modalContainer'].style.display = 'none';
-    g_cache['modalMask'].style.display = 'none';
-    g_cache['modalContent'].removeAttribute('class');
-  }, 300); // Sync with transition time
-  // Remove focus trap
-  [].forEach.call(g_cache['app'].querySelectorAll('a[href], button'), function(el) {
-    el.tabIndex = 0;
-  });
-}
 function showModal(sHtml, sClass) {
-  if (sClass) g_cache['modalContent'].classList.add(sClass);
+  if (sClass) g_cache['modalContainer'].classList.add(sClass);
   g_cache['modalContent'].innerHTML = sHtml;
   g_cache['modalMask'].style.display = 'block';
   g_cache['modalContainer'].style.display = 'block';
-  centerModal();
+  setModalHeight();
   setTimeout(function() {
     // Autofocus on first input or button
     var elControl = g_cache['modalContent'].querySelector('input, button');
@@ -134,6 +118,27 @@ function showModal(sHtml, sClass) {
   [].forEach.call(g_cache['app'].querySelectorAll('a[href], button'), function(el) {
     el.tabIndex = -1;
   });
+}
+function hideModal() {
+  g_cache['modalContainer'].classList.remove('on');
+  g_cache['modalMask'].classList.remove('on');
+  g_bui.timer = setTimeout(function() {
+    g_cache['modalContainer'].style.display = 'none';
+    g_cache['modalMask'].style.display = 'none';
+    g_cache['modalContent'].style.height = '';
+    g_cache['modalContainer'].removeAttribute('class');
+  }, 300); // Sync with transition time
+  // Remove focus trap
+  [].forEach.call(g_cache['app'].querySelectorAll('a[href], button'), function(el) {
+    el.tabIndex = 0;
+  });
+}
+function setModalHeight() {
+  if (!g_cache['modalContainer'].offsetHeight) return;
+  setTimeout(function() {
+    g_cache['modalContent'].style.height = '';
+    g_cache['modalContent'].style.height = g_cache['modalContainer'].clientHeight + 'px';
+  }, 50);
 }
 
 // Main UI logic
@@ -754,12 +759,13 @@ function RedipsUI() {
     g_cache['sound'].play();
   };
 
-  self.prompt = function(msg, button) {
+  self.prompt = function(msg, button, sClass) {
     showModal(
       msg +
       '<div class="buttons">' +
       (button || '<button class="button" onclick="hideModal()">' + t('OK') + '</button>') +
-      '</div>'
+      '</div>',
+      sClass
     );
   };
 
@@ -902,7 +908,7 @@ function RedipsUI() {
     html += '</tr></table>';
 
     // Display the HTML in the modal window
-    self.prompt(html, '<button class="button" onclick="g_bui.onSwap()">' + t('Swap') + ' & ' + t('Pass') + '</button>');
+    self.prompt(html, '<button class="button" onclick="g_bui.onSwap()">' + t('Swap') + ' & ' + t('Pass') + '</button>', 'wide');
 
     // And then fill the DOM in the modal window with the existing letter
     // divs from the players rack
@@ -919,7 +925,7 @@ function RedipsUI() {
       accumulator[currentValue] = (accumulator[currentValue] || 0) + 1;
       return accumulator;
     }, {});
-    self.prompt('<div style="line-height:1.2">' + JSON.stringify(oTilesLeft).replace(/[{}"]/g, '').replace(/([:,])/g, '$1 ') + '</div>');
+    self.prompt('<div class="debug">' + JSON.stringify(oTilesLeft).replace(/[{}"]/g, '').replace(/([:,])/g, '$1 ') + '</div>');
   };
 
   // Toggle opponent rack visibility

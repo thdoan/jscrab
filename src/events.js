@@ -76,7 +76,7 @@ function toggleMobile() {
     el('#drag .player tr:last-child').remove();
   }
   // Adjust modal position
-  centerModal();
+  setModalHeight();
 }
 
 document.addEventListener('keydown', handleKeyDown);

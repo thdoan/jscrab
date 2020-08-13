@@ -75,6 +75,10 @@ select {
   cursor: pointer;
 }
 
+.debug {
+  line-height: 1.2;
+}
+
 #app {
   position: relative;
   display: table;
@@ -582,8 +586,6 @@ a.down img {
 #modal-mask,
 #modal-container {
   position: fixed;
-  left: 0;
-  width: 100%;
   display: none;
   opacity: 0;
   -webkit-transition: opacity 0.3s;
@@ -591,6 +593,8 @@ a.down img {
 }
 #modal-mask {
   top: 0;
+  left: 0;
+  width: 100%;
   height: 100%;
   background: #000;
   z-index: 200;
@@ -599,17 +603,38 @@ a.down img {
   opacity: 0.7;
 }
 #modal-container {
-  top: 50%;
+  top: calc(50% + 6px); /* Titlebar height / 2 */
+  left: 50%;
+  min-width: 240px;
+  max-width: 480px;
+  max-height: 90%;
   text-align: center;
+  -ms-transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
   z-index: 201;
 }
 #modal-container.on {
   opacity: 1;
 }
+#modal-inner:before {
+  position: absolute;
+  top: -12px;
+  left: 0;
+  width: 100%;
+  height: 13px;
+  background: #99b;
+  border-top: 1px solid #78a3f2;
+  border-left: 1px solid #78a3f2;
+  border-bottom: 2px solid #000;
+  border-right: 1px solid #204095;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  content: '';
+}
 #modal-content {
   position: relative;
-  min-width: 240px;
-  max-width: 480px;
+  width: 100%;
   background: #fff;
   border-left: 1px solid rgba(0, 0, 0, 0.9);
   border-bottom: 1px solid rgba(0, 0, 0, 0.9);
@@ -619,24 +644,12 @@ a.down img {
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
   display: inline-block;
+  overflow: auto;
   padding: 1rem;
   text-align: left;
 }
-#modal-content.center {
+#modal-container.center #modal-content {
   text-align: center;
-}
-#modal-content:before {
-  position: absolute;
-  top: -13px;
-  left: -1px;
-  width: 100%;
-  height: 10px;
-  background: #99b;
-  border-top: 1px solid #78a3f2;
-  border-left: 1px solid #78a3f2;
-  border-bottom: 2px solid #000;
-  border-right: 1px solid #204095;
-  content: '';
 }
 
 #letters .obutton {
@@ -648,6 +661,9 @@ a.down img {
   text-align: center;
 }
 
+#swaptable {
+  margin: 0 auto;
+}
 #swaptable td {
   cursor: pointer;
 }
@@ -792,8 +808,10 @@ html.mobile #score {
   height: 100%;
   display: none;
 }
+html.mobile #modal-container.wide {
+  width: 95%;
+}
 html.mobile #modal-content {
-  max-width: 95%;
   padding: 4%;
 }
 html.mobile
