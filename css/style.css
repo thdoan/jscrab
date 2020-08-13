@@ -760,9 +760,10 @@ html.mobile #app {
 html.mobile #app:after {
   content: none;
 }
-html.mobile .mark .button,
-html.mobile .mark .obutton {
+html.mobile #drag .button,
+html.mobile #drag .obutton {
   font-size: calc(12px + 0.25vw);
+  line-height: 1.5;
 }
 html.mobile #scoreboard {
   display: table;
