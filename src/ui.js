@@ -102,7 +102,7 @@ function setTileset(elSelect) {
 
 // Modal functions
 function showModal(sHtml, sClass) {
-  if (sClass) g_cache['modalContainer'].classList.add(sClass);
+  if (sClass) g_cache['modalContainer'].className = sClass;
   g_cache['modalContent'].innerHTML = sHtml;
   g_cache['modalMask'].style.display = 'block';
   g_cache['modalContainer'].style.display = 'block';
@@ -894,7 +894,7 @@ function RedipsUI() {
       }
     }
     html = '<div id="letters">' + html + '</div>';
-    showModal(html, 'center');
+    showModal(html, 'center wide');
   };
 
   self.showSwapModal = function(tilesLeft) {
