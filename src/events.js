@@ -28,14 +28,12 @@ function handleKeyDown(e) {
   if (e.key === 'Escape') closeModal();
 }
 
-// Activate marquee in status
-function startMarquee(elStatus) {
-  if (elStatus.classList.contains('marquee')) return;
-  elStatus.classList.toggle('marquee', elStatus.offsetWidth < elStatus.scrollWidth);
-  clearTimeout(elStatus['marqueeTimeout']);
-  elStatus['marqueeTimeout'] = setTimeout(function() {
-    elStatus.classList.remove('marquee');
-  }, 4000); // Animation time
+// Toggle game info screen on mobile
+function showGameInfo() {
+  document.documentElement.classList.add('gameinfo');
+}
+function hideGameInfo() {
+  document.documentElement.classList.remove('gameinfo');
 }
 
 // Cycle through icon/logo colors
@@ -45,6 +43,16 @@ function spinColors(elIcon, bBrightness) {
     elIcon.style.filter = (bBrightness ? 'brightness(' + randFloat(0.85, 1, 2) + ') ' : '') + 'hue-rotate(' + randInt(0, 360) + 'deg)';
     if (++nTick === 20) clearInterval(nTimer);
   }, 100);
+}
+
+// Activate marquee in status
+function startMarquee(elStatus) {
+  if (elStatus.classList.contains('marquee')) return;
+  elStatus.classList.toggle('marquee', elStatus.offsetWidth < elStatus.scrollWidth);
+  clearTimeout(elStatus['marqueeTimeout']);
+  elStatus['marqueeTimeout'] = setTimeout(function() {
+    elStatus.classList.remove('marquee');
+  }, 4000); // Animation time
 }
 
 // Toggle mobile layout
@@ -103,6 +111,10 @@ window.addEventListener('load', function() {
     // Close modal by clicking on its shadow
     g_cache['modalMask'].addEventListener('click', closeModal);
     g_cache['modalInner'].addEventListener('click', handleHideModal);
+    // Toggle game info (mobile)
+    el('score-opponent').addEventListener('click', showGameInfo);
+    el('score-player').addEventListener('click', showGameInfo);
+    el('back').addEventListener('click', hideGameInfo);
   } else {
     // Sad faces to randomly show
     var aEmojis = [

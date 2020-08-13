@@ -59,7 +59,10 @@ a:focus {
 a:active {
   color: #e00;
 }
-a:hover img {
+a:hover img,
+#wordresult #play:hover,
+#back:hover,
+#back:active {
   -webkit-filter: brightness(0.85);
   filter: brightness(0.85);
 }
@@ -437,6 +440,21 @@ table.board td .drag,
 
 /*** Game Info ***/
 
+#back {
+  position: absolute;
+  width: 48px;
+  height: 48px;
+  background: none;
+  border: none;
+  color: #fff;
+  display: none;
+  line-height: 48px;
+  padding: 0;
+}
+#back svg {
+  margin: 14px;
+}
+
 #score {
   position: relative;
   min-width: 284px;
@@ -725,10 +743,6 @@ a.down img {
   margin-left: 4px;
   vertical-align: text-bottom;
 }
-#wordresult #play:hover {
-  -webkit-filter: brightness(0.85);
-  filter: brightness(0.85);
-}
 #wordresult #play span {
   display: none;
 }
@@ -739,6 +753,7 @@ html.mobile body {
   vertical-align: top;
 }
 html.mobile #app {
+  position: static;
   -webkit-box-shadow: 0 3px 15px rgba(0, 0, 0, 0.5);
   box-shadow: 0 3px 15px rgba(0, 0, 0, 0.5);
 }
@@ -800,13 +815,60 @@ html.mobile .tile .drag {
   font-size: calc(16px + 1vw);
   padding: 3px 2px;
 }
+html.mobile #back {
+  display: block;
+}
+html.mobile #board,
 html.mobile #score {
-  position: absolute;
+  -webkit-transition: transform 0.3s;
+  transition: transform 0.3s;
+}
+html.mobile #score {
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
+  -ms-transform: translateX(100%);
+  -webkit-transform: translateX(100%);
+  transform: translateX(100%);
+  z-index: 10;
+}
+html.mobile.gameinfo #board {
+  -ms-transform: translateX(-100%);
+  -webkit-transform: translateX(-100%);
+  transform: translateX(-100%);
+}
+html.mobile.gameinfo #score {
+  -ms-transform: translateX(0%);
+  -webkit-transform: translateX(0%);
+  transform: translateX(0%);
+}
+html.mobile #score .container {
+  padding: 0;
+}
+html.mobile #score h1 {
+  background: #3a3a3a;
+}
+html.mobile #score h1 img {
+  width: 32px;
+  margin: 0;
+}
+html.mobile #score h1 span,
+html.mobile #score h1 sup {
   display: none;
+}
+html.mobile #score table.gameinfo td:first-child {
+  padding-left: 2%;
+}
+html.mobile #score table.gameinfo td:last-child {
+  padding-right: 2%;
+}
+html.mobile #score tr.highlight {
+  font-weight: bold;
+}
+html.mobile #history {
+  padding: 2%;
 }
 html.mobile #modal-container.wide {
   width: 95%;
@@ -814,8 +876,3 @@ html.mobile #modal-container.wide {
 html.mobile #modal-content {
   padding: 4%;
 }
-html.mobile
-html.mobile
-html.mobile
-html.mobile
-html.mobile
