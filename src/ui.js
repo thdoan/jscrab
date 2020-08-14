@@ -326,7 +326,12 @@ function RedipsUI() {
     self.by = by;
 
     // Scoreboard
-    html = '<table id="scoreboard"><tr><td id="score-opponent">0</td><td class="spacer"></td><td class="logo"><img src="pics/logo.svg" alt="Vietboard" onload="spinColors(this)"><br><small id="status" onclick="startMarquee(this)"></small></td><td class="spacer"></td><td id="score-player">0</td></tr></table>';
+    html = '<table id="scoreboard"><tr>' +
+      '<td id="score-opponent">0</td>' +
+      '<td class="spacer"></td>' +
+      '<td class="logo"><img src="pics/logo.svg" alt="Vietboard" onload="spinColors(this)"><br><small id="status" onclick="startMarquee(this)">' + t('Tap on score for game info') + '</small></td>' +
+      '<td class="spacer"></td>' +
+      '<td id="score-player">0</td></tr></table>';
     html += '<div id="drag">';
     //---------------------------
     // Opponent's rack

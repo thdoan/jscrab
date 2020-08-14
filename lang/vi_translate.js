@@ -39,6 +39,7 @@ var translation_map = {
   'Sorry, this browser is not supported. Please upgrade to a modern browser.': 'Xin lỗi, trình duyệt này không được hỗ trợ. Vui lòng nâng cấp trình duyệt.',
   'spaces in word.': 'khoảng trống trong từ.',
   'Swap': 'Đổi Chữ',
+  'Tap on score for game info': 'Chạm vào điểm để xem thêm',
   'This will restart the game.': 'Trò chơi sẽ khởi động lại.',
   'Tiles left:': 'Số chữ còn lại:',
   'Tileset:': 'Bộ chữ:',
