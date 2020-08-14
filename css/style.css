@@ -109,9 +109,11 @@ html.loaded #app {
   -webkit-transition: opacity 0.6s;
   transition: opacity 0.6s; /* 0.3s spinner + 0.3s */
 }
-#app > p {
+#app > p { /* Unsupported browser */
+  max-width: 58%;
   font-size: 110%;
-  margin: 5%;
+  line-height: 1.2;
+  margin: 5% auto;
 }
 #app > p > strong {
   color: #b8860b; /* darkgoldenrod */
@@ -757,7 +759,8 @@ html.mobile #app {
   -webkit-box-shadow: 0 3px 15px rgba(0, 0, 0, 0.5);
   box-shadow: 0 3px 15px rgba(0, 0, 0, 0.5);
 }
-html.mobile #app:after {
+html.mobile #app:after,
+html.error #app:after {
   content: none;
 }
 html.mobile #drag .button,

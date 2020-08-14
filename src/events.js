@@ -57,6 +57,7 @@ function startMarquee(elStatus) {
 
 // Toggle mobile layout
 function toggleMobile() {
+  if (document.documentElement.className === 'loaded error') return;
   g_isMobile = window.outerWidth < window.outerHeight;
   document.documentElement.classList.toggle('mobile', g_isMobile);
   var elPlayerButtons = el('#drag .player td.mark');
@@ -87,9 +88,7 @@ function toggleMobile() {
   setModalHeight();
 }
 
-document.addEventListener('keydown', handleKeyDown);
-
-window.addEventListener('load', function() {
+window.onload = function() {
   // Cache elements
   g_cache = {
     'app': el('app'),
@@ -100,13 +99,7 @@ window.addEventListener('load', function() {
     'sound': el('sound')
   };
   // Check browser support
-  if (Array.prototype.indexOf
-    && document.querySelector
-    && window.addEventListener
-    && window.console
-    && window.DOMTokenList
-    && window.JSON
-    && window.localStorage) {
+  if (g_isSupported) {
     init('board');
     // Close modal by clicking on its shadow
     g_cache['modalMask'].addEventListener('click', closeModal);
@@ -115,6 +108,8 @@ window.addEventListener('load', function() {
     el('score-opponent').addEventListener('click', showGameInfo);
     el('score-player').addEventListener('click', showGameInfo);
     el('back').addEventListener('click', hideGameInfo);
+    // Fade in
+    document.documentElement.classList.replace('loading', 'loaded');
   } else {
     // Sad faces to randomly show
     var aEmojis = [
@@ -131,15 +126,18 @@ window.addEventListener('load', function() {
       '&#128550;', // Frowning with open mouth
       '&#128551;'  // Anguished
     ];
-    g_cache['app'].innerHTML = '<p><strong>' + aEmojis[randInt(0, aEmojis.length - 1)] + '</strong><br><br><br>' +
-      t('Sorry, this browser is not supported. Please upgrade to a modern browser.') + '</p>';
+    //document.documentElement.className = 'error';
+    g_cache['app'].innerHTML = '<p><strong>' + aEmojis[randInt(0, aEmojis.length - 1)] + '</strong><br><br>' +
+      gErrPrefix() + t('this browser is not supported. Please upgrade to a modern browser.') + '</p>';
+    document.documentElement.className = 'loaded error';
     // GA
     gtag('event', navigator.userAgent, {
       'event_category': 'Unsupported Browser'
     });
   }
-  // Fade in
-  document.documentElement.classList.replace('loading', 'loaded');
-});
+};
 
-window.addEventListener('resize', debounce(toggleMobile));
+if (g_isSupported) {
+  window.addEventListener('resize', debounce(toggleMobile));
+  document.addEventListener('keydown', handleKeyDown);
+}

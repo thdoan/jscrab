@@ -58,6 +58,15 @@ var gCloneFunc = (typeof Object.create === 'function') ? Object.create :
     return cl;
   };
 
+var gErrPrefix = function() {
+  var aPrefixes = [
+    'Oops',
+    'Sorry',
+    'Whoops'
+  ];
+  return (localStorage['lang'] === 'vi') ? t('Sorry, ') : aPrefixes[randInt(0, aPrefixes.length - 1)] + ', ';
+};
+
 //------------------------------------------------------------------------------
 function init(iddiv) {
   // Put all the letters in the pool
@@ -232,7 +241,7 @@ function checkValidPlacement(placement) {
     // Spaces in the middle of the word?
     if (ltr === '') return {
       'played': '',
-      'msg': t('spaces in word.')
+      'msg': t('you have to place tiles next to each other.')
     };
 
     xy = x + '_' + y;
@@ -1058,7 +1067,7 @@ function onPlayerMove() {
     var pinfo = checkValidPlacement(placement);
     var pstr = pinfo.played;
     if (pstr === '') {
-      g_bui.prompt(t('Sorry, ') + pinfo.msg);
+      g_bui.prompt(gErrPrefix() + pinfo.msg);
       return;
     }
 
@@ -1198,7 +1207,7 @@ function onPlayerSwap() {
   // back on the rack.
   var tilesLeft = g_letpool.length;
   if (tilesLeft === 0) {
-    g_bui.prompt(t('Sorry, no tiles left to swap.'));
+    g_bui.prompt(gErrPrefix() + t('no tiles left to swap.'));
     return;
   }
   g_bui.cancelPlayerPlacement();

@@ -76,7 +76,7 @@ function randInt(nMin, nMax) {
 function setLang(sLang) {
   var bConfirm = confirm(t('This will restart the game.'));
   if (bConfirm) {
-    setStorage('lang', sLang);
+    localStorage['lang'] = sLang;
     // GA
     gtag('event', sLang, {
       'event_category': 'Language'
@@ -89,7 +89,7 @@ function setLang(sLang) {
 function setTileset(elSelect) {
   var bConfirm = confirm(t('This will restart the game.'));
   if (bConfirm) {
-    setStorage('tileset', elSelect.value);
+    localStorage['tileset'] = elSelect.value;
     // GA
     gtag('event', elSelect.value, {
       'event_category': 'Tileset'
@@ -156,7 +156,7 @@ function RedipsUI() {
   self.racks[2] = [];
   self.firstrack = true;
   //self.cellbg = '#e0e0b0';
-  self.level = getStorage('level') || 1; // Playing level
+  self.level = localStorage['level'] || 1; // Playing level
   self.hlines = '';    // Play hisory lines
   self.hcount = 0;     // Play history count
   self.showOpRack = 1; // 0=hidden, 1=visible
@@ -309,7 +309,7 @@ function RedipsUI() {
     html +=
       '</table>' +
       '<div id="footer">' +
-      (getStorage('lang') === 'vi' ?
+      (localStorage['lang'] === 'vi' ?
         '<a href="javascript:setLang(\'en\')">' + t('English') + '</a> | ' + t('Vietnamese') :
         t('English') + ' | <a href="javascript:setLang(\'vi\')">' + t('Vietnamese') + '</a>') + '<br>' +
       t('Feedback?') + ' <a href="mailto:feedback@vietboard.org?subject=Vietboard">feedback@vietboard.org</a>' +
@@ -537,7 +537,7 @@ function RedipsUI() {
     el('level').textContent = self.level;
     el('level').title = t('Computer can score up to ') + g_maxwpoints[self.level - 1] + t(' points per turn');
     g_playlevel = self.level - 1;
-    setStorage('level', self.level);
+    localStorage['level'] = self.level;
   };
 
   self.levelUp = function() {
@@ -545,7 +545,7 @@ function RedipsUI() {
     el('level').textContent = self.level;
     el('level').title = t('Computer can score up to ') + g_maxwpoints[self.level - 1] + t(' points per turn');
     g_playlevel = self.level - 1;
-    setStorage('level', self.level);
+    localStorage['level'] = self.level;
   };
 
   self.makeTilesFixed = function() {
@@ -570,7 +570,7 @@ function RedipsUI() {
     cell.holds = self.hcopy(holds);
     var html = '';
     //html += '<div class="drag t1">';
-    html += (ltr !== '*') ? ltr.toUpperCase() : '&nbsp;';
+    html += (ltr !== ' ' && ltr !== '*') ? ltr.toUpperCase() : '&nbsp;';
     //html += '</div>';
     //cell.innerHTML = html;
     var div = cell.firstChild;
