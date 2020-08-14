@@ -510,11 +510,11 @@ table.board td .drag,
   color: #499b33;
 }
 #score h2 {
-  height: 20px;
+  height: 23px;
   background: #f5f5dc; /* beige */
   color: #c39b3c; /* page bg color luminosity 50% */
   font-size: 16px;
-  line-height: 20px;
+  line-height: 23px;
   margin: 0;
   text-transform: uppercase;
 }
