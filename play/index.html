@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="loading">
+<html class="loading" lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
@@ -13,18 +13,22 @@ window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', 'UA-2843793-11');
-// Local storage functions
-function getStorage(sKey) {
-  if (window.localStorage) return localStorage[sKey];
-  else return null;
-}
-function setStorage(sKey, sValue) {
-  if (window.localStorage) {
-    localStorage[sKey] = sValue;
-    return true;
-  } else return false;
-}
+// Browser check
+window.g_isSupported = Array.prototype.indexOf
+  && document.querySelector
+  && window.addEventListener
+  && typeof window.console==='object'
+  && window.DOMTokenList
+  && typeof window.JSON==='object'
+  && typeof window.localStorage==='object';
 (function() {
+  // Load translation
+  var sLang = localStorage['lang']==='vi' ? 'vi' : 'en';
+  var script = document.createElement('script');
+  script.src = 'lang/' + sLang + '_translate.js';
+  document.head.appendChild(script);
+  document.documentElement.lang = sLang; // HTML5 compliance
+  if (!g_isSupported) return;
   // Toggle mobile layout
   window.g_isMobile = window.outerWidth < window.outerHeight;
   document.documentElement.classList.toggle('mobile', g_isMobile);
@@ -34,8 +38,8 @@ function setStorage(sKey, sValue) {
     'Grenze Gotisch',
     'MuseoModerno'
   ];
-  window.g_tileset = getStorage('tileset');
-  var sFamily = (Array.prototype.indexOf && g_tilesets.indexOf(g_tileset)>-1) ? g_tileset : 'Maven+Pro:wght@500';
+  window.g_tileset = localStorage['tileset'];
+  var sFamily = g_tilesets.indexOf(g_tileset)>-1 ? g_tileset : 'Maven+Pro:wght@500';
   var link = document.createElement('link');
   link.rel = 'stylesheet';
   link.href = 'https://fonts.googleapis.com/css2?family=' + sFamily + '&display=swap';
@@ -61,12 +65,6 @@ function setStorage(sKey, sValue) {
   }
   style.textContent += sCss;
   document.head.appendChild(style);
-  // Load translation
-  var sLang = getStorage('lang')==='vi' ? 'vi' : 'en';
-  var script = document.createElement('script');
-  script.src = 'lang/' + sLang + '_translate.js';
-  document.head.appendChild(script);
-  document.documentElement.lang = sLang; // HTML5 compliance
 })();
 </script>
 <link rel="stylesheet" href="css/styles.min.css">
