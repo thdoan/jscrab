@@ -28,20 +28,21 @@ function BonusesLayout() {
 
     self.setquad(midx, 0, 3);
     self.setquad(0, midy, 3);
-    self.setquad(4, 0, 4);
-    self.setquad(0, 1, 4);
-    self.setquad(4, 4, 0);
-    self.setquad(1, 2, 0);
-    self.setquad(2, 1, 0);
+    self.setquad(0, 1, 0);
+    self.setquad(0, 2, 4);
+    self.setquad(1, 0, 0);
     self.setquad(1, 1, 3);
-    self.setquad(4, 1, 0);
+    self.setquad(2, 0, 1);
+    self.setquad(2, 5, 3);
+    self.setquad(2, 6, 0);
+    self.setquad(3, 5, 0);
+    self.setquad(4, 1, 4);
+    self.setquad(4, 4, 0);
+    self.setquad(4, 7, 3);
+    self.setquad(5, 2, 3);
+    self.setquad(5, 3, 0);
     self.setquad(6, 5, 2);
     self.setquad(8, 2, 0);
-    self.setquad(2, 6, 0);
-    self.setquad(4, 7, 3);
-
-    //self.setquad(6, 7, 3);
-    //self.setquad(7, 6, 3);
 
     g_boardmults = self.boardm;
     return self.boardm;
