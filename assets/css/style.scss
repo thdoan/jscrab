@@ -35,6 +35,9 @@ a {
     &:focus {
       filter: hue-rotate(45deg);
     }
+    &:active {
+      filter: hue-rotate(45deg) brightness(0.85);
+    }
   }
 }
 
