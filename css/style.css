@@ -386,6 +386,7 @@ table.board td:after,
   justify-content: center;
   line-height: 1.1;
   opacity: 0.9;
+  padding-top: 2px;
   text-align: center;
   z-index: 10;
 }
