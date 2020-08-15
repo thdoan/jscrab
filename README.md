@@ -61,7 +61,7 @@ Corrections and comments are welcome by [sending an email](mailto:feedback@vietb
 - Introduced randomness to make computer more human
 - Enhanced desktop gameboard to be fluid (scales to window size)
 - Added responsive design for mobile devices
-- Improved bonus tiles layout (more evenly spread out)
+- Improved bonuses layout (more evenly spread out)
 
 ## Dependencies for local build
 
