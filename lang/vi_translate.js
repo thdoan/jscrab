@@ -3,6 +3,7 @@ var translation_map = {
   ' not found in dictionary.': ' không tìm thấy trong từ điển.',
   ' points for ': ' điểm với từ ',
   ' points per turn': ' số điểm một lượt',
+  'Bonuses layout:': 'Sơ đồ điểm thưởng:',
   'Clear': 'Xóa',
   'Computer can score up to ': 'Máy tính có thể ghi số điểm lên tới ',
   'Computer thinking, please wait...': 'Máy tính đang nghĩ, xin chờ...',

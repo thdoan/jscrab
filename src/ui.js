@@ -85,6 +85,21 @@ function setLang(sLang) {
   }
 }
 
+// Set bonuses layout
+function setLayout(elSelect) {
+  var bConfirm = confirm(t('This will restart the game.'));
+  if (bConfirm) {
+    localStorage['layout'] = elSelect.value;
+    // GA
+    gtag('event', elSelect.value, {
+      'event_category': 'Bonuses Layout'
+    });
+    location.reload();
+  } else {
+    elSelect.selectedIndex = 0;
+  }
+}
+
 // Set tileset
 function setTileset(elSelect) {
   var bConfirm = confirm(t('This will restart the game.'));
@@ -288,16 +303,26 @@ function RedipsUI() {
       '<a class="link down" title="' + t('Decrease difficulty') + '" aria-label="' + t('Decrease difficulty') + '" onclick="g_bui.levelDn()">' + arrow + '</a></td></tr>';
 
     var sTileset = g_tilesets.indexOf(g_tileset) > -1 ? g_tileset : t('Default');
-    var sSelect = '<select title="' + sTileset + '" onchange="setTileset(this)"><option>' + sTileset + '</option>';
-    if (sTileset !== t('Default')) sSelect += '<option value="default">' + t('Default') + '</option>';
+    var sSelTileset = '<select title="' + sTileset + '" onchange="setTileset(this)"><option>' + sTileset + '</option>';
+    if (sTileset !== t('Default')) sSelTileset += '<option value="default">' + t('Default') + '</option>';
     for (var i = 0; i < g_tilesets.length; ++i) {
       if (g_tilesets[i] === sTileset) continue;
-      sSelect += '<option>' + g_tilesets[i] + '</option>';
+      sSelTileset += '<option>' + g_tilesets[i] + '</option>';
     }
-    sSelect += '</select>';
+    sSelTileset += '</select>';
+
+    var sLayout = g_layouts.indexOf(g_layout) > -1 ? g_layout : t('Default');
+    var sSelLayout = '<select title="' + sLayout + '" onchange="setLayout(this)"><option>' + sLayout + '</option>';
+    if (sLayout !== t('Default')) sSelLayout += '<option value="default">' + t('Default') + '</option>';
+    for (var i = 0; i < g_layouts.length; ++i) {
+      if (g_layouts[i] === sLayout) continue;
+      sSelLayout += '<option>' + g_layouts[i] + '</option>';
+    }
+    sSelLayout += '</select>';
 
     html +=
-      '<tr><td>' + t('Tileset:') + '</td><td>' + sSelect + '</td></tr>' +
+      '<tr><td>' + t('Tileset:') + '</td><td>' + sSelTileset + '</td></tr>' +
+      '<tr><td>' + t('Bonuses layout:') + '</td><td>' + sSelLayout + '</td></tr>' +
       hr +
       '<tr><td>' + t('Computer&rsquo;s last score:') + '</td><td id="loscore">0</td></tr>' +
       '<tr class="highlight"><td>' + t('Computer&rsquo;s total score:') + '</td><td id="oscore">0</td></tr>' +

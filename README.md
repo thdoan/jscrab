@@ -47,7 +47,7 @@ Corrections and comments are welcome by [sending an email](mailto:feedback@vietb
 - Added message for unsupported legacy browsers
 - Fixed modal rendering on mobile
 - Removed dependency on subModal
-- Added ability to choose different tilesets
+- Added option to choose different tilesets
 - Simplified and polished user interface
 - Added debug mode
 - Removed button to show computer rack (still available in debug mode)
@@ -62,6 +62,7 @@ Corrections and comments are welcome by [sending an email](mailto:feedback@vietb
 - Enhanced desktop gameboard to be fluid (scales to window size)
 - Added responsive design for mobile devices
 - Improved bonuses layout (more evenly spread out)
+- Added option to change bonuses layout
 
 ## Dependencies for local build
 
