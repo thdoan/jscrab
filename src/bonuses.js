@@ -84,6 +84,36 @@ function BonusesLayout(sLayout) {
         self.q(5, 0, 4);
         self.q(0, 5, 4);
         break;
+      case 'Heart':
+        // DL
+        self.m(2, 1, 1);
+        self.m(4, 1, 1);
+        self.m(0, 4, 1);
+        self.m(0, 6, 1);
+        self.m(1, 8, 1);
+        self.m(3, 10, 1);
+        self.m(6, 13, 1);
+        self.boardm[3][3] = 1;
+        self.boardm[2][4] = 1;
+        // TL
+        self.m(5, 1, 2);
+        self.m(1, 2, 2);
+        self.m(0, 7, 2);
+        self.m(4, 11, 2);
+        // DW
+        self.m(3, 1, 3);
+        self.m(6, 2, 3);
+        self.m(0, 3, 3);
+        self.m(2, 9, 3);
+        self.m(5, 12, 3);
+        self.boardm[4][3] = 3;
+        self.boardm[3][4] = 3;
+        self.boardm[2][5] = 3;
+        // TW
+        self.m(7, 3, 4);
+        self.m(0, 5, 4);
+        self.m(7, 14, 4);
+        break;
       case 'Mario Star':
         // DL
         self.m(midx, 0, 1);
