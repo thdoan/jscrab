@@ -337,6 +337,11 @@ table.board td:after,
   line-height: 1.4;
   margin: 0 1%;
 }
+html[lang="vi"] #drag .button,
+html[lang="vi"] #drag .obutton {
+  font-size: calc(10px + 0.15vw);
+  letter-spacing: -0.5px;
+}
 #drag #toggle {
   width: 98%;
   min-width: 138px;
