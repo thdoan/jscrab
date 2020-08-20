@@ -30,7 +30,7 @@ header {
 }
 
 a {
-  &.button {
+  &[href] {
     &:hover,
     &:focus {
       filter: hue-rotate(45deg);
