@@ -337,8 +337,8 @@ table.board td:after,
   line-height: 1.4;
   margin: 0 1%;
 }
-html[lang="vi"] #drag .button,
-html[lang="vi"] #drag .obutton {
+html[lang="vi"]:not(.mobile) #drag .button,
+html[lang="vi"]:not(.mobile) #drag .obutton {
   font-size: calc(10px + 0.15vw);
   letter-spacing: -0.5px;
 }
