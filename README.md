@@ -63,6 +63,7 @@ Corrections and comments are welcome by [sending an email](mailto:feedback@vietb
 - Added responsive design for mobile devices
 - Improved bonuses layout (more evenly spread out)
 - Added option to change bonuses layout
+- Added "what's new" update notification
 
 ## Dependencies for local build
 

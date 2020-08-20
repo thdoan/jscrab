@@ -13,7 +13,7 @@ fart %temp%\vietboard\src\*.js "console.log" " //console.log"
 REM Build (minify and concatenate)
 AjaxMin.exe -clobber css\style.css -out %target%\css\styles.min.css
 AjaxMin.exe -inline:no -clobber -term lang\vi_wordlist.js lang\vi_defs.js lang\vi_letters.js -out %target%\js\lang.min.js
-AjaxMin.exe -inline:no -clobber -term %temp%\vietboard\src\redipsdrag.js %temp%\vietboard\src\bonuses.js %temp%\vietboard\src\ui.js %temp%\vietboard\src\engine.js %temp%\vietboard\src\events.js -out %target%\js\app.min.js
+AjaxMin.exe -inline:no -clobber -term %temp%\vietboard\src\redipsdrag.js %temp%\vietboard\src\bonuses.js %temp%\vietboard\src\ui.js %temp%\vietboard\src\engine.js %temp%\vietboard\src\events.js %temp%\vietboard\src\changelog.js -out %target%\js\app.min.js
 REM Deploy
 copy /y index.html %target%
 xcopy /y lang\en_translate.js %target%\lang\
@@ -30,6 +30,7 @@ fart --c-style --remove %target%\index.html "<script src=\"src/bonuses.js\"></sc
 fart --c-style --remove %target%\index.html "<script src=\"src/ui.js\"></script>\n"
 fart --c-style --remove %target%\index.html "<script src=\"src/engine.js\"></script>\n"
 fart --c-style --remove %target%\index.html "<script src=\"src/events.js\"></script>\n"
+fart --c-style --remove %target%\index.html "<script src=\"src/changelog.js\"></script>\n"
 REM Clean up
 rmdir /s /q %temp%\vietboard
 REM End local scope

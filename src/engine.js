@@ -107,6 +107,8 @@ function init(iddiv) {
     if (!g_wstr_arr[i]) continue;
     g_wstr.push('_' + g_wstr_arr[i].join('_') + '_');
   }
+
+  document.dispatchEvent(new Event('appReady'));
 }
 
 //------------------------------------------------------------------------------

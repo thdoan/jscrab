@@ -677,6 +677,9 @@ a.down img {
 #modal-container.center #modal-content {
   text-align: center;
 }
+#modal-content h3 {
+  margin: 0;
+}
 
 #letters .obutton {
   width: 32px;
