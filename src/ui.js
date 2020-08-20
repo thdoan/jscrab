@@ -334,7 +334,7 @@ function RedipsUI() {
     html +=
       '</table>' +
       '<div id="footer">' +
-      '<a href="https://fb.me/vietboardplay" class="social"><img src="pics/fb.svg" width="32" height="32" alt="Facebook"></a>' +
+      '<a href="https://fb.me/vietboardplay" class="social" title="' + t('Visit our Facebook Page to learn more') + '"><img src="pics/fb.svg" width="32" height="32" alt="Facebook"></a>' +
       (localStorage['lang'] === 'vi' ?
         '<a href="javascript:setLang(\'en\')">' + t('English') + '</a> | ' + t('Vietnamese') :
         t('English') + ' | <a href="javascript:setLang(\'vi\')">' + t('Vietnamese') + '</a>') +
@@ -997,7 +997,7 @@ function RedipsUI() {
     } else {
       // If it doesn't exist, look it up online
       getJsonp('https://m.vdict.com/mobile/dictjson?fromapp=1&word=' + encodeURIComponent(word) + '&dict=2', function() {
-        g_def = g_def.replace('href="#"', 'onclick="el(\'audio\').play()" title="' + t('Listen to pronunciation') + '"');
+        g_def = g_def.replace('href="#"', 'title="' + t('Listen to pronunciation') + '" onclick="el(\'audio\').play()"');
         g_def = g_def.replace(' Suggestions:', '');
         g_def = g_def.replace(/">(.+?) not found/, '"><strong>$1</strong> ' + t('not found'));
         self.prompt(g_def);

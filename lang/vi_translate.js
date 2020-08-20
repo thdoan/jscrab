@@ -44,6 +44,7 @@ var translation_map = {
   'Tiles left:': 'Số chữ còn lại:',
   'Tileset:': 'Kiểu chữ:',
   'Vietnamese': 'Tiếng Việt',
+  'Visit our Facebook Page to learn more': 'Ghé Facebook để xem thêm',
   'Word definitions not enabled.': 'Không có định nghĩa từ.',
   'word is not connected.': 'từ không được kết nối.',
   'word must be horizontal or vertical.': 'từ phải xếp hàng ngang hoặc dọc.',
