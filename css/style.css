@@ -60,6 +60,7 @@ a:active {
   color: #e00;
 }
 a:hover img,
+a:focus img,
 #wordresult #play:hover,
 #back:hover,
 #back:active {
