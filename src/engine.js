@@ -130,14 +130,23 @@ function announceWinner() {
   g_oscore -= odeduct;
   g_pscore -= pdeduct;
 
-  var html = t('Game over. The score is...');
-  html += '<ul><li>';
-  html += t('You') + ': ' + g_pscore + '</li><li>' + t('Computer') + ': ' + g_oscore + '</li></ul>';
-  var msg = t('It&rsquo;s a tie!');
-  if (g_oscore > g_pscore) msg = t('Computer wins.');
-  else if (g_oscore < g_pscore) msg = t('You win!');
-  html += '<h3>' + msg + '</h3>';
-  g_bui.prompt(html, '<button class="button" onclick="location.reload()">' + t('Play Again') + '</button>');
+  var html = '<table id="gameover" class="centered"><tr>';
+  var text = 'GAMEOVER';
+  for (var i = 0; i < text.length; ++i) {
+    html += '<td class="tile"><div class="drag t' + randInt(1, 2) + '">' + text[i] + '</div></td>';
+  }
+  html += '</tr></table><ul><li>';
+  html += t('You') + ': <strong>' + g_pscore + '</strong></li><li>' + t('Computer') + ': <strong>' + g_oscore + '</strong></li></ul>';
+  var msg = '<h3>' + t('It&rsquo;s a tie!');
+  if (g_oscore > g_pscore) msg = '<h3 class="opponent">' + t('Computer wins.');
+  else if (g_oscore < g_pscore) msg = '<h3 class="player">' + t('You win!');
+  html += msg + '</h3>';
+  g_bui.prompt(html, '<button class="button" onclick="location.reload()">' + t('Play Again') + '</button>', 'gameover wide');
+  var timer = setInterval(function() {
+    var tile = el('#gameover td:not(.on)');
+    if (tile) el('#gameover td:not(.on)').classList.add('on');
+    else clearInterval(timer);
+  }, 100);
 
   // GA
   gtag('event', 'Game Over', {

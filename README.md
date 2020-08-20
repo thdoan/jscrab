@@ -64,6 +64,7 @@ Corrections and comments are welcome by [sending an email](mailto:feedback@vietb
 - Improved bonuses layout (more evenly spread out)
 - Added option to change bonuses layout
 - Added "what's new" update notification
+- Added proper Game Over modal
 
 ## Dependencies for local build
 

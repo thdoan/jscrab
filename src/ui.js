@@ -929,7 +929,7 @@ function RedipsUI() {
 
   self.showSwapModal = function(tilesLeft) {
     var divs = [];
-    var html = '<table id="swaptable" title="' + t('Select the letters you want to swap') + '"><tr>';
+    var html = '<table id="swaptable" class="centered" title="' + t('Select the letters you want to swap') + '"><tr>';
     for (var i = 0; i < self.racksize; ++i) {
       var rcell = el(self.plrRackId + i);
       if (rcell.holds === '') continue;
@@ -999,12 +999,12 @@ function RedipsUI() {
       getJsonp('https://m.vdict.com/mobile/dictjson?fromapp=1&word=' + encodeURIComponent(word) + '&dict=2', function() {
         g_def = g_def.replace('href="#"', 'onclick="el(\'audio\').play()" title="' + t('Listen to pronunciation') + '"');
         g_def = g_def.replace(' Suggestions:', '');
-        g_def = g_def.replace(/">(.+?) not found/, '"><b>$1</b> ' + t('not found'));
+        g_def = g_def.replace(/">(.+?) not found/, '"><strong>$1</strong> ' + t('not found'));
         self.prompt(g_def);
         // GA
         gtag('event', word, {
           'event_category': 'Definition',
-          'event_label': g_def.indexOf('</b> not found') < 0 ? 'Found' : 'Not Found'
+          'event_label': g_def.indexOf('</strong> ' + t('not found')) < 0 ? 'Found' : 'Not Found'
         });
       });
     }

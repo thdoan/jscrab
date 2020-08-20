@@ -78,6 +78,10 @@ select {
   cursor: pointer;
 }
 
+.centered {
+  margin: 0 auto;
+}
+
 .debug {
   line-height: 1.2;
 }
@@ -510,10 +514,12 @@ table.board td .drag,
   margin-left: -2px;
   vertical-align: text-top;
 }
-#score h1 .opponent {
+#score h1 .opponent,
+h3.opponent {
   color: #cd5c5c;
 }
-#score h1 .player {
+#score h1 .player,
+h3.player {
   color: #499b33;
 }
 #score h2 {
@@ -691,9 +697,6 @@ a.down img {
   text-align: center;
 }
 
-#swaptable {
-  margin: 0 auto;
-}
 #swaptable td {
   cursor: pointer;
 }
@@ -701,6 +704,36 @@ a.down img {
   background: #1a1a1a;
   border-color: #be74d2;
   color: #fff;
+}
+
+#gameover td {
+  opacity: 0;
+  -ms-transform: scale(0);
+  -webkit-transform: scale(0);
+  transform: scale(0);
+}
+#gameover td.on {
+  opacity: 1;
+  -ms-transform: scale(1);
+  -webkit-transform: scale(1);
+  transform: scale(1);
+  -webkit-transition: opacity 0.3s;
+  transition: all 0.3s;
+}
+#modal-container.gameover h3,
+#modal-container.gameover ul {
+  padding: 0;
+  text-align: center;
+}
+#modal-container.gameover ul li {
+  display: inline-block;
+}
+#modal-container.gameover ul li:first-child:after {
+  width: 70px;
+  color: #999;
+  content: 'vs';
+  display: inline-block;
+  font-weight: bold;
 }
 
 /*** VDict ***/
