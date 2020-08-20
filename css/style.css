@@ -503,6 +503,7 @@ table.board td .drag,
 }
 #score h1 sup { /* beta */
   color: #999;
+  cursor: pointer;
   font-size: 12px;
   font-weight: normal;
   line-height: 22px;
