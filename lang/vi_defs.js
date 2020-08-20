@@ -89,6 +89,60 @@ var g_defs = {
       }
     ]
   },
+  'phỏm': {
+    'noun': [
+      {
+        'definition': 'a type of rummy',
+        'examples': [
+          { 'chơi phỏm': 'playing rummy' }
+        ]
+      }
+    ]
+  },
+  'tá lả': {
+    'noun': [
+      {
+        'definition': 'a type of rummy',
+        'examples': [
+          { 'chơi tá lả': 'playing rummy' }
+        ]
+      }
+    ]
+  },
+  'man': {
+    '': [
+      {
+        'definition': 'falseness, falsity',
+        'examples': [
+          { 'khai man trước tòa': 'to perjure' }
+        ]
+      }
+    ]
+  },
+  'đú': {
+    '': [
+      {
+        'definition': 'Lark, romp',
+        'examples': [
+          {
+            'Đừng đú nữa, đi học bài đi': 'Stop romping and learn your lesson'
+          }
+        ]
+      }
+    ]
+  },
+  'đú đởn': {
+    '': [
+      {
+        'definition': 'Frolic amorously',
+        'examples': [
+          {
+            'Ranh con mà đã đú đa đú đởn': 'Only a chit of a girl and alrealy she frolics amorously'
+          }
+        ]
+      }
+    ]
+  },
   'mi': {
     '': [
       {
