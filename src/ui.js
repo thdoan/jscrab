@@ -334,10 +334,10 @@ function RedipsUI() {
     html +=
       '</table>' +
       '<div id="footer">' +
+      '<a href="https://fb.me/vietboardplay" class="social"><img src="pics/fb.svg" width="32" height="32" alt="Facebook"></a>' +
       (localStorage['lang'] === 'vi' ?
         '<a href="javascript:setLang(\'en\')">' + t('English') + '</a> | ' + t('Vietnamese') :
-        t('English') + ' | <a href="javascript:setLang(\'vi\')">' + t('Vietnamese') + '</a>') + '<br>' +
-      t('Feedback?') + ' <a href="mailto:feedback@vietboard.org?subject=Vietboard">feedback@vietboard.org</a>' +
+        t('English') + ' | <a href="javascript:setLang(\'vi\')">' + t('Vietnamese') + '</a>') +
       '</div></div></div>';
 
     g_cache['app'].innerHTML = html;

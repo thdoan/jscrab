@@ -606,12 +606,17 @@ a.down img {
 }
 
 #footer {
-  height: 60px;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
   font-size: 12px;
-  line-height: 1.8;
-  padding: 0.5rem;
+  line-height: 30px;
+  padding: 4%;
+}
+#footer img {
+  display: block;
+}
+#footer .social {
+  float: right;
 }
 
 /*** Modal ***/
