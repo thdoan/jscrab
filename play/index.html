@@ -65,7 +65,20 @@ window.g_isSupported = Array.prototype.indexOf
   document.head.appendChild(link);
   var style = document.createElement('style');
   style.textContent = '.drag{font-family:\'' + (sFamily.indexOf('Maven')===0 ? 'Maven Pro' : sFamily) + '\', Arial, sans-serif}';
-  // Load bonus tiles
+  // Load bonuses layout
+  window.g_layouts = [
+    'Classic',
+    'WWF',
+    'Basketball',
+    'Heart',
+    'Mario Star',
+    'Poké Ball',
+    'Smiley',
+    'Yin Yang',
+    'Random'
+  ];
+  window.g_layout = localStorage['layout'];
+  // Render bonus tiles
   var aBonusTiles = [
     ['ST', 'be74d2'], // Inverse of player tile
     ['DL', '60b57c'], // #6021 Pale Green (bigchill.com)
