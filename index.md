@@ -1,5 +1,5 @@
-This is a Vietnamese Scrabble-type word game implemented in pure JavaScript and played against the computer with a very fast engine. You can play the game online by clicking the big button below or download the code and open *play\index.html* in your browser.
+This could very well be the world's first Vietnamese Scrabble-type game. Whether you're a Vietnamese language learner or a native speaker, Vietboard provides endless crosswording fun for everyone. You can play the game online by clicking the big button below or download the game and open *play\index.html* in your browser.
 
-Corrections and comments are welcome by [sending an email](mailto:feedback@vietboard.org?subject=Vietboard) or [creating an Issue](https://github.com/thdoan/vietboard/issues).
+Vietboard is still in early beta, so we are actively looking for players to help us fine-tune the game balance. We'd love to hear from you, so drop by our (Facebook Page)[https://fb.me/vietboardplay] and join a new community of word game fans.
 
 Enjoy! ^^
