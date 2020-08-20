@@ -1,4 +1,4 @@
-const VER = 1.0;
+const VER = 1.01;
 
 function showWhatsNew() {
   g_bui.prompt(
@@ -6,6 +6,7 @@ function showWhatsNew() {
     '<ul>' +
     '<li>Option to change bonuses layout</li>' +
     '<li>Update notfication (what you\'re seeing now)</li>' +
+    '<li>New "Game Over" experience</li>' +
     '</ul>'
   );
 }
