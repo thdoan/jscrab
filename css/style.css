@@ -30,6 +30,9 @@ html.loaded {
   from { background-color: #fff; }
   to { background-color: #d8be7f; }
 }
+html.shuffling {
+  overflow: hidden;
+}
 
 body {
   width: 100%;
