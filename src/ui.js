@@ -251,13 +251,13 @@ function RedipsUI() {
     }
   };
 
-  self.cancelPlayerPlacement = function() {
+  self.cancelPlayerPlacement = function(cellId) {
     var placement = self.getPlayerPlacement();
     var divs = [];
     var id;
     for (var i = 0; i < placement.length; ++i) {
-      var pl = placement[i];
-      id = self.boardId + pl.x + '_' + pl.y;
+      id = placement[i].id;
+      if (cellId && cellId !== id) continue;
       var cell = el(id);
       divs.push(cell.firstChild);
       cell.holds = '';
@@ -275,7 +275,12 @@ function RedipsUI() {
         rcell.holds = self.hcopy(div.holds);
       }
     }
-    self.newplays = [];
+    if (cellId) delete self.newplays[cellId];
+    else self.newplays = {};
+    if (Object.keys(self.newplays).length === 0) {
+      el('clear').textContent = t('Shuffle');
+      el('clear').onclick = onPlayerShuffle;
+    }
   };
 
   self.create = function(iddiv, bx, by, scores, racksize) {
@@ -402,9 +407,9 @@ function RedipsUI() {
     if (g_isMobile) html += '</tr><tr>';
     html += '<td class="mark"' + (g_isMobile ? ' colspan="8"' : '') + '>' +
       '<button class="button" onclick="onPlayerMoved()">' + t('Play') + '</button>' +
-      '<button id="pass" class="obutton" onclick="onPlayerMoved(true)">' + t('Pass') + '</button>' +
-      '<button class="obutton" onclick="onPlayerClear()">' + t('Clear') + '</button>' +
+      '<button id="clear" class="obutton" onclick="onPlayerShuffle()">' + t('Shuffle') + '</button>' +
       '<button class="obutton" onclick="onPlayerSwap()">' + t('Swap') + '</button>' +
+      '<button id="pass" class="obutton" onclick="onPlayerMoved(true)">' + t('Pass') + '</button>' +
       '</td></tr></table></div>';
 
     el(iddiv).innerHTML = html;
@@ -448,7 +453,6 @@ function RedipsUI() {
       for (var y = 0; y < self.by; ++y) {
         var id = self.boardId + x + '_' + y;
         var obj = el(id);
-        //obj.style.backgroundColor = self.cellbg;
         var letter = '';
         var points = 0;
         if (obj.holds !== '') {
@@ -476,6 +480,7 @@ function RedipsUI() {
       var sc = l.substr(1);
       var co = sc.split('_');
       placement.push({
+        'id': l,
         'ltr': played[l].letter,
         'lsc': played[l].points,
         'x': +co[0],
@@ -525,28 +530,31 @@ function RedipsUI() {
       var sc = self.rd.td.source.id.charAt(0);
       if (id.charAt(0) === self.boardId) {
         // Tile dropped on playing board
-        if (holds !== '' &&      // Should never happen
-          holds.points === 0 &&  // Joker
-          sc !== self.boardId) { // Taken from rack to board
+        self.playSound();
+        el('clear').textContent = t('Clear');
+        el('clear').onclick = onPlayerClear;
+        if (holds && holds.points === 0 // Joker
+          && sc !== self.boardId) {     // Taken from rack to board
           self.showLettersModal(id);
           return;
         }
         self.newplays[id] = self.hcopy(holds);
-        self.playSound();
-      } else
-        if (id.charAt(0) === 'p') {
-          // Tile dropped on player rack
-          if (holds !== '' &&      // Should never happen
-            holds.points === 0 &&  // Joker
-            sc === self.boardId) { // Taken board to rack
-            // Remove selected letter from joker tile
-            self.rd.obj.innerHTML = '';
-            self.rd.obj.holds = {
-              'letter': '',
-              'points': 0
-            };
-          }
+      } else if (id.charAt(0) === 'p') {
+        // Tile dropped on player rack
+        if (holds && holds.points === 0 // Joker
+          && sc === self.boardId) {     // Taken board to rack
+          // Remove selected letter from joker tile
+          self.rd.obj.innerHTML = '';
+          self.rd.obj.holds = {
+            'letter': '',
+            'points': 0
+          };
         }
+        if (Object.keys(self.newplays).length === 0) {
+          el('clear').textContent = t('Shuffle');
+          el('clear').onclick = onPlayerShuffle;
+        }
+      }
     };
     self.rd.event.moved = function() {
       self.rd.td.source.holds = '';
@@ -601,6 +609,7 @@ function RedipsUI() {
     div.holds = self.hcopy(holds);
     div.innerHTML = html;
     hideModal();
+    return self.bdropCellId;
   };
 
   self.onSwap = function(cancel) {
@@ -783,10 +792,11 @@ function RedipsUI() {
       if (lettermoves[0].x !== lettermoves[1].x) lettermoves.sort(compareByX);
       else lettermoves.sort(compareByY);
     }
+    var wait;
     for (var i = 0; i < totalanims; ++i) {
       // Set the the time to wait before animating this letter to its
       // position on the board
-      var wait = g_wait * i;
+      wait = g_wait * i;
       // Create a separate instance of the letter info local to the
       // function and set the timer to move the letter by activating this
       // function

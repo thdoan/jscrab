@@ -66,6 +66,8 @@ Corrections and comments are welcome by [sending an email](mailto:feedback@vietb
 - Added "what's new" update notification
 - Added proper Game Over modal
 - Fixed possibility to swap more tiles than remaining
+- Changed position of Pass button
+- Added Shuffle feature
 
 ## Dependencies for local build
 

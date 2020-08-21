@@ -8,8 +8,7 @@ function closeModal() {
     g_bui.onSwap(true);
   } else if (el('letters')) {
     // Clear Blank tile if closing modal without selecting a letter
-    g_bui.onSelLetter('*');
-    g_bui.cancelPlayerPlacement();
+    g_bui.cancelPlayerPlacement(g_bui.onSelLetter('*'));
   } else {
     var elButton = g_cache['modalContent'].querySelector('.button');
     if (elButton) elButton.click();
