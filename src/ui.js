@@ -402,9 +402,9 @@ function RedipsUI() {
     if (g_isMobile) html += '</tr><tr>';
     html += '<td class="mark"' + (g_isMobile ? ' colspan="8"' : '') + '>' +
       '<button class="button" onclick="onPlayerMoved()">' + t('Play') + '</button>' +
-      '<button id="pass" class="obutton" onclick="onPlayerMoved(true)">' + t('Pass') + '</button>' +
       '<button class="obutton" onclick="onPlayerClear()">' + t('Clear') + '</button>' +
       '<button class="obutton" onclick="onPlayerSwap()">' + t('Swap') + '</button>' +
+      '<button id="pass" class="obutton" onclick="onPlayerMoved(true)">' + t('Pass') + '</button>' +
       '</td></tr></table></div>';
 
     el(iddiv).innerHTML = html;
