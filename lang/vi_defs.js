@@ -175,6 +175,13 @@ var g_defs = {
       }
     ]
   },
+  'thuỗn': {
+    'verb': [
+      {
+        'definition': 'elongate'
+      }
+    ]
+  },
   'thửa': {
     'noun': [
       {
