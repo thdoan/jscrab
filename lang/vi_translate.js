@@ -37,6 +37,7 @@ var translation_map = {
   'Select the letters you want to swap': 'Chọn những chữ bạn muốn đổi',
   'Show computer&rsquo;s rack': 'Hiện khay chữ của máy',
   'Show definition': 'Hiển thị định nghĩa',
+  'Shuffle': 'Xáo Chữ',
   'Sorry, ': 'Xin lỗi, ',
   'Swap': 'Đổi Chữ',
   'Tap on score for game info': 'Chạm vào điểm để xem thêm',

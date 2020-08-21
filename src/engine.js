@@ -1074,9 +1074,9 @@ function onPlayerMove() {
   g_boardpoints = boardinfo.boardp;
 
   if (!passed) {
-    var placement = g_bui.getPlayerPlacement();
-    var pinfo = checkValidPlacement(placement);
+    var pinfo = checkValidPlacement(g_bui.getPlayerPlacement());
     var pstr = pinfo.played;
+
     if (pstr === '') {
       g_bui.prompt(gErrPrefix() + pinfo.msg);
       return;
@@ -1213,6 +1213,41 @@ function onPlayerMoved(passed, swapped) {
 }
 
 //------------------------------------------------------------------------------
+function onPlayerShuffle() {
+  var elClear = el('clear');
+  if (elClear.anim) return;
+  var done = function() {
+    clearTimeout(elClear.timer);
+    elClear.timer = setTimeout(function() {
+      elClear.anim = false;
+    }, 200);
+  };
+  var indexes = [];
+  for (var i = 0; i < g_racksize; ++i) {
+    indexes.push(i);
+  }
+  var rnd, i, j;
+  while (indexes.length > 0) {
+    rnd = Math.floor(Math.random() * indexes.length);
+    i = indexes[rnd];
+    indexes.splice(rnd, 1);
+    rnd = Math.floor(Math.random() * indexes.length);
+    j = indexes[rnd];
+    indexes.splice(rnd, 1);
+    elClear.anim = true;
+    g_bui.rd.moveObject({
+      'obj': el('pl' + i).firstChild,
+      'target': el('pl' + j)
+    });
+    g_bui.rd.moveObject({
+      'obj': el('pl' + j).firstChild,
+      'target': el('pl' + i),
+      'callback': done
+    });
+  }
+}
+
+//------------------------------------------------------------------------------
 function onPlayerSwap() {
   if (g_letpool.length === 0) {
     g_bui.prompt(gErrPrefix() + t('no tiles left to swap.'));
@@ -1284,9 +1319,10 @@ function placeOnBoard(word, animCallback) {
 //------------------------------------------------------------------------------
 function shufflePool() {
   var total = g_letpool.length;
+  var rnd, c;
   for (var i = 0; i < total; ++i) {
-    var rnd = Math.floor((Math.random() * total));
-    var c = g_letpool[i];
+    rnd = Math.floor(Math.random() * total);
+    c = g_letpool[i];
     g_letpool[i] = g_letpool[rnd];
     g_letpool[rnd] = c;
   }
