@@ -1214,15 +1214,14 @@ function onPlayerMoved(passed, swapped) {
 
 //------------------------------------------------------------------------------
 function onPlayerSwap() {
-  // If there were any tiles from the player's rack on the board, put them
-  // back on the rack.
-  var tilesLeft = g_letpool.length;
-  if (tilesLeft === 0) {
+  if (g_letpool.length === 0) {
     g_bui.prompt(gErrPrefix() + t('no tiles left to swap.'));
     return;
   }
+  // If there were any tiles from the player's rack on the board, put them
+  // back on the rack.
   g_bui.cancelPlayerPlacement();
-  g_bui.showSwapModal(tilesLeft);
+  g_bui.showSwapModal();
 }
 
 //------------------------------------------------------------------------------
@@ -1234,9 +1233,11 @@ function onPlayerSwapped(keep, swap) {
     g_bui.makeTilesFixed();
     return;
   }
+  // Put swapped letters back into the bag
   for (var i = 0; i < swap.length; ++i) {
     g_letpool.push(swap.charAt(i));
   }
+  // Shake the bag
   shufflePool();
   g_bui.setPlayerRack(takeLetters(keep));
   onPlayerMoved(true, true);
@@ -1295,11 +1296,9 @@ function shufflePool() {
 function takeLetters(existing) {
   var poolsize = g_letpool.length;
   if (poolsize === 0) return existing;
-  var needed = g_racksize - existing.length;
-  if (needed > poolsize) needed = poolsize;
-  var letters = g_letpool.slice(0, needed).join('');
-  g_letpool.splice(0, needed);
-  return letters + existing;
+  var needed = Math.min(g_racksize - existing.length, poolsize);
+  var letters = g_letpool.splice(0, needed).join('');
+  return existing + letters;
 }
 
 window['init'] = init;

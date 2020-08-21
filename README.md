@@ -65,6 +65,7 @@ Corrections and comments are welcome by [sending an email](mailto:feedback@vietb
 - Added option to change bonuses layout
 - Added "what's new" update notification
 - Added proper Game Over modal
+- Fixed possibility to swap more tiles than remaining
 
 ## Dependencies for local build
 

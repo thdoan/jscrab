@@ -255,7 +255,6 @@ function RedipsUI() {
     var placement = self.getPlayerPlacement();
     var divs = [];
     var id;
-    console.log(placement);
     for (var i = 0; i < placement.length; ++i) {
       var pl = placement[i];
       id = self.boardId + pl.x + '_' + pl.y;
@@ -636,6 +635,15 @@ function RedipsUI() {
     onPlayerSwapped(keep, swap);
   };
 
+  self.onSwapToggle = function(elTile) {
+    if (!elTile.classList.contains('to-swap') && document.querySelectorAll('#swaptable .to-swap').length === g_letpool.length) {
+      el('swaptable').title = t('No tiles left to swap');
+    } else {
+      elTile.classList.toggle('to-swap');
+      el('swaptable').title = t('Select the letters you want to swap');
+    }
+  };
+
   /*
   self.opponentPlay = function(x, y, lt, lts) {
     // TODO: add animation, etc.
@@ -927,14 +935,14 @@ function RedipsUI() {
     showModal(html, 'center wide');
   };
 
-  self.showSwapModal = function(tilesLeft) {
+  self.showSwapModal = function() {
     var divs = [];
     var html = '<table id="swaptable" class="centered" title="' + t('Select the letters you want to swap') + '"><tr>';
     for (var i = 0; i < self.racksize; ++i) {
       var rcell = el(self.plrRackId + i);
       if (rcell.holds === '') continue;
       divs.push(rcell.firstChild);
-      html += '<td id="swap-candidate' + i + '" class="tile" onclick="this.classList.toggle(\'to-swap\')"></td>';
+      html += '<td id="swap-candidate' + i + '" class="tile" onclick="g_bui.onSwapToggle(this)"></td>';
     }
     html += '</tr></table>';
 
