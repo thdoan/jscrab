@@ -1218,10 +1218,17 @@ function onPlayerShuffle() {
   elClear.disabled = true;
   document.documentElement.classList.add('shuffling');
   var indexes = [];
+  var totalanims = 0;
+  var animDone = function() {
+    if (++totalanims === g_racksize / 2) {
+      elClear.disabled = false;
+      document.documentElement.classList.remove('shuffling');
+    }
+  };
   for (var i = 0; i < g_racksize; ++i) {
     indexes.push(i);
   }
-  var rnd, i, j, moveinfo1, moveinfo2;
+  var rnd, i, j;
   while (indexes.length > 0) {
     rnd = Math.floor(Math.random() * indexes.length);
     i = indexes[rnd];
@@ -1229,23 +1236,16 @@ function onPlayerShuffle() {
     rnd = Math.floor(Math.random() * indexes.length);
     j = indexes[rnd];
     indexes.splice(rnd, 1);
-    moveinfo1 = {
+    g_bui.rd.moveObject({
       'obj': el('pl' + i).firstChild,
       'target': el('pl' + j)
-    };
-    moveinfo2 = {
+    });
+    g_bui.rd.moveObject({
       'obj': el('pl' + j).firstChild,
-      'target': el('pl' + i)
-    };
-    if (moveinfo1['obj'] && moveinfo2['obj']) {
-      g_bui.rd.moveObject(moveinfo1);
-      g_bui.rd.moveObject(moveinfo2);
-    }
+      'target': el('pl' + i),
+      'callback': animDone
+    });
   }
-  setTimeout(function() {
-    elClear.disabled = false;
-    document.documentElement.classList.remove('shuffling');
-  }, 350);
 }
 
 //------------------------------------------------------------------------------
