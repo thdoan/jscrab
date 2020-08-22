@@ -542,6 +542,7 @@ h3.player {
 }
 #score table.gameinfo td:first-child { /* Opponent */
   padding-left: 4px;
+  white-space: nowrap;
 }
 #score table.gameinfo td:last-child { /* Player */
   padding-right: 4px;

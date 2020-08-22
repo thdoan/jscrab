@@ -87,6 +87,7 @@ function init(iddiv) {
   var my_letters = '';
   var comp_letters = '';
 
+  //my_letters = takeLetters('qẵễỗệộỵv');
   my_letters = takeLetters(my_letters);
   comp_letters = takeLetters(comp_letters);
 

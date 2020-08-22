@@ -852,17 +852,14 @@ function RedipsUI() {
   };
 
   self.setLetters = function(player, letters) {
+    //console.log('setLetters', letters);
     self.racks[player] = letters;
     var cells = [];
 
     // TODO: sanity checks on values of player
 
     var ifprfx = (player === 1) ? self.plrRackId : self.oppRackId;
-    //var upper = letters.toUpperCase();
-    var upper = '';
-    for (var i = 0; i < letters.length; ++i) {
-      upper += letters.charAt(i).toUpperCase();
-    }
+    var upper = letters.toUpperCase();
 
     for (var i = 0; i < self.racksize; ++i) {
       var id = ifprfx + i;
