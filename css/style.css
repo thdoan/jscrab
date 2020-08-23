@@ -638,6 +638,10 @@ footer {
 footer img {
   display: block;
 }
+footer span {
+  color: #999;
+  float: left;
+}
 footer .social {
   float: right;
 }

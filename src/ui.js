@@ -341,6 +341,7 @@ function RedipsUI() {
     html +=
       '</table><footer>' +
       '<a href="https://fb.me/vietboardplay" class="social" title="' + t('Visit our Facebook Page to learn more') + '"><img src="pics/fb.svg" width="32" height="32" alt="Facebook"></a>' +
+      '<span onclick="showWhatsNew()">v' + VER + '</span>' +
       (localStorage['lang'] === 'vi' ?
         '<a href="javascript:setLang(\'en\')">' + t('English') + '</a> | ' + t('Vietnamese') :
         t('English') + ' | <a href="javascript:setLang(\'vi\')">' + t('Vietnamese') + '</a>') +
@@ -378,7 +379,7 @@ function RedipsUI() {
         '</td>';
     }
     for (var i = 0; i < racksize; ++i) {
-      html += '<td id="' + self.oppRackId + i + '"></td>';
+      html += '<td id="' + self.oppRackId + i + '"' + (DEBUG ? ' class="on"' : '') + '></td>';
     }
     html += '</tr></table>';
 

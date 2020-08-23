@@ -1,4 +1,4 @@
-const VER = 1.10;
+const VER = '1.11';
 
 function showWhatsNew() {
   g_bui.prompt(
@@ -9,6 +9,7 @@ function showWhatsNew() {
     '<li>Updated desktop logo to be consistent with mobile</li>' +
     '<li>Moved desktop logo to the left side</li>' +
     '<li>Added High Scores button (placeholder)</li>' +
+    '<li>Added version number</li>' +
     '</ul>'
   );
 }
