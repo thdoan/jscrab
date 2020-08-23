@@ -40,7 +40,7 @@ function BonusesLayout(sLayout) {
         break;
       case 'WWF':
         // DL
-        for (var i = 2, j = 1; i < 7; i += 2) {
+        for (var i = 2, j = 1; i < midx; i += 2) {
           self.q(i, j, 1);
           self.q(j, i, 1);
           j *= 2;
@@ -83,6 +83,16 @@ function BonusesLayout(sLayout) {
         // TW
         self.q(5, 0, 4);
         self.q(0, 5, 4);
+        break;
+      case 'Flower Garden':
+        var aS = [4, 2, 3, 1];
+        for (var i = 0, k = 0; i < bx; i += 2) {
+          for (var j = 0; j < by; j += 2) {
+            self.boardm[i][j] = aS[k++];
+            if (k === aS.length) k = 0;
+          }
+          if (--k === -1) k = aS.length - 1;
+        }
         break;
       case 'Heart':
         // DL
