@@ -222,6 +222,7 @@ html.loaded #app {
 }
 #scoreboard .logo img {
   width: 100%;
+  max-height: 50px;
 }
 #scoreboard .spacer {
   width: 2%;
@@ -284,7 +285,7 @@ html.loaded #app {
 
 #board {
   width: calc(100vh - 12vw);
-  min-width: 530px;
+  min-width: 480px;
   background: #3a3a3a;
   border-radius: 8px 0 0 8px;
   display: table-cell;
@@ -473,7 +474,7 @@ table.board td .drag,
 
 #score {
   position: relative;
-  min-width: 288px;
+  min-width: 310px;
   background: #fafafa;
   background: -webkit-gradient(linear, left top, left bottom, from(#f7fef7), to(#fafafa));
   background: linear-gradient(#f7fef7, #fafafa);
@@ -541,11 +542,10 @@ h3.player {
   text-align: right;
 }
 #score table.gameinfo td:first-child { /* Opponent */
-  padding-left: 4px;
-  white-space: nowrap;
+  padding-left: 2%;
 }
 #score table.gameinfo td:last-child { /* Player */
-  padding-right: 4px;
+  padding-right: 2%;
 }
 
 #score tr {
@@ -932,4 +932,16 @@ html.mobile #modal-container.wide {
 }
 html.mobile #modal-content {
   padding: 4%;
+}
+
+@media (max-height: 649px) {
+  #drag .button,
+  #drag .obutton {
+    font-size: calc(8px + 0.25vw);
+    letter-spacing: -0.5px;
+  }
+  #drag .opponent td:first-child,
+  #drag .player td:last-child {
+    padding: 2px 0;
+  }
 }

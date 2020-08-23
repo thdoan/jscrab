@@ -877,7 +877,7 @@ function RedipsUI() {
         rcell.holds = holds;
         if (ltr !== '*') {
           var char = upper.charAt(i);
-          html += (char === ' ' ? '&nbsp;&nbsp;' : char) + '<sup><small>' + self.scores[ltr] + '</small></sup>';
+          html += (char !== ' ' ? char : '&nbsp;&nbsp;') + '<sup><small>' + self.scores[ltr] + '</small></sup>';
         } else {
           html += '&nbsp;';
         }
@@ -966,8 +966,8 @@ function RedipsUI() {
 
   self.showTilesLeft = function() {
     var oTilesLeft = g_letpool.sort().reduce(function(accumulator, currentValue) {
-      if (currentValue === '*') currentValue = '&lt;blank&gt;';
-      else if (currentValue === ' ') currentValue = '&lt;space&gt;';
+      if (currentValue === ' ') currentValue = '&lt;space&gt;';
+      else if (currentValue === '*') currentValue = '&lt;blank&gt;';
       accumulator[currentValue] = (accumulator[currentValue] || 0) + 1;
       return accumulator;
     }, {});
