@@ -182,6 +182,13 @@ var g_defs = {
       }
     ]
   },
+  'dàu': {
+    'adj': [
+      {
+        'definition': 'sullen, gloomy, morose'
+      }
+    ]
+  },
   'thửa': {
     'noun': [
       {
