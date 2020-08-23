@@ -3,6 +3,9 @@ REM Begin local scope
 setlocal
 REM Set build directory
 set target=play
+REM Set timestamp
+set timestamp=%time%
+set timestamp=%timestamp:~0,2%%timestamp:~3,2%%timestamp:~6,2%
 REM Move files to temp directory to search & replace
 xcopy /iy src %temp%\vietboard\src
 REM Comment out debugging stuff; space required before "//" to work around this bug:
@@ -20,9 +23,9 @@ xcopy /y lang\en_translate.js %target%\lang\
 xcopy /y lang\vi_translate.js %target%\lang\
 xcopy /iy pics %target%\pics
 xcopy /iy sounds %target%\sounds
-fart %target%\index.html style.css styles.min.css
-fart %target%\index.html lang/vi_wordlist.js js/lang.min.js
-fart %target%\index.html src/redipsdrag.js js/app.min.js
+fart %target%\index.html style.css styles.min.css?v=%timestamp%
+fart %target%\index.html lang/vi_wordlist.js js/lang.min.js?v=%timestamp%
+fart %target%\index.html src/redipsdrag.js js/app.min.js?v=%timestamp%
 fart --c-style --remove %target%\index.html "<script src=\"lang/vi_defs.js\"></script>\n"
 fart --c-style --remove %target%\index.html "<script src=\"lang/vi_letters.js\"></script>\n"
 fart --c-style --remove %target%\index.html "<script src=\"lang/vi_translate.js\"></script>\n"
