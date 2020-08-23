@@ -290,14 +290,17 @@ function RedipsUI() {
     var arrow = '<picture><source type="image/webp" srcset="pics/arrow.webp"><img src="pics/arrow.png" width="22" height="22" alt=""></picture>';
     var hr = '<tr class="ruler"><td colspan="2"></td></tr>';
 
+    g_cache['html'].hs = '<button class="obutton disabled" title="Coming soon..." onclick="g_bui.showHighScores()">' + t('High Scores') + '</button>';
+
     // Gameboard
     var html = '<div id="board" class="human-computer"></div>';
     // Game info
     html +=
-      '<div id="score"><div class="container">' +
+      '<div id="score"><div class="container"><header>' +
       '<button id="back"><svg version="1.1" viewBox="0 0 414.5 414.5" xmlns="http://www.w3.org/2000/svg"><polygon points="324.7 28.238 296.37 0 89.796 207.25 296.37 414.5 324.7 386.26 146.27 207.25" fill="currentColor"/></svg></button>' +
-      '<h1 id="header"><img src="pics/icon.svg" alt="Vietboard" class="icon"><img src="pics/logo.svg" alt="Vietboard" class="logo" onload="spinColors(this)"></h1>' +
-      '<h2 class="heading">' + t('Words Played') + '</h2>' +
+      g_cache['html'].hs +
+      '<img src="pics/icon.svg" width="32" height="32" alt="Vietboard"></header>' +
+      '<h2>' + t('Words Played') + '</h2>' +
       '<div id="history"></div>' +
       '<table class="gameinfo">' +
       hr +
@@ -336,13 +339,12 @@ function RedipsUI() {
       hr;
     if (DEBUG) html += '<tr><td>' + t('Tiles left:') + '</td><td id="tleft"></td></tr>' + hr;
     html +=
-      '</table>' +
-      '<div id="footer">' +
+      '</table><footer>' +
       '<a href="https://fb.me/vietboardplay" class="social" title="' + t('Visit our Facebook Page to learn more') + '"><img src="pics/fb.svg" width="32" height="32" alt="Facebook"></a>' +
       (localStorage['lang'] === 'vi' ?
         '<a href="javascript:setLang(\'en\')">' + t('English') + '</a> | ' + t('Vietnamese') :
         t('English') + ' | <a href="javascript:setLang(\'vi\')">' + t('Vietnamese') + '</a>') +
-      '</div></div></div>';
+      '</footer></div></div>';
 
     g_cache['app'].innerHTML = html;
 
@@ -354,6 +356,9 @@ function RedipsUI() {
     self.bx = bx;
     self.by = by;
 
+    g_cache['html'].logo = '<img src="pics/logo.svg" alt="Vietboard" onload="spinColors(this)">';
+    g_cache['html'].oppcta = g_cache['html'].hs + '<h1>' + g_cache['html'].logo + '</h1>';
+
     // Scoreboard
     html = '<table id="scoreboard"><tr>' +
       '<td id="score-opponent">0</td>' +
@@ -362,14 +367,15 @@ function RedipsUI() {
       '<td class="spacer"></td>' +
       '<td id="score-player">0</td></tr></table>';
     html += '<div id="drag">';
+
     //---------------------------
     // Opponent's rack
-
     html += '<table class="opponent"><tr>';
     if (!g_isMobile) {
-      html += '<td class="mark">';
-      if (DEBUG) html += '<button id="toggle" class="obutton" onclick="g_bui.toggleORV()"></button>';
-      html += '</td>';
+      html += '<td class="mark">' +
+        //'<button id="toggle" class="obutton" onclick="g_bui.toggleORV()"></button>' +
+        g_cache['html'].oppcta +
+        '</td>';
     }
     for (var i = 0; i < racksize; ++i) {
       html += '<td id="' + self.oppRackId + i + '"></td>';
@@ -432,7 +438,7 @@ function RedipsUI() {
     }
 
     // Hide opponent's rack
-    if (DEBUG) self.toggleORV();
+    //if (DEBUG) self.toggleORV();
 
     // Initialize REDIPS framework
     self.rd = REDIPS.drag;
@@ -929,6 +935,10 @@ function RedipsUI() {
     showModal(t('Computer thinking, please wait...'));
   };
 
+  self.showHighScores = function() {
+    alert('Coming soon...');
+  }
+
   self.showLettersModal = function(bdropCellId) {
     self.bdropCellId = bdropCellId;
     var rlen = 6;
@@ -978,6 +988,7 @@ function RedipsUI() {
   };
 
   // Toggle opponent rack visibility
+  /*
   self.toggleORV = function() {
     if (!el('toggle')) return;
     self.showOpRack = 1 - self.showOpRack;
@@ -986,6 +997,7 @@ function RedipsUI() {
       el(self.oppRackId + i).classList.toggle('on', self.showOpRack);
     }
   };
+  */
 
   self.wordInfo = function(word) {
     if (!window.g_defs) {

@@ -36,11 +36,17 @@ function hideGameInfo() {
 }
 
 // Cycle through icon/logo colors
-function spinColors(elIcon) {
+function spinColors(elImg) {
   var nTick = 0;
   var nTimer = setInterval(function() {
-    elIcon.style.filter = 'hue-rotate(' + randInt(0, 360) + 'deg)';
-    if (++nTick === 20) clearInterval(nTimer);
+    elImg.style.filter = 'hue-rotate(' + randInt(0, 360) + 'deg)';
+    if (++nTick === 20) {
+      clearInterval(nTimer);
+      [].forEach.call(document.querySelectorAll('img[alt="Vietboard"]'), function(_el) {
+        if (_el === elImg) return;
+        _el.style.filter = elImg.style.filter;
+      });
+    }
   }, 100);
 }
 
@@ -63,7 +69,7 @@ function toggleMobile() {
   if (g_isMobile) {
     var elOpponentButtons = el('#drag .opponent td.mark');
     if (elOpponentButtons) {
-      // Delete opponent buttons placeholder
+      // Remove desktop logo
       elOpponentButtons.remove();
       // Move player rack down
       var elRow = document.createElement('tr');
@@ -73,19 +79,16 @@ function toggleMobile() {
     }
   } else {
     if (el('#drag .player td.mark:first-child')) {
-      // Insert opponent buttons placeholder
+      // Insert desktop logo
       var elCell = document.createElement('td');
       elCell.className = 'mark';
-      if (DEBUG) elCell.innerHTML = '<button id="toggle" class="obutton" onclick="g_bui.toggleORV()">' +
-        (g_bui.showOpRack ? t('Hide computer&rsquo;s rack') : t('Show computer&rsquo;s rack')) + '</button>';
+      elCell.innerHTML = g_cache['html'].oppcta;
       el('#drag .opponent tr').insertBefore(elCell, el('op0'));
       // Move player rack up
       el('#drag .player tr:first-child').appendChild(elPlayerButtons);
       elPlayerButtons.removeAttribute('colspan');
       el('#drag .player tr:last-child').remove();
     }
-    // Set desktop header height
-    el('header').style.height = el('#drag .opponent').offsetHeight + 'px';
   }
   // Adjust modal position
   setModalHeight();
@@ -99,7 +102,8 @@ window.onload = function() {
     'modalContainer': el('modal-container'),
     'modalInner': el('modal-inner'),
     'modalContent': el('modal-content'),
-    'sound': el('sound')
+    'sound': el('sound'),
+    'html': {}
   };
   // Check browser support
   if (g_isSupported) {

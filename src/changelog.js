@@ -1,4 +1,4 @@
-const VER = 1.08;
+const VER = 1.10;
 
 function showWhatsNew() {
   g_bui.prompt(
@@ -7,6 +7,8 @@ function showWhatsNew() {
     '<li>Fixed Vietnamese text wrapping on iPad</li>' +
     '<li>Added Flower Garden bonuses layout</li>' +
     '<li>Updated desktop logo to be consistent with mobile</li>' +
+    '<li>Moved desktop logo to the left side</li>' +
+    '<li>Added High Scores button (placeholder)</li>' +
     '</ul>'
   );
 }
