@@ -296,7 +296,7 @@ function RedipsUI() {
     html +=
       '<div id="score"><div class="container">' +
       '<button id="back"><svg version="1.1" viewBox="0 0 414.5 414.5" xmlns="http://www.w3.org/2000/svg"><polygon points="324.7 28.238 296.37 0 89.796 207.25 296.37 414.5 324.7 386.26 146.27 207.25" fill="currentColor"/></svg></button>' +
-      '<h1><img src="pics/icon.svg" alt="Vietboard" onload="spinColors(this,true)"> <span class="opponent">Viet</span><span class="player">board</span> <sup title="See what\'s new" onclick="showWhatsNew()">beta</sup></h1>' +
+      '<h1 id="header"><img src="pics/icon.svg" alt="Vietboard" class="icon"><img src="pics/logo.svg" alt="Vietboard" class="logo" onload="spinColors(this)"></h1>' +
       '<h2 class="heading">' + t('Words Played') + '</h2>' +
       '<div id="history"></div>' +
       '<table class="gameinfo">' +
@@ -413,6 +413,9 @@ function RedipsUI() {
       '</td></tr></table></div>';
 
     el(iddiv).innerHTML = html;
+
+    // Set desktop header height
+    toggleMobile();
 
     // Initialize custom DOM "holds" property
     for (var i = 0; i < racksize; ++i) {

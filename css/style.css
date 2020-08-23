@@ -75,6 +75,13 @@ picture {
   display: inline-block;
 }
 
+h3.opponent {
+  color: #cd5c5c;
+}
+h3.player {
+  color: #499b33;
+}
+
 select {
   width: 114px;
   background: none;
@@ -221,8 +228,11 @@ html.loaded #app {
   vertical-align: top;
 }
 #scoreboard .logo img {
+  position: relative;
   width: 100%;
   max-height: 50px;
+  background: #3a3a3a;
+  z-index: 1;
 }
 #scoreboard .spacer {
   width: 2%;
@@ -498,17 +508,22 @@ table.board td .drag,
   padding: 0 2px;
 }
 #score h1 {
-  height: 48px;
+  background: #3a3a3a;
+  border-top-right-radius: 8px;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
-  font-size: 26px;
-  margin: 0;
+  margin: 0 -2px;
   padding: 0.5rem;
 }
-#score h1 img {
-  width: 24px;
-  margin-right: 4px;
-  vertical-align: bottom;
+#score h1 .icon {
+  height: 32px;
+  display: none;
+}
+#score h1 .logo {
+  width: 100%;
+  height: 100%;
+  display: block;
+  margin: 0 auto;
 }
 #score h1 sup { /* beta */
   color: #999;
@@ -518,14 +533,6 @@ table.board td .drag,
   line-height: 22px;
   margin-left: -2px;
   vertical-align: text-top;
-}
-#score h1 .opponent,
-h3.opponent {
-  color: #cd5c5c;
-}
-#score h1 .player,
-h3.player {
-  color: #499b33;
 }
 #score h2 {
   height: 23px;
@@ -553,6 +560,7 @@ h3.player {
 }
 #score tr.highlight {
   background: #fefeba;
+  font-weight: bold;
 }
 #score tr.level {
   height: 30px;
@@ -650,7 +658,7 @@ a.down img {
   left: 50%;
   min-width: 240px;
   max-width: 480px;
-  max-height: 90%;
+  max-height: 95%;
   text-align: center;
   -ms-transform: translate(-50%, -50%);
   -webkit-transform: translate(-50%, -50%);
@@ -905,11 +913,14 @@ html.mobile #score .container {
   padding: 0;
 }
 html.mobile #score h1 {
-  background: #3a3a3a;
+  height: 48px !important;
+  border-radius: 0;
 }
-html.mobile #score h1 img {
-  width: 32px;
-  margin: 0;
+html.mobile #score h1 .icon {
+  display: inline;
+}
+html.mobile #score h1 .logo {
+  display: none;
 }
 html.mobile #score h1 span,
 html.mobile #score h1 sup {
@@ -920,9 +931,6 @@ html.mobile #score table.gameinfo td:first-child {
 }
 html.mobile #score table.gameinfo td:last-child {
   padding-right: 2%;
-}
-html.mobile #score tr.highlight {
-  font-weight: bold;
 }
 html.mobile #history {
   padding: 2%;

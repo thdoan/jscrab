@@ -36,10 +36,10 @@ function hideGameInfo() {
 }
 
 // Cycle through icon/logo colors
-function spinColors(elIcon, bBrightness) {
+function spinColors(elIcon) {
   var nTick = 0;
   var nTimer = setInterval(function() {
-    elIcon.style.filter = (bBrightness ? 'brightness(' + randFloat(0.85, 1, 2) + ') ' : '') + 'hue-rotate(' + randInt(0, 360) + 'deg)';
+    elIcon.style.filter = 'hue-rotate(' + randInt(0, 360) + 'deg)';
     if (++nTick === 20) clearInterval(nTimer);
   }, 100);
 }
@@ -61,27 +61,31 @@ function toggleMobile() {
   document.documentElement.classList.toggle('mobile', g_isMobile);
   var elPlayerButtons = el('#drag .player td.mark');
   if (g_isMobile) {
-    // Delete opponent rack toggle button
     var elOpponentButtons = el('#drag .opponent td.mark');
-    if (!elOpponentButtons) return;
-    elOpponentButtons.remove();
-    // Move player rack down
-    var elRow = document.createElement('tr');
-    elPlayerButtons.setAttribute('colspan', g_racksize);
-    elRow.appendChild(elPlayerButtons);
-    el('#drag .player tbody').appendChild(elRow);
+    if (elOpponentButtons) {
+      // Delete opponent buttons placeholder
+      elOpponentButtons.remove();
+      // Move player rack down
+      var elRow = document.createElement('tr');
+      elPlayerButtons.setAttribute('colspan', g_racksize);
+      elRow.appendChild(elPlayerButtons);
+      el('#drag .player tbody').appendChild(elRow);
+    }
   } else {
-    // Insert opponent rack toggle button
-    if (!el('#drag .player td.mark:first-child')) return;
-    var elCell = document.createElement('td');
-    elCell.className = 'mark';
-    if (DEBUG) elCell.innerHTML = '<button id="toggle" class="obutton" onclick="g_bui.toggleORV()">' +
-      (g_bui.showOpRack ? t('Hide computer&rsquo;s rack') : t('Show computer&rsquo;s rack')) + '</button>';
-    el('#drag .opponent tr').insertBefore(elCell, el('op0'));
-    // Move player rack up
-    el('#drag .player tr:first-child').appendChild(elPlayerButtons);
-    elPlayerButtons.removeAttribute('colspan');
-    el('#drag .player tr:last-child').remove();
+    if (el('#drag .player td.mark:first-child')) {
+      // Insert opponent buttons placeholder
+      var elCell = document.createElement('td');
+      elCell.className = 'mark';
+      if (DEBUG) elCell.innerHTML = '<button id="toggle" class="obutton" onclick="g_bui.toggleORV()">' +
+        (g_bui.showOpRack ? t('Hide computer&rsquo;s rack') : t('Show computer&rsquo;s rack')) + '</button>';
+      el('#drag .opponent tr').insertBefore(elCell, el('op0'));
+      // Move player rack up
+      el('#drag .player tr:first-child').appendChild(elPlayerButtons);
+      elPlayerButtons.removeAttribute('colspan');
+      el('#drag .player tr:last-child').remove();
+    }
+    // Set desktop header height
+    el('header').style.height = el('#drag .opponent').offsetHeight + 'px';
   }
   // Adjust modal position
   setModalHeight();
