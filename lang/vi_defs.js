@@ -95,6 +95,13 @@ var g_defs = {
       }
     ]
   },
+  'nhội': {
+    'noun': [
+      {
+        'definition': 'bischofia tree ~ cây cơm nguội'
+      }
+    ]
+  },
   'ỉn': {
     'noun': [
       {
