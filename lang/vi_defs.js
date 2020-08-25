@@ -28,7 +28,7 @@ var g_defs = {
           {
             'giấy ẩm viết nhòe': 'one&rsquo;s writing blurs on wet paper'
           },
-          { 'rơi nước trà vào nhòe cả trang giấy mới viết': 'after a storm comes a calm; after black clouds, clear weather' }
+          { 'rơi nước trà vào nhòe cả trang giấy mới viết': 'to smear all over a newly-written page with spilt tea' }
         ]
       }
     ]
