@@ -20,6 +20,19 @@ var g_defs = {
       }
     ]
   },
+  'nhòe': {
+    'verb': [
+      {
+        'definition': 'to blur; to smear all over something',
+        'examples': [
+          {
+            'giấy ẩm viết nhòe': 'one&rsquo;s writing blurs on wet paper'
+          },
+          { 'rơi nước trà vào nhòe cả trang giấy mới viết': 'to smear all over a newly-written page with spilt tea' }
+        ]
+      }
+    ]
+  },
   'cừ': {
     'adj': [
       {
@@ -82,10 +95,24 @@ var g_defs = {
       }
     ]
   },
+  'nhội': {
+    'noun': [
+      {
+        'definition': 'bischofia tree ~ cây cơm nguội'
+      }
+    ]
+  },
   'ỉn': {
     'noun': [
       {
         'definition': 'pig ~ lợn'
+      }
+    ]
+  },
+  'nhum': {
+    'noun': [
+      {
+        'definition': 'sea urchins'
       }
     ]
   },
@@ -95,6 +122,16 @@ var g_defs = {
         'definition': 'a type of rummy',
         'examples': [
           { 'chơi phỏm': 'playing rummy' }
+        ]
+      }
+    ]
+  },
+  'ọe': {
+    'verb': [
+      {
+        'definition': 'Retch; vomit; throw up',
+        'examples': [
+          { 'Nghén hay ọe': 'To retch often from being with child' }
         ]
       }
     ]
@@ -172,6 +209,27 @@ var g_defs = {
     '': [
       {
         'definition': 'take one word for another ~ chữ tác đánh chữ tộ'
+      }
+    ]
+  },
+  'sưa': {
+    'noun': [
+      {
+        'definition': 'dalbergia tonkinensis tree'
+      }
+    ]
+  },
+  'trẩu': {
+    'noun': [
+      {
+        'definition': 'vernicia montana tree'
+      }
+    ]
+  },
+  'trỉa': {
+    'verb': [
+      {
+        'definition': 'sow (the seeds)'
       }
     ]
   },
