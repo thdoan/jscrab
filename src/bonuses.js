@@ -213,6 +213,33 @@ function BonusesLayout(sLayout) {
         self.q(5, 0, 4);
         self.q(0, 5, 4);
         break;
+      case 'Snowflake':
+        // DL
+        self.q(4, 2, 1);
+        self.q(2, 4, 1);
+        self.q(midx, 3, 1);
+        self.q(midx, 5, 1);
+        self.q(3, midy, 1);
+        self.q(5, midy, 1);
+        self.boardm[6][0] = 1;
+        self.boardm[8][14] = 1;
+        // TL
+        self.q(4, 4, 2);
+        self.q(6, 6, 2);
+        self.boardm[14][6] = 2;
+        self.boardm[0][8] = 2;
+        // DW
+        self.q(3, 3, 3);
+        self.q(5, 5, 3);
+        self.boardm[8][0] = 3;
+        self.boardm[14][8] = 3;
+        self.boardm[6][14] = 3;
+        self.boardm[0][6] = 3;
+        // TW
+        self.q(midx, 1, 4);
+        self.q(2, 2, 4);
+        self.q(1, midy, 4);
+        break;
       case 'Yin Yang':
         // DL
         for (var i = 5; i < 9; ++i) {
