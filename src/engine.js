@@ -149,6 +149,10 @@ function announceWinner() {
     else clearInterval(timer);
   }, 100);
 
+  // Update game info column also
+  el('oscore').textContent = g_oscore;
+  el('pscore').textContent = g_pscore;
+
   // GA
   gtag('event', 'Game Over', {
     'event_category': 'Gameplay - Lvl ' + (g_playlevel + 1),
