@@ -102,6 +102,27 @@ var g_defs = {
       }
     ]
   },
+  'dặng': {
+    'verb': [
+      {
+        'definition': 'clear one&rsquo;s throat'
+      }
+    ]
+  },
+  'lơn': {
+    'verb': [
+      {
+        'definition': 'flirt, seduce'
+      }
+    ]
+  },
+  'thố': {
+    'noun': [
+      {
+        'definition': 'small cooking pot'
+      }
+    ]
+  },
   'ỉn': {
     'noun': [
       {
