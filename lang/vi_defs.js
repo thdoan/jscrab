@@ -48,6 +48,30 @@ var g_defs = {
       }
     ]
   },
+  'thiu': {
+    'verb': [
+      {
+        'definition': 'to get stale, sad'
+      },
+      {
+        'definition': 'to doze, snooze, fall asleep'
+      }
+    ],
+    'adverb': [
+      {
+        'definition': 'melancholy, gloomily',
+        'examples': [
+          { 'anh ấy buồn thiu': 'he is in a melancholy mood' }
+        ]
+      },
+      {
+        'definition': 'not fresh, state, old',
+        'examples': [
+          { 'thịt, cá thiu': 'the meat, fish has gone off/is a bit off' }
+        ]
+      }
+    ]
+  },
   'dọng': {
     'noun': [
       {
@@ -99,6 +123,27 @@ var g_defs = {
     'noun': [
       {
         'definition': 'bischofia tree ~ cây cơm nguội'
+      }
+    ]
+  },
+  'hỗng': {
+    'adj': [
+      {
+        'definition': 'cheeky; impolite; rude'
+      }
+    ]
+  },
+  'hấu': {
+    'noun': [
+      {
+        'definition': 'watermelon ~ dưa hấu'
+      }
+    ]
+  },
+  'thèn': {
+    'noun': [
+      {
+        'definition': 'red mullet ~ cá thèn'
       }
     ]
   },
