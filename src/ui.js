@@ -1030,7 +1030,7 @@ function RedipsUI() {
       getJsonp('https://m.vdict.com/mobile/dictjson?fromapp=1&word=' + encodeURIComponent(word) + '&dict=2', function() {
         g_def = g_def.replace('href="#"', 'title="' + t('Listen to pronunciation') + '" onclick="el(\'audio\').play()"');
         g_def = g_def.replace(' Suggestions:', '');
-        g_def = g_def.replace(/">(.+?) not found/, '"><strong>$1</strong> ' + t('not found'));
+        g_def = g_def.replace(/">(.+?) not found/, '"><strong>$1</strong> ' + t('has no definition or may be part of a compound word'));
         self.prompt(g_def);
         // GA
         gtag('event', word, {

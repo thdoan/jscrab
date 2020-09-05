@@ -28,7 +28,7 @@ var translation_map = {
   'no letters were placed.': 'không có chữ nào được sử dụng.',
   'no tiles left to swap.': 'không còn chữ nào để đổi.',
   'No tiles left to swap': 'Không còn chữ nào để đổi',
-  'not found': 'chưa có định nghĩa từ',
+  'has no definition or may be part of a compound word': 'chưa có định nghĩa hoặc là một phần trong từ ghép',
   'OK': 'OK',
   'Pass': 'Bỏ Lượt',
   'Play Again': 'Chơi Lại',

@@ -1,11 +1,10 @@
-const VER = '1.13';
+const VER = '1.14';
 
 function showWhatsNew() {
   g_bui.prompt(
     '<h3>What\'s New</h3>' +
     '<ul>' +
-    '<li>Fixed incorrect final scores in game info column</li>' +
-    '<li>Added Snowflake bonuses layout</li>' +
+    '<li>You can now play part of a compound word</li>' +
     '</ul>'
   );
 }
