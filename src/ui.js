@@ -290,7 +290,7 @@ function RedipsUI() {
     var arrow = '<picture><source type="image/webp" srcset="pics/arrow.webp"><img src="pics/arrow.png" width="22" height="22" alt=""></picture>';
     var hr = '<tr class="ruler"><td colspan="2"></td></tr>';
 
-    g_cache['html'].hs = '<button class="obutton disabled" title="Coming soon..." onclick="g_bui.showHighScores()">' + t('High Scores') + '</button>';
+    g_cache['html'].hs = '<button class="button secondary disabled" title="Coming soon..." onclick="g_bui.showHighScores()">' + t('High Scores') + '</button>';
 
     // Gameboard
     var html = '<div id="board" class="human-computer"></div>';
@@ -374,7 +374,7 @@ function RedipsUI() {
     html += '<table class="opponent"><tr>';
     if (!g_isMobile) {
       html += '<td class="mark">' +
-        //'<button id="toggle" class="obutton" onclick="g_bui.toggleORV()"></button>' +
+        //'<button id="toggle" class="button secondary" onclick="g_bui.toggleORV()"></button>' +
         g_cache['html'].oppcta +
         '</td>';
     }
@@ -414,9 +414,9 @@ function RedipsUI() {
     if (g_isMobile) html += '</tr><tr>';
     html += '<td class="mark"' + (g_isMobile ? ' colspan="8"' : '') + '>' +
       '<button class="button" onclick="onPlayerMoved()">' + t('Play') + '</button>' +
-      '<button id="clear" class="obutton" onclick="onPlayerShuffle()">' + t('Shuffle') + '</button>' +
-      '<button class="obutton" onclick="onPlayerSwap()">' + t('Swap') + '</button>' +
-      '<button id="pass" class="obutton" onclick="onPlayerMoved(true)">' + t('Pass') + '</button>' +
+      '<button id="clear" class="button secondary" onclick="onPlayerShuffle()">' + t('Shuffle') + '</button>' +
+      '<button class="button secondary" onclick="onPlayerSwap()">' + t('Swap') + '</button>' +
+      '<button id="pass" class="button secondary" onclick="onPlayerMoved(true)">' + t('Pass') + '</button>' +
       '</td></tr></table></div>';
 
     el(iddiv).innerHTML = html;
@@ -948,7 +948,7 @@ function RedipsUI() {
     for (var i = 0; i < llen; ++i) {
       var ltr = g_letters[i][0];
       if (ltr !== '*') {
-        html += '<button class="obutton" onclick="g_bui.onSelLetter(\'' + ltr + '\')">';
+        html += '<button class="button secondary" onclick="g_bui.onSelLetter(\'' + ltr + '\')">';
         html += (ltr === ' ' ? '&nbsp;' : ltr.toUpperCase()) + '</button>';
       }
     }

@@ -153,10 +153,10 @@ html.loaded #app {
   cursor: pointer;
   display: inline-block;
   font: bold 12px/1 'Trebuchet MS', Arial, sans-serif;
-  padding: 6px 9px;
+  padding: 6px 10px;
   text-decoration: none;
   text-shadow: 1px 1px 0 #aade7c;
-  white-space: nowrap;
+  vertical-align: middle;
 }
 .button:not([disabled]):hover,
 .button:not([disabled]):focus {
@@ -169,38 +169,25 @@ html.loaded #app {
   top: 1px;
 }
 
-.obutton {
+.button.secondary {
   -webkit-box-shadow: inset 0 1px 0 -2px #fff6af;
   box-shadow: inset 0 1px 0 -2px #fff6af;
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #ffec64), color-stop(1, #ffab23));
   background: linear-gradient(to bottom, #ffec64 5%, #ffab23 100%);
   background-color: #ffec64;
   border: 1px solid #ffaa22;
-  border-radius: 6px;
   color: #333;
-  cursor: pointer;
-  display: inline-block;
-  font: bold 12px/1 'Trebuchet MS', Arial, sans-serif;
-  padding: 6px 6px;
-  text-decoration: none;
   text-shadow: 1px 1px 0 #ffee66;
-  white-space: nowrap;
 }
-.obutton:not([disabled]):hover,
-.obutton:not([disabled]):focus {
+.button.secondary:not([disabled]):hover,
+.button.secondary:not([disabled]):focus {
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #ffab23), color-stop(1, #ffec64));
   background: linear-gradient(to bottom, #ffab23 5%, #ffec64 100%);
   background-color: #ffab23;
 }
-.obutton:active {
-  position: relative;
-  top: 1px;
-}
 
 .button.disabled,
-.button[disabled],
-.obutton.disabled,
-.obutton[disabled] {
+.button[disabled] {
   cursor: default;
   -webkit-filter: grayscale(1);
   filter: grayscale(1);
@@ -363,21 +350,20 @@ table.board td:after,
 #drag td.mark h1 img {
   display: block;
 }
-#drag .opponent .obutton {
+#drag .opponent .button {
   width: 45%;
 }
 
-#drag .button,
-#drag .obutton {
+#drag .button {
   width: 23%;
+  min-height: 30px;
   font-size: calc(10px + 0.25vw);
-  line-height: 1.4;
   margin: 0 1%;
+  padding: 3px 5px;
 }
-html[lang="vi"]:not(.mobile) #drag .button,
-html[lang="vi"]:not(.mobile) #drag .obutton {
-  font-size: calc(10px + 0.15vw);
-  letter-spacing: -0.5px;
+html[lang="vi"]:not(.mobile) #drag .button {
+  letter-spacing: normal;
+  line-height: 0.9;
 }
 #drag #toggle {
   width: 98%;
@@ -536,7 +522,7 @@ table.board td .drag,
   top: 8px;
   right: 8px;
 }
-#score header .obutton {
+#score header .button {
   height: 32px;
   margin: 8px;
   padding-left: 5%;
@@ -720,7 +706,7 @@ footer .social {
   margin: 0;
 }
 
-#letters .obutton {
+#letters .button {
   width: 32px;
   height: 32px;
   line-height: 32px;
@@ -838,8 +824,7 @@ html.mobile #app:after,
 html.error #app:after {
   content: none;
 }
-html.mobile #drag .button,
-html.mobile #drag .obutton {
+html.mobile #drag .button {
   font-size: calc(12px + 0.25vw);
   line-height: 1.5;
 }
@@ -934,8 +919,7 @@ html.mobile #modal-content {
 }
 
 @media (max-height: 649px) {
-  #drag .button,
-  #drag .obutton {
+  #drag .button {
     font-size: calc(8px + 0.25vw);
     letter-spacing: -0.5px;
   }
