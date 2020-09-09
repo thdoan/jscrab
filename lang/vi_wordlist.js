@@ -27908,7 +27908,7 @@ var g_wordmap = {
   'tái phạm': 1,
   'tài phán': 1,
   'tái phát': 1,
-  't��i phiệt': 1,
+  'tài phiệt': 1,
   'tài phú': 1,
   'tai quái': 1,
   'tài sắc': 1,
