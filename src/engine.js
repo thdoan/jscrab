@@ -152,6 +152,9 @@ function announceWinner() {
   el('oscore').textContent = g_oscore;
   el('pscore').textContent = g_pscore;
 
+  // Clear session
+  localStorage.removeItem('session');
+
   // GA
   gtag('event', 'Game Over', {
     'event_category': 'Gameplay - Lvl ' + (g_playlevel + 1),
