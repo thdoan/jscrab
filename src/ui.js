@@ -195,8 +195,10 @@ function load(sSession) {
   el('history').innerHTML = html;
   el('loscore').textContent = oSession['loscore'];
   el('oscore').textContent = oSession['oscore'];
+  el('score-opponent').textContent = oSession['oscore'];
   el('lpscore').textContent = oSession['lpscore'];
   el('pscore').textContent = oSession['pscore'];
+  el('score-player').textContent = oSession['pscore'];
   g_bui.setTilesLeft(g_letpool.length);
 }
 
