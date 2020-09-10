@@ -1,7 +1,7 @@
-function BonusesLayout(sLayout) {
+function BonusesLayout() {
   var self = this;
   self.boardm = [];
-  self.init = function(bx, by) {
+  self.init = function(bx, by, layout) {
     self.bx = bx;
     self.by = by;
 
@@ -15,7 +15,7 @@ function BonusesLayout(sLayout) {
     var midx = Math.floor(bx / 2);
     var midy = Math.floor(by / 2);
 
-    switch (sLayout) {
+    switch (layout) {
       case 'Classic':
         // DL
         self.q(3, 0, 1);
@@ -365,4 +365,4 @@ function BonusesLayout(sLayout) {
   };
 }
 
-var g_boardm = new BonusesLayout(localStorage['layout']);
+var g_boardm = new BonusesLayout();

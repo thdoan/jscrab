@@ -22,6 +22,7 @@ var g_wait = 500;               // Wait time in between moves (in ms)
 // Don't touch settings below
 var g_board;                    // Letters on board
 var g_boardpoints;              // Points on board
+var g_boardtypes;               // Tile type (1=player, 2=computer)
 var g_boardmults;               // Board bonus multipliers (DL, TL, DW, TW)
 var g_letpool = [];             // Letter pool
 var g_letscore = {};            // Score for each letter
@@ -38,13 +39,31 @@ var g_allLettersBonus = 50;     // Bonus when all letters in rack are played
 
 // Computer play level
 var g_playlevel = g_bui.getPlayLevel();
+
 // Maximum word score for each level
 var g_maxwpoints = [10, 20, 30, 40, 50, 75, 100, 125, 250, 500];
 
 // Words grouped by length
 var g_wstr = [];
+(function() {
+  // Build g_wstr list
+  var g_wstr_arr = [];
+  for (var i in g_wordmap) {
+    if (i.length > 15) continue;
+    if (!g_wstr_arr[i.length - 2]) g_wstr_arr[i.length - 2] = [];
+    g_wstr_arr[i.length - 2].push(i);
+  }
+  for (var i = 0; i < g_wstr_arr.length; ++i) {
+    if (!g_wstr_arr[i]) continue;
+    g_wstr.push('_' + g_wstr_arr[i].join('_') + '_');
+  }
+})();
+
 // Used to store word definition retrieved from the internet
 var g_def;
+
+// Words played
+var g_history = [];
 
 // Cached elements
 var g_cache;
@@ -84,32 +103,12 @@ function init(iddiv) {
 
   shufflePool();
 
-  var my_letters = '';
-  var comp_letters = '';
+  g_bui.create(iddiv, g_boardwidth, g_boardheight, g_letscore, g_racksize, localStorage['layout']);
 
-  //my_letters = takeLetters('qẵễỗệộỵv');
-  my_letters = takeLetters(my_letters);
-  comp_letters = takeLetters(comp_letters);
-
-  g_bui.create(iddiv, g_boardwidth, g_boardheight, g_letscore, g_racksize);
-
-  g_bui.setPlayerRack(my_letters);
-  g_bui.setOpponentRack(comp_letters);
+  g_bui.setOpponentRack(takeLetters(''));
+  g_bui.setPlayerRack(takeLetters(''));
+  //g_bui.setPlayerRack(takeLetters('qẵễỗệộỵv'));
   g_bui.setTilesLeft(g_letpool.length);
-
-  // Build g_wstr list
-  var g_wstr_arr = [];
-  for (var i in g_wordmap) {
-    if (i.length > 15) continue;
-    if (!g_wstr_arr[i.length - 2]) g_wstr_arr[i.length - 2] = [];
-    g_wstr_arr[i.length - 2].push(i);
-  }
-  for (var i = 0; i < g_wstr_arr.length; ++i) {
-    if (!g_wstr_arr[i]) continue;
-    g_wstr.push('_' + g_wstr_arr[i].join('_') + '_');
-  }
-
-  document.dispatchEvent(new Event('appReady'));
 }
 
 //------------------------------------------------------------------------------
@@ -394,34 +393,34 @@ function findBestWord(letters, ax, ay, dirs) {
     var threshold;
     switch (g_playlevel) {
       case 0: // Level 1
-        threshold = randFloat(80, 100, 16);
+        threshold = randFloat(50, 100, 16);
         break;
       case 1: // Level 2
-        threshold = randFloat(82, 100, 16);
+        threshold = randFloat(55, 100, 16);
         break;
       case 2: // Level 3
-        threshold = randFloat(84, 100, 16);
+        threshold = randFloat(60, 100, 16);
         break;
       case 3: // Level 4
-        threshold = randFloat(86, 100, 16);
+        threshold = randFloat(65, 100, 16);
         break;
       case 4: // Level 5
-        threshold = randFloat(88, 100, 16);
+        threshold = randFloat(70, 100, 16);
         break;
       case 5: // Level 6
-        threshold = randFloat(90, 100, 16);
+        threshold = randFloat(75, 100, 16);
         break;
       case 6: // Level 7
-        threshold = randFloat(92, 100, 16);
+        threshold = randFloat(80, 100, 16);
         break;
       case 7: // Level 8
-        threshold = randFloat(94, 100, 16);
+        threshold = randFloat(85, 100, 16);
         break;
       case 8: // Level 9
-        threshold = randFloat(96, 100, 16);
+        threshold = randFloat(90, 100, 16);
         break;
       case 9: // Level 10
-        threshold = randFloat(98, 100, 16);
+        threshold = randFloat(95, 100, 16);
         break;
     }
     if (Math.random() > threshold / 100) continue;
@@ -1077,6 +1076,7 @@ function onPlayerMove() {
   //console.log('onPlayerMove', boardinfo);
   g_board = boardinfo.board;
   g_boardpoints = boardinfo.boardp;
+  g_boardtypes = boardinfo.boardt;
 
   if (!passed) {
     var pinfo = checkValidPlacement(g_bui.getPlayerPlacement());
@@ -1089,8 +1089,14 @@ function onPlayerMove() {
 
     //console.log('Player placement chars: ' + pstr);
     g_bui.acceptPlayerPlacement();
-    g_board_empty = false; // Placement made
-    g_passes = 0; // Reset consecutive passes
+    // Placement made
+    if (g_board_empty) {
+      g_board_empty = false;
+      el('a.link.up').classList.add('disabled');
+      el('a.link.down').classList.add('disabled');
+    }
+    // Reset consecutive passes
+    g_passes = 0;
 
     if (pstr.length === g_racksize) g_pscore += g_allLettersBonus;
 
@@ -1171,6 +1177,8 @@ function onPlayerMove() {
     g_bui.setOpponentRack(newLetters);
     g_bui.setTilesLeft(g_letpool.length);
     el('pass').disabled = false;
+    // Save session
+    localStorage['session'] = getSession();
   };
 
   if (play_word !== null) {
@@ -1209,12 +1217,14 @@ function onPlayerMoved(passed, swapped) {
   clearTimeout(g_bui.timer); // Clear hideModal() 300ms delay
   setTimeout(onPlayerMove, 100);
 
-  // GA
-  gtag('event', 'Player ' + (swapped ? 'Swap' : 'Pass'), {
-    'event_category': 'Gameplay - Lvl ' + (g_playlevel + 1),
-    'event_label': '[' + g_bui.getPlayerRack() + ']',
-    'value': g_letpool.length
-  });
+  if (passed) {
+    // GA
+    gtag('event', 'Player ' + (swapped ? 'Swap' : 'Pass'), {
+      'event_category': 'Gameplay - Lvl ' + (g_playlevel + 1),
+      'event_label': '[' + g_bui.getPlayerRack() + ']',
+      'value': g_letpool.length
+    });
+  }
 }
 
 //------------------------------------------------------------------------------
@@ -1313,13 +1323,18 @@ function placeOnBoard(word, animCallback) {
       //console.log('placeOnBoard', ltr, lscr);
       g_board[x][y] = ltr;
       g_boardpoints[x][y] = lscr;
+      g_boardtypes[x][y] = 2;
     }
     x += dx;
     y += dy;
   }
   hideModal();
   g_bui.playOpponentMove(placements, animCallback);
-  g_board_empty = false;
+  if (g_board_empty) {
+    g_board_empty = false;
+    el('a.link.up').classList.add('disabled');
+    el('a.link.down').classList.add('disabled');
+  }
 }
 
 //------------------------------------------------------------------------------

@@ -572,5 +572,6 @@ var g_defs = {
         ]
       }
     ]
-  }
+  },
+  'hy': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>hy sinh</li><li>hy vọng</li></ul>'
 };

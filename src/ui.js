@@ -62,7 +62,7 @@ function getJsonp(sUrl, callback) {
   document.head.appendChild(js);
 }
 
-// https://snipplr.com/view/37687/random-number-float-generator/
+// Return a random float between nMin and nMax with nDecimals (inclusive)
 function randFloat(nMin, nMax, nDecimals) {
   return parseFloat(Math.min(nMin + (Math.random() * (nMax - nMin)), nMax).toFixed(nDecimals || 0));
 }
@@ -74,15 +74,12 @@ function randInt(nMin, nMax) {
 
 // Set language
 function setLang(sLang) {
-  var bConfirm = confirm(t('This will restart the game.'));
-  if (bConfirm) {
-    localStorage['lang'] = sLang;
-    // GA
-    gtag('event', sLang, {
-      'event_category': 'Language'
-    });
-    location.reload();
-  }
+  localStorage['lang'] = sLang;
+  // GA
+  gtag('event', sLang, {
+    'event_category': 'Language'
+  });
+  location.reload();
 }
 
 // Set bonuses layout
@@ -102,17 +99,12 @@ function setLayout(elSelect) {
 
 // Set tileset
 function setTileset(elSelect) {
-  var bConfirm = confirm(t('This will restart the game.'));
-  if (bConfirm) {
-    localStorage['tileset'] = elSelect.value;
-    // GA
-    gtag('event', elSelect.value, {
-      'event_category': 'Tileset'
-    });
-    location.reload();
-  } else {
-    elSelect.selectedIndex = 0;
-  }
+  localStorage['tileset'] = elSelect.value;
+  // GA
+  gtag('event', elSelect.value, {
+    'event_category': 'Tileset'
+  });
+  location.reload();
 }
 
 // Modal functions
@@ -156,6 +148,58 @@ function setModalHeight() {
   }, 50);
 }
 
+// Session functions
+function getSession() {
+  var oSession = {
+    'board': g_board,
+    'boardp': g_boardpoints,
+    'boardt': g_boardtypes,
+    'history': g_history,
+    'layout': g_layout,
+    'letpool': g_letpool,
+    'letscore': g_letscore,
+    'level': g_bui.level,
+    'loscore': el('loscore').textContent,
+    'lpscore': el('lpscore').textContent,
+    'orack': g_bui.getOpponentRack(),
+    'oscore': g_oscore,
+    'passes': g_passes,
+    'prack': g_bui.getPlayerRack(),
+    'pscore': g_pscore
+  };
+  return JSON.stringify(oSession);
+}
+function load(sSession) {
+  var oSession = JSON.parse(sSession);
+  g_board_empty = false;
+  g_board = oSession['board'];
+  g_boardpoints = oSession['boardp'];
+  g_boardtypes = oSession['boardt'];
+  g_history = oSession['history'];
+  g_layout = oSession['layout'];
+  g_letpool = oSession['letpool'];
+  g_letscore = oSession['letscore'];
+  g_playlevel = oSession['level'] - 1;
+  g_bui.level = oSession['level'];
+  g_passes = oSession['passes'];
+  g_bui.create('board', g_boardwidth, g_boardheight, g_letscore, g_racksize, g_layout);
+  g_bui.setOpponentRack(oSession['orack']);
+  g_bui.setPlayerRack(oSession['prack']);
+  var html = '<table>';
+  for (var i = 0; i < g_history.length; ++i) {
+    var entry = g_history[i];
+    html += g_bui.renderWordPlayed(entry[0], entry[1]);
+  }
+  html += '</table>';
+  g_bui.hlines = html;
+  el('history').innerHTML = html;
+  el('loscore').textContent = oSession['loscore'];
+  el('oscore').textContent = oSession['oscore'];
+  el('lpscore').textContent = oSession['lpscore'];
+  el('pscore').textContent = oSession['pscore'];
+  g_bui.setTilesLeft(g_letpool.length);
+}
+
 // Main UI logic
 function RedipsUI() {
   var self = this;
@@ -172,7 +216,7 @@ function RedipsUI() {
   self.firstrack = true;
   //self.cellbg = '#e0e0b0';
   self.level = localStorage['level'] || 1; // Playing level
-  self.hlines = '';    // Play hisory lines
+  self.hlines = '';    // Play history lines
   self.hcount = 0;     // Play history count
   self.showOpRack = 1; // 0=hidden, 1=visible
 
@@ -182,16 +226,15 @@ function RedipsUI() {
   };
 
   self.addToHistory = function(words, player) {
+    //console.log('addToHistory', words);
     if (player !== 1 && player !== 2) player = 1;
     player = player - 1;
     ++self.hcount;
     var html = '<table>';
     for (var i = 0; i < words.length; ++i) {
       var word = words[i];
-      html += '<tr class="player-' + player + '">';
-      html += '<td>' + word.toUpperCase() + '</td><td>';
-      html += '<a class="link" title="' + t('Show definition') + '" aria-label="' + t('Show definition') + '" onclick="g_bui.wordInfo(\'' + word + '\')"><img src="pics/info.svg" width="22" height="22" alt=""></a>';
-      html += '</td></tr>';
+      html += self.renderWordPlayed(word, player);
+      g_history.push([word, player]);
     }
     html += '</table>';
     self.hlines += html;
@@ -270,7 +313,7 @@ function RedipsUI() {
       if (rcell.holds === '' && count < divs.length) {
         var div = divs[count++];
         // Joker tile - remove previously selected letter from tile?
-        if (div.holds.points === 0) div.innerHTML = '&nbsp;';
+        if (div.holds.points === 0) div.innerHTML = '&nbsp;&nbsp;';
         rcell.appendChild(div);
         rcell.holds = self.hcopy(div.holds);
       }
@@ -283,9 +326,9 @@ function RedipsUI() {
     }
   };
 
-  self.create = function(iddiv, bx, by, scores, racksize) {
+  self.create = function(iddiv, bx, by, scores, racksize, layout) {
     if (self.created) return;
-    self.boardm = g_boardm.init(bx, by);
+    self.boardm = g_boardm.init(bx, by, layout);
 
     var arrow = '<picture><source type="image/webp" srcset="pics/arrow.webp"><img src="pics/arrow.png" width="22" height="22" alt=""></picture>';
     var hr = '<tr class="ruler"><td colspan="2"></td></tr>';
@@ -306,8 +349,8 @@ function RedipsUI() {
       hr +
       '<tr class="level"><td>' + t('Level:') + '</td><td>' +
       '<span id="level" title="' + t('Computer can score up to ') + g_maxwpoints[g_playlevel] + t(' points per turn') + '">' + (g_playlevel + 1) + '</span>&nbsp;' +
-      '<a class="link up" title="' + t('Increase difficulty') + '" aria-label="' + t('Increase difficulty') + '" onclick="g_bui.levelUp()">' + arrow + '</a>' +
-      '<a class="link down" title="' + t('Decrease difficulty') + '" aria-label="' + t('Decrease difficulty') + '" onclick="g_bui.levelDn()">' + arrow + '</a></td></tr>';
+      '<a class="link up' + (g_board_empty ? '' : ' disabled') + '" title="' + t('Increase difficulty') + '" aria-label="' + t('Increase difficulty') + '" onclick="g_bui.levelUp()">' + arrow + '</a>' +
+      '<a class="link down' + (g_board_empty ? '' : ' disabled') + '" title="' + t('Decrease difficulty') + '" aria-label="' + t('Decrease difficulty') + '" onclick="g_bui.levelDn()">' + arrow + '</a></td></tr>';
 
     var sTileset = g_tilesets.indexOf(g_tileset) > -1 ? g_tileset : t('Default');
     var sSelTileset = '<select title="' + sTileset + '" onchange="setTileset(this)"><option>' + sTileset + '</option>';
@@ -388,16 +431,24 @@ function RedipsUI() {
     var st = self.getStartXY();
     var mults = ['', 'DL', 'TL', 'DW', 'TW'];
     var mult;
+    var cellId;
 
     html += '<table class="board">';
     for (var i = 0; i < by; ++i) {
       html += '<tr>';
       for (var j = 0; j < bx; ++j) {
-        html += '<td id="c' + j + '_' + i + '" ';
-        mult = '';
-        mult = (j === st.x && i === st.y) ? 'ST' : mults[self.boardm[j][i]];
+        cellId = self.boardId + j + '_' + i;
+        html += '<td id="' + cellId + '" ';
+        mult = (j === st.x && i === st.y) ? 'ST' : mults[self.boardm[j][i]] || '';
         if (mult !== '') mult = 'class="' + mult + '"';
-        html += mult + '></td>';
+        html += mult + '>';
+        if (g_board && g_board[j][i]) {
+          html += '<div class="drag t' + g_boardtypes[j][i] + '">' +
+            (g_board[j][i] === ' ' ? '&nbsp;&nbsp;' : g_board[j][i].toUpperCase()) +
+            (g_boardpoints[j][i] ? '<sup><small>' + g_boardpoints[j][i] + '</small></sup>' : '') +
+            '</div>';
+        }
+        html += '</td>';
       }
       html += '</tr>';
     }
@@ -433,8 +484,18 @@ function RedipsUI() {
     }
     for (var i = 0; i < by; ++i) {
       for (var j = 0; j < bx; ++j) {
-        var idc = self.boardId + j + '_' + i;
-        el(idc).holds = '';
+        cellId = self.boardId + j + '_' + i;
+        // Populate holds from saved session?
+        if (g_board && g_board[j][i]) {
+          var holds = {
+            'letter': g_board[j][i],
+            'points': g_boardpoints[j][i]
+          };
+          el(cellId).holds = holds;
+          el(cellId).firstChild.holds = holds;
+        } else {
+          el(cellId).holds = '';
+        }
       }
     }
 
@@ -457,25 +518,33 @@ function RedipsUI() {
   self.getBoard = function() {
     var board = [];
     var boardp = [];
+    var boardt = [];
     for (var x = 0; x < self.bx; ++x) {
       board[x] = [];
       boardp[x] = [];
+      boardt[x] = [];
       for (var y = 0; y < self.by; ++y) {
         var id = self.boardId + x + '_' + y;
         var obj = el(id);
         var letter = '';
         var points = 0;
+        var tiletype = 0;
         if (obj.holds !== '') {
           letter = obj.holds.letter;
           points = obj.holds.points;
         }
+        if (obj && obj.firstChild) {
+          tiletype = +obj.firstChild.classList.contains('t2') + 1;
+        }
         board[x][y] = letter;
         boardp[x][y] = points;
+        boardt[x][y] = tiletype;
       }
     }
     return {
       'board': board,
-      'boardp': boardp
+      'boardp': boardp,
+      'boardt': boardt
     };
   };
 
@@ -543,8 +612,8 @@ function RedipsUI() {
         self.playSound();
         el('clear').textContent = t('Clear');
         el('clear').onclick = onPlayerClear;
-        if (holds && holds.points === 0 // Joker
-          && sc !== self.boardId) {     // Taken from rack to board
+        console.log(holds, self.rd.td.source, self.boardId);
+        if (holds && holds.points === 0) { // Joker
           self.showLettersModal(id);
           return;
         }
@@ -575,6 +644,7 @@ function RedipsUI() {
   };
 
   self.levelDn = function() {
+    if (!g_board_empty) return;
     if (self.level > 1) --self.level;
     el('level').textContent = self.level;
     el('level').title = t('Computer can score up to ') + g_maxwpoints[self.level - 1] + t(' points per turn');
@@ -583,6 +653,7 @@ function RedipsUI() {
   };
 
   self.levelUp = function() {
+    if (!g_board_empty) return;
     if (self.level < g_maxwpoints.length) ++self.level;
     el('level').textContent = self.level;
     el('level').title = t('Computer can score up to ') + g_maxwpoints[self.level - 1] + t(' points per turn');
@@ -612,7 +683,7 @@ function RedipsUI() {
     cell.holds = self.hcopy(holds);
     var html = '';
     //html += '<div class="drag t1">';
-    html += (ltr !== ' ' && ltr !== '*') ? ltr.toUpperCase() : '&nbsp;';
+    html += (ltr !== ' ' && ltr !== '*') ? ltr.toUpperCase() : '&nbsp;&nbsp;';
     //html += '</div>';
     //cell.innerHTML = html;
     var div = cell.firstChild;
@@ -718,12 +789,8 @@ function RedipsUI() {
         orack = orack.replace('*', '_');
         // Expose joker letter value in new rack
         newrack = newrack.replace('*', l);
-        var orcellid = self.oppRackId + jpos;
-        var rcell = el(orcellid);
-        var html = '<div class="drag t2">' + l.toUpperCase();
-        html += '<sup><small>&nbsp;</small></sup>';
-        html += '</div>';
-        rcell.innerHTML = html;
+        l = (l !== ' ') ? l.toUpperCase() : '&nbsp;&nbsp;';
+        el(self.oppRackId + jpos).innerHTML = '<div class="drag t2">' + l + '</div>';
       } else {
         orack = orack.replace(l, '_');
       }
@@ -861,6 +928,13 @@ function RedipsUI() {
     self.racks[pl] = rack.join('');
   };
 
+  self.renderWordPlayed = function(word, player) {
+    return '<tr class="player-' + player + '">' +
+      '<td>' + word.toUpperCase() + '</td><td>' +
+      '<a class="link" title="' + t('Show definition') + '" aria-label="' + t('Show definition') + '" onclick="g_bui.wordInfo(\'' + word + '\')"><img src="pics/info.svg" width="22" height="22" alt=""></a>' +
+      '</td></tr>';
+  }
+
   self.setLetters = function(player, letters) {
     //console.log('setLetters', letters);
     self.racks[player] = letters;
@@ -889,7 +963,7 @@ function RedipsUI() {
           var char = upper.charAt(i);
           html += (char !== ' ' ? char : '&nbsp;&nbsp;') + '<sup><small>' + self.scores[ltr] + '</small></sup>';
         } else {
-          html += '&nbsp;';
+          html += '&nbsp;&nbsp;';
         }
         html += '</div>';
         rcell.innerHTML = html;
@@ -1008,19 +1082,23 @@ function RedipsUI() {
     if (word in g_defs) {
       // Try to get definition locally first
       var html = '<div id="wordresult"><div style="text-align:center"><h1>' + word + '</h1></div>';
-      for (var type in g_defs[word]) {
-        html += '<div class="phanloai">' + (type || '&nbsp;') + '</div>';
-        for (var i = 0, entry; i < g_defs[word][type].length; ++i) {
-          entry = g_defs[word][type][i];
-          html += '<ul class="list1"><li>' + entry['definition'];
-          if (entry['examples']) {
-            for (var j = 0; j < entry['examples'].length; ++j) {
-              for (var example in entry['examples'][j]) {
-                html += '<ul class="list2"><li><span class="example-original">' + example + '</span><br>' + entry['examples'][j][example] + '</li></ul>';
+      if (typeof g_defs[word] === 'string') {
+        html += '<div class="phanloai">&nbsp;</div>' + g_defs[word];
+      } else {
+        for (var type in g_defs[word]) {
+          html += '<div class="phanloai">' + (type || '&nbsp;') + '</div>';
+          for (var i = 0, entry; i < g_defs[word][type].length; ++i) {
+            entry = g_defs[word][type][i];
+            html += '<ul class="list1"><li>' + entry['definition'];
+            if (entry['examples']) {
+              for (var j = 0; j < entry['examples'].length; ++j) {
+                for (var example in entry['examples'][j]) {
+                  html += '<ul class="list2"><li><span class="example-original">' + example + '</span><br>' + entry['examples'][j][example] + '</li></ul>';
+                }
               }
             }
+            html += '</li></ul>';
           }
-          html += '</li></ul>';
         }
       }
       html += '</div>';

@@ -107,7 +107,9 @@ window.onload = function() {
   };
   // Check browser support
   if (g_isSupported) {
-    init('board');
+    // If there is a saved session, load it; otherwise initialize a new board
+    if (localStorage['session']) load(localStorage['session']);
+    else init('board');
     // Close modal by clicking on its shadow
     g_cache['modalMask'].addEventListener('click', closeModal);
     g_cache['modalInner'].addEventListener('click', handleHideModal);
@@ -117,6 +119,7 @@ window.onload = function() {
     el('back').addEventListener('click', hideGameInfo);
     // Fade in
     document.documentElement.classList.replace('loading', 'loaded');
+    document.dispatchEvent(new Event('appReady'));
   } else {
     // Sad faces to randomly show
     var aEmojis = [

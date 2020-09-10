@@ -68,6 +68,7 @@ Corrections and comments are welcome by [sending an email](mailto:feedback@vietb
 - Fixed possibility to swap more tiles than remaining
 - Changed position of Pass button
 - Added Shuffle feature
+- Added saved sessions
 
 ## Dependencies for local build
 
