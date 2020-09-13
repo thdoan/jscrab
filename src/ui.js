@@ -163,9 +163,9 @@ function getSession() {
     'lpscore': el('lpscore').textContent,
     'orack': g_bui.getOpponentRack(),
     'oscore': g_oscore,
-    'passes': g_passes,
     'prack': g_bui.getPlayerRack(),
-    'pscore': g_pscore
+    'pscore': g_pscore,
+    'passes': g_passes
   };
   return JSON.stringify(oSession);
 }
@@ -185,6 +185,7 @@ function load(sSession) {
   g_bui.create('board', g_boardwidth, g_boardheight, g_letscore, g_racksize, g_layout);
   g_bui.setOpponentRack(oSession['orack']);
   g_bui.setPlayerRack(oSession['prack']);
+  g_opponent_has_joker = oSession['orack'].indexOf('*') > -1;
   var html = '<table>';
   for (var i = 0; i < g_history.length; ++i) {
     var entry = g_history[i];
@@ -193,12 +194,10 @@ function load(sSession) {
   html += '</table>';
   g_bui.hlines = html;
   el('history').innerHTML = html;
-  el('loscore').textContent = oSession['loscore'];
-  el('oscore').textContent = oSession['oscore'];
-  el('score-opponent').textContent = oSession['oscore'];
-  el('lpscore').textContent = oSession['lpscore'];
-  el('pscore').textContent = oSession['pscore'];
-  el('score-player').textContent = oSession['pscore'];
+  g_oscore = oSession['oscore'];
+  g_bui.setOpponentScore(oSession['loscore'], g_oscore);
+  g_pscore = oSession['pscore'];
+  g_bui.setPlayerScore(oSession['lpscore'], g_pscore);
   g_bui.setTilesLeft(g_letpool.length);
 }
 
@@ -253,7 +252,6 @@ function RedipsUI() {
       elStatus['updateTimeout'] = setTimeout(function() {
         elStatus.classList.remove('marquee');
         if (player === 0) {
-          el('score-player').textContent = el('pscore').textContent;
           elStatus.textContent = t('You') + ' ' + t('scored ') + el('lpscore').textContent + ' ' + t(' points for ') + words.join(', ').toUpperCase();
           gtag('event', 'Player Move', {
             'event_category': 'Gameplay - Lvl ' + (g_playlevel + 1),
@@ -261,7 +259,6 @@ function RedipsUI() {
             'value': +el('lpscore').textContent
           });
         } else {
-          el('score-opponent').textContent = el('oscore').textContent;
           elStatus.textContent = t('Computer') + ' ' + t('scored ') + el('loscore').textContent + ' ' + t(' points for ') + words.join(', ').toUpperCase();
           gtag('event', 'Computer Move', {
             'event_category': 'Gameplay - Lvl ' + (g_playlevel + 1),
@@ -992,6 +989,7 @@ function RedipsUI() {
   self.setPlayerScore = function(last, total) {
     el('lpscore').textContent = last;
     el('pscore').textContent = total;
+    el('score-player').textContent = total;
   };
 
   self.setOpponentRack = function(letters) {
@@ -1001,6 +999,7 @@ function RedipsUI() {
   self.setOpponentScore = function(last, total) {
     el('loscore').textContent = last;
     el('oscore').textContent = total;
+    el('score-opponent').textContent = total;
   };
 
   self.setTilesLeft = function(left) {
