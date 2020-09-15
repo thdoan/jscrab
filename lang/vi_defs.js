@@ -921,6 +921,13 @@ var g_defs = {
   'ton': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>lon ton</li><li>ton hót</li></ul>',
   'ti': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>ti thể</li><li>li ti</li></ul>',
   'lận': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>gian lận</li><li>lận đận</li><li>biển lận</li></ul>',
+  'bịu': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>bận bịu</li></ul>',
+  'hi': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>hi vọng</li><li>hi sinh</li><li>hi hữu</li></ul>',
+  'xớn': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>xí xớn</li><li>xớn xác</li></ul>',
+  'choi': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>loi choi</li></ul>',
+  'mị': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>mị hoặc</li><li>ủy mị</li></ul>',
+  'huy': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>quốc huy</li><li>huy hoàng</li></ul>',
+  'đản': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>khánh đản</li><li>đản sinh</li></ul>',
   'ba': {
     '': [
       {
@@ -1024,6 +1031,16 @@ var g_defs = {
       }
     ]
   },
+  'lệch': {
+    'adj': [
+      {
+        'definition': 'inclined, sloping, slanting, askew, oblique, lop-sided'
+      },
+      {
+        'definition': 'wrong, not correct'
+      }
+    ]
+  },
   'lở': {
     '': [
       {
@@ -1038,6 +1055,13 @@ var g_defs = {
     'verb': [
       {
         'definition': 'to touch; to interfere with something'
+      }
+    ]
+  },
+  'khú': {
+    'adj': [
+      {
+        'definition': 'pungently sour (like sour cabbage turning bad, or damp clothes)'
       }
     ]
   },
