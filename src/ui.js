@@ -373,11 +373,11 @@ function RedipsUI() {
       '<tr><td>' + t('Tileset:') + '</td><td>' + sSelTileset + '</td></tr>' +
       '<tr><td>' + t('Bonuses layout:') + '</td><td>' + sSelLayout + '</td></tr>' +
       hr +
-      '<tr><td>' + t('Computer&rsquo;s last score:') + '</td><td id="loscore">0</td></tr>' +
-      '<tr class="highlight"><td>' + t('Computer&rsquo;s total score:') + '</td><td id="oscore">0</td></tr>' +
-      hr +
       '<tr><td>' + t('Your last score:') + '</td><td id="lpscore">0</td></tr>' +
       '<tr class="highlight"><td>' + t('Your total score:') + '</td><td id="pscore">0</td></tr>' +
+      hr +
+      '<tr><td>' + t('Computer&rsquo;s last score:') + '</td><td id="loscore">0</td></tr>' +
+      '<tr class="highlight"><td>' + t('Computer&rsquo;s total score:') + '</td><td id="oscore">0</td></tr>' +
       hr;
     if (DEBUG) html += '<tr><td>' + t('Tiles left:') + '</td><td id="tleft"></td></tr>' + hr;
     html +=
@@ -404,11 +404,11 @@ function RedipsUI() {
 
     // Scoreboard
     html = '<table id="scoreboard"><tr>' +
-      '<td id="score-opponent">0</td>' +
+      '<td id="score-player">0</td>' +
       '<td class="spacer"></td>' +
       '<td class="logo"><img src="pics/logo.svg" alt="Vietboard" onload="spinColors(this)"><br><small id="status" onclick="startMarquee(this)">' + t('Tap on score for game info') + '</small></td>' +
       '<td class="spacer"></td>' +
-      '<td id="score-player">0</td></tr></table>';
+      '<td id="score-opponent">0</td></tr></table>';
     html += '<div id="drag">';
 
     //---------------------------

@@ -148,7 +148,9 @@ function announceWinner() {
     else clearInterval(timer);
   }, 100);
 
-  // Update scoreboard also
+  // Update total scores
+  el('oscore').textContent = g_oscore;
+  el('pscore').textContent = g_pscore;
   el('score-opponent').textContent = g_oscore;
   el('score-player').textContent = g_pscore;
 
@@ -1201,6 +1203,8 @@ function onPlayerMove() {
     } else {
       g_bui.prompt(t('I pass, your turn.'));
       g_bui.makeTilesFixed();
+      // Save session
+      localStorage['session'] = getSession();
     }
 
     return;
