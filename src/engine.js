@@ -148,9 +148,9 @@ function announceWinner() {
     else clearInterval(timer);
   }, 100);
 
-  // Update game info column also
-  el('oscore').textContent = g_oscore;
-  el('pscore').textContent = g_pscore;
+  // Update scoreboard also
+  el('score-opponent').textContent = g_oscore;
+  el('score-player').textContent = g_pscore;
 
   // Clear session
   localStorage.removeItem('session');
