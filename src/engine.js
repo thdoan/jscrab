@@ -155,7 +155,7 @@ function announceWinner() {
   if (g_oscore > g_pscore) msg = '<h3 class="opponent">' + t('Computer wins.');
   else if (g_oscore < g_pscore) msg = '<h3 class="player">' + t('You win!');
   html += msg + '</h3>';
-  g_bui.prompt(html, '<button class="button" onclick="location.reload()">' + t('Play Again') + '</button>', 'gameover wide');
+  g_bui.prompt(html, '<button class="button" onclick="hideModal();g_bui.restart()">' + t('Play Again') + '</button>', 'gameover wide');
   var timer = setInterval(function() {
     var tile = el('#gameover td:not(.on)');
     if (tile) el('#gameover td:not(.on)').classList.add('on');

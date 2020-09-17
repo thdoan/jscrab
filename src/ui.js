@@ -337,7 +337,7 @@ function RedipsUI() {
 
     g_cache['html'].miscBtns =
       '<button id="highscores" class="button secondary disabled" title="' + t('High Scores') + '" onclick="g_bui.showHighScores()"><img src="pics/highscores.svg" alt="' + t('High Scores') + '"></button>' +
-      '<button id="restart" class="button secondary" title="' + t('Restart') + '" onclick="g_bui.restart()"><img src="pics/restart.svg" alt="' + t('Restart') + '"></button>';
+      '<button id="restart" class="button secondary" title="' + t('Restart') + '" onclick="g_bui.restart();if(g_isMobile)hideGameInfo()"><img src="pics/restart.svg" alt="' + t('Restart') + '"></button>';
 
     // Gameboard
     var html = '<div id="board" class="human-computer"></div>';
@@ -942,7 +942,6 @@ function RedipsUI() {
     localStorage.removeItem('session');
     g_bui = new RedipsUI();
     init('board');
-    if (g_isMobile) hideGameInfo();
   };
 
   self.setLetters = function(player, letters) {
