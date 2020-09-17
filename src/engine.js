@@ -1113,6 +1113,7 @@ function onPlayerMove() {
       g_board_empty = false;
       el('a.link.up').classList.add('disabled');
       el('a.link.down').classList.add('disabled');
+      el('bonuseslayout').disabled = true;
     }
     // Reset consecutive passes
     g_passes = 0;
@@ -1355,6 +1356,7 @@ function placeOnBoard(word, animCallback) {
     g_board_empty = false;
     el('a.link.up').classList.add('disabled');
     el('a.link.down').classList.add('disabled');
+    el('bonuseslayout').disabled = true;
   }
 }
 

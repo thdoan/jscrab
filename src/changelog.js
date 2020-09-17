@@ -1,4 +1,4 @@
-const VER = '1.27';
+const VER = '1.28';
 
 function showWhatsNew() {
   g_bui.prompt(
@@ -6,6 +6,7 @@ function showWhatsNew() {
     '<ul>' +
     '<li>Added restart button</li>' +
     '<li>Replaced top button text with icon</li>' +
+    '<li>Fixed not being able to change bonuses layout</li>' +
     '</ul>'
   );
 }

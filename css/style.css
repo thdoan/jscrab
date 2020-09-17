@@ -76,7 +76,8 @@ picture {
 }
 a.link.disabled,
 .button.disabled,
-.button[disabled] {
+.button[disabled],
+select[disabled] {
   cursor: default;
   -webkit-filter: grayscale(1);
   filter: grayscale(1);

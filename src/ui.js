@@ -84,17 +84,12 @@ function setLang(sLang) {
 
 // Set bonuses layout
 function setLayout(elSelect) {
-  var bConfirm = confirm(t('This will restart the game.'));
-  if (bConfirm) {
-    localStorage['layout'] = elSelect.value;
-    // GA
-    gtag('event', elSelect.value, {
-      'event_category': 'Bonuses Layout'
-    });
-    location.reload();
-  } else {
-    elSelect.selectedIndex = 0;
-  }
+  localStorage['layout'] = elSelect.value;
+  // GA
+  gtag('event', elSelect.value, {
+    'event_category': 'Bonuses Layout'
+  });
+  location.reload();
 }
 
 // Set tileset
@@ -366,7 +361,7 @@ function RedipsUI() {
     sSelTileset += '</select>';
 
     var sLayout = g_layouts.indexOf(g_layout) > -1 ? g_layout : t('Default');
-    var sSelLayout = '<select title="' + sLayout + '" onchange="setLayout(this)"><option>' + sLayout + '</option>';
+    var sSelLayout = '<select id="bonuseslayout" title="' + sLayout + '" onchange="setLayout(this)"' + (g_board_empty ? '' : ' disabled') + '><option>' + sLayout + '</option>';
     if (sLayout !== t('Default')) sSelLayout += '<option value="default">' + t('Default') + '</option>';
     for (var i = 0; i < g_layouts.length; ++i) {
       if (g_layouts[i] === sLayout) continue;
