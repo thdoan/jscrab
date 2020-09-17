@@ -10,6 +10,8 @@ var g_defs = {
   'băn': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>băn khoăn</li></ul>',
   'bằn': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>bằn bặt</li></ul>',
   'bặn': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>bằng bặn</li></ul>',
+  'bân': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>rét nàng bân</li></ul>',
+  'bẵm': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>chăm bẵm</li></ul>',
   'bâng': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>bâng khuâng</li></ul>',
   'bắng': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>bắng nhắng</li></ul>',
   'bấp': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>bấp bênh</li></ul>',
@@ -39,7 +41,6 @@ var g_defs = {
   'bửu': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>bát bửu</li></ul>',
   'cẫn': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>lẫn cẫn</li></ul>',
   'cẳn': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>cấm cẳn</li></ul>',
-  'cằng': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>cằng chân</li></ul>',
   'càu': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>càu nhàu</li><li>càu cạu</li></ul>',
   'cảu': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>cau cảu</li><li>cấm cảu</li></ul>',
   'cạu': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>càu cạu</li></ul>',
@@ -743,6 +744,8 @@ var g_defs = {
   'tẻo': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>tẻo teo</li></ul>',
   'tẹp': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>tẹp nhẹp</li></ul>',
   'têu': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>đầu têu</li></ul>',
+  'tễu': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>chú tễu</li></ul>',
+  'tều': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>môi tều</li></ul>',
   'thắc': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>thắc mắc</li></ul>',
   'thạc': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>thạc sĩ</li></ul>',
   'thãi': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>thừa thãi</li></ul>',
@@ -1055,6 +1058,13 @@ var g_defs = {
     'verb': [
       {
         'definition': 'to touch; to interfere with something'
+      }
+    ]
+  },
+  'chăm bẵm': {
+    'verb': [
+      {
+        'definition': 'to take care'
       }
     ]
   },
