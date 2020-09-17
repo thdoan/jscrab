@@ -27,14 +27,6 @@ function handleKeyDown(e) {
   if (e.key === 'Escape') closeModal();
 }
 
-// Toggle game info screen on mobile
-function showGameInfo() {
-  document.documentElement.classList.add('gameinfo');
-}
-function hideGameInfo() {
-  document.documentElement.classList.remove('gameinfo');
-}
-
 // Cycle through icon/logo colors
 function spinColors(elImg) {
   var nTick = 0;
@@ -113,10 +105,6 @@ window.onload = function() {
     // Close modal by clicking on its shadow
     g_cache['modalMask'].addEventListener('click', closeModal);
     g_cache['modalInner'].addEventListener('click', handleHideModal);
-    // Toggle game info (mobile)
-    el('score-opponent').addEventListener('click', showGameInfo);
-    el('score-player').addEventListener('click', showGameInfo);
-    el('back').addEventListener('click', hideGameInfo);
     // Fade in
     document.documentElement.classList.replace('loading', 'loaded');
     document.dispatchEvent(new Event('appReady'));

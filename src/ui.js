@@ -102,6 +102,14 @@ function setTileset(elSelect) {
   location.reload();
 }
 
+// Toggle game info screen on mobile
+function showGameInfo() {
+  document.documentElement.classList.add('gameinfo');
+}
+function hideGameInfo() {
+  document.documentElement.classList.remove('gameinfo');
+}
+
 // Modal functions
 function showModal(sHtml, sClass) {
   if (sClass) g_cache['modalContainer'].className = sClass;
@@ -503,6 +511,11 @@ function RedipsUI() {
     // Initialize REDIPS framework
     self.rd = REDIPS.drag;
     self.initRedips();
+
+    // Toggle game info (mobile)
+    el('score-opponent').addEventListener('click', showGameInfo);
+    el('score-player').addEventListener('click', showGameInfo);
+    el('back').addEventListener('click', hideGameInfo);
   };
 
   self.fixPlayerTiles = function() {
@@ -1017,7 +1030,7 @@ function RedipsUI() {
   };
 
   self.showHighScores = function() {
-    alert('Coming soon...');
+    alert('High Scores coming soon!');
   };
 
   self.showLettersModal = function(bdropCellId) {
