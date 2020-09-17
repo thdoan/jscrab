@@ -6,6 +6,7 @@ set target=play
 REM Set timestamp
 set timestamp=%time%
 set timestamp=%timestamp:~0,2%%timestamp:~3,2%%timestamp:~6,2%
+set timestamp=%timestamp: =%
 REM Move files to temp directory to search & replace
 xcopy /iy src %temp%\vietboard\src
 REM Comment out debugging stuff; space required before "//" to work around this bug:
@@ -16,7 +17,7 @@ fart %temp%\vietboard\src\*.js "console.log" " //console.log"
 REM Build (minify and concatenate)
 AjaxMin.exe -clobber css\style.css -out %target%\css\styles.min.css
 AjaxMin.exe -inline:no -clobber -term lang\vi_wordlist.js lang\vi_defs.js lang\vi_letters.js -out %target%\js\lang.min.js
-AjaxMin.exe -inline:no -clobber -term %temp%\vietboard\src\redipsdrag.js %temp%\vietboard\src\bonuses.js %temp%\vietboard\src\ui.js %temp%\vietboard\src\engine.js %temp%\vietboard\src\events.js %temp%\vietboard\src\changelog.js -out %target%\js\app.min.js
+AjaxMin.exe -inline:no -clobber -ignore:JS1300 -term %temp%\vietboard\src\redipsdrag.js %temp%\vietboard\src\bonuses.js %temp%\vietboard\src\ui.js %temp%\vietboard\src\engine.js %temp%\vietboard\src\events.js %temp%\vietboard\src\changelog.js -out %target%\js\app.min.js
 REM Deploy
 copy /y index.html %target%
 xcopy /y lang\en_translate.js %target%\lang\
