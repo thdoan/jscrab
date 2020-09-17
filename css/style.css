@@ -23,10 +23,10 @@ html.loading:after {
   transform: translate(-50%, -50%);
 }
 html.loaded {
-  -webkit-animation: fade-in 0.3s forwards;
-  animation: fade-in 0.3s forwards;
+  -webkit-animation: reveal 0.3s forwards;
+  animation: reveal 0.3s forwards;
 }
-@keyframes fade-in {
+@keyframes reveal {
   from { background-color: #fff; }
   to { background-color: #d8be7f; }
 }
@@ -143,6 +143,16 @@ html.loaded #app {
 }
 #app > table {
   margin: 0 auto;
+}
+
+footer img,
+picture img {
+  -webkit-animation: fade-in 1s forwards;
+  animation: fade-in 1s forwards;
+}
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 /*** Buttons ***/
@@ -343,7 +353,7 @@ table.board td:after,
   position: absolute;
   top: 50%;
   left: 4px;
-  width: 50%;
+  width: 51%;
   margin: 0;
   transform: translateY(-50%);
 }
@@ -351,7 +361,16 @@ table.board td:after,
   display: block;
 }
 #drag .opponent .button {
-  width: 45%;
+  width: 21%;
+}
+
+#highscores img {
+  width: 100%;
+  max-height: 15px;
+}
+#restart img {
+  width: 50%;
+  max-height: 18px;
 }
 
 #drag .button {
@@ -517,12 +536,13 @@ table.board td .drag,
   background: #3a3a3a;
   display: none;
 }
-#score header img {
+#score header > img {
   position: absolute;
   top: 8px;
   right: 8px;
 }
 #score header .button {
+  width: 20%;
   height: 32px;
   margin: 8px;
   padding-left: 5%;

@@ -82,7 +82,7 @@ function toggleMobile() {
       // Insert desktop logo
       var elCell = document.createElement('td');
       elCell.className = 'mark';
-      elCell.innerHTML = g_cache['html'].oppcta;
+      elCell.innerHTML = g_cache['html'].h1;
       el('#drag .opponent tr').insertBefore(elCell, el('op0'));
       // Move player rack up
       el('#drag .player tr:first-child').appendChild(elPlayerButtons);

@@ -24,17 +24,18 @@ var g_board;                    // Letters on board
 var g_boardpoints;              // Points on board
 var g_boardtypes;               // Tile type (1=player, 2=computer)
 var g_boardmults;               // Board bonus multipliers (DL, TL, DW, TW)
-var g_letpool = [];             // Letter pool
-var g_letscore = {};            // Score for each letter
-var g_matches_cache = {};       // To speed up
-var g_pscore = 0;               // Player score
-var g_oscore = 0;               // Opponent (computer) score
-var g_board_empty = true;       // First move flag
-var g_passes = 0;               // Number of consecutive passes
+var g_letpool;                  // Letter pool
+var g_letscore;                 // Score for each letter
+var g_matches_cache;            // To speed up regex matches
+var g_pscore;                   // Player score
+var g_oscore;                   // Opponent (computer) score
+var g_passes;                   // Number of consecutive passes
+var g_board_empty;              // First move flag
+var g_opponent_has_joker;       // Optimization flag if computer has joker tile
+
 var g_maxpasses = 2;            // Maximum number of consecutive passes
 var g_lmults = [1, 2, 3, 1, 1]; // Letter multipliers by index
 var g_wmults = [1, 1, 1, 2, 3]; // Word multipliers by index
-var g_opponent_has_joker;       // Optimization flag if computer has joker tile
 var g_allLettersBonus = 50;     // Bonus when all letters in rack are played
 
 // Computer play level
@@ -63,7 +64,7 @@ var g_wstr = [];
 var g_def;
 
 // Words played
-var g_history = [];
+var g_history;
 
 // Cached elements
 var g_cache;
@@ -88,6 +89,19 @@ var gErrPrefix = function() {
 
 //------------------------------------------------------------------------------
 function init(iddiv) {
+  // Reset
+  g_board = [];
+  g_boardpoints = [];
+  g_boardtypes = [];
+  g_letpool = [];
+  g_letscore = {};
+  g_matches_cache = {};
+  g_pscore = 0;
+  g_oscore = 0;
+  g_passes = 0;
+  g_board_empty = true;
+  g_history = [];
+
   // Put all the letters in the pool
   var numalpha = g_letters.length;
   for (var i = 0; i < numalpha; ++i) {

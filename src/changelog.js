@@ -1,12 +1,11 @@
-const VER = '1.25';
+const VER = '1.27';
 
 function showWhatsNew() {
   g_bui.prompt(
     '<h3>What\'s New</h3>' +
     '<ul>' +
-    '<li>Fixed mobile scoreboard not updated on game over</li>' +
-    '<li>Now showing player score first</li>' +
-    '<li>Fixed session not saved if computer passes</li>' +
+    '<li>Added restart button</li>' +
+    '<li>Replaced top button text with icon</li>' +
     '</ul>'
   );
 }

@@ -69,6 +69,7 @@ Corrections and comments are welcome by [sending an email](mailto:feedback@vietb
 - Changed position of Pass button
 - Added Shuffle feature
 - Added saved sessions
+- Added high scores feature
 
 ## Dependencies for local build
 

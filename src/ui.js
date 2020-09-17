@@ -154,6 +154,7 @@ function getSession() {
     'board': g_board,
     'boardp': g_boardpoints,
     'boardt': g_boardtypes,
+    'hcount': g_bui.hcount,
     'history': g_history,
     'layout': g_layout,
     'letpool': g_letpool,
@@ -171,7 +172,6 @@ function getSession() {
 }
 function load(sSession) {
   var oSession = JSON.parse(sSession);
-  g_board_empty = false;
   g_board = oSession['board'];
   g_boardpoints = oSession['boardp'];
   g_boardtypes = oSession['boardt'];
@@ -185,6 +185,8 @@ function load(sSession) {
   g_bui.create('board', g_boardwidth, g_boardheight, g_letscore, g_racksize, g_layout);
   g_bui.setOpponentRack(oSession['orack']);
   g_bui.setPlayerRack(oSession['prack']);
+  g_matches_cache = {};
+  g_board_empty = false;
   g_opponent_has_joker = oSession['orack'].indexOf('*') > -1;
   var html = '<table>';
   for (var i = 0; i < g_history.length; ++i) {
@@ -192,8 +194,9 @@ function load(sSession) {
     html += g_bui.renderWordPlayed(entry[0], entry[1]);
   }
   html += '</table>';
-  g_bui.hlines = html;
   el('history').innerHTML = html;
+  g_bui.hlines = html;
+  g_bui.hcount = oSession['hcount'];
   g_oscore = oSession['oscore'];
   g_bui.setOpponentScore(oSession['loscore'], g_oscore);
   g_pscore = oSession['pscore'];
@@ -332,7 +335,9 @@ function RedipsUI() {
     var arrow = '<picture><source type="image/webp" srcset="pics/arrow.webp"><img src="pics/arrow.png" width="22" height="22" alt=""></picture>';
     var hr = '<tr class="ruler"><td colspan="2"></td></tr>';
 
-    g_cache['html'].hs = '<button class="button secondary disabled" title="Coming soon..." onclick="g_bui.showHighScores()">' + t('High Scores') + '</button>';
+    g_cache['html'].miscBtns =
+      '<button id="highscores" class="button secondary disabled" title="' + t('High Scores') + '" onclick="g_bui.showHighScores()"><img src="pics/highscores.svg" alt="' + t('High Scores') + '"></button>' +
+      '<button id="restart" class="button secondary" title="' + t('Restart') + '" onclick="g_bui.restart()"><img src="pics/restart.svg" alt="' + t('Restart') + '"></button>';
 
     // Gameboard
     var html = '<div id="board" class="human-computer"></div>';
@@ -340,7 +345,7 @@ function RedipsUI() {
     html +=
       '<div id="score"><div class="container"><header>' +
       '<button id="back"><svg version="1.1" viewBox="0 0 414.5 414.5" xmlns="http://www.w3.org/2000/svg"><polygon points="324.7 28.238 296.37 0 89.796 207.25 296.37 414.5 324.7 386.26 146.27 207.25" fill="currentColor"/></svg></button>' +
-      g_cache['html'].hs +
+      g_cache['html'].miscBtns +
       '<img src="pics/icon.svg" width="32" height="32" alt="Vietboard"></header>' +
       '<h2>' + t('Words Played') + '</h2>' +
       '<div id="history"></div>' +
@@ -399,8 +404,7 @@ function RedipsUI() {
     self.bx = bx;
     self.by = by;
 
-    g_cache['html'].logo = '<img src="pics/logo.svg" alt="Vietboard" onload="spinColors(this)">';
-    g_cache['html'].oppcta = g_cache['html'].hs + '<h1>' + g_cache['html'].logo + '</h1>';
+    g_cache['html'].h1 = '<h1><img src="pics/logo.svg" alt="Vietboard" onload="spinColors(this)"></h1>' + g_cache['html'].miscBtns;
 
     // Scoreboard
     html = '<table id="scoreboard"><tr>' +
@@ -417,7 +421,7 @@ function RedipsUI() {
     if (!g_isMobile) {
       html += '<td class="mark">' +
         //'<button id="toggle" class="button secondary" onclick="g_bui.toggleORV()"></button>' +
-        g_cache['html'].oppcta +
+        g_cache['html'].h1 +
         '</td>';
     }
     for (var i = 0; i < racksize; ++i) {
@@ -441,7 +445,7 @@ function RedipsUI() {
         mult = (j === st.x && i === st.y) ? 'ST' : mults[self.boardm[j][i]] || '';
         if (mult !== '') mult = 'class="' + mult + '"';
         html += mult + '>';
-        if (g_board && g_board[j][i]) {
+        if (g_board[j] && g_board[j][i]) {
           html += '<div class="drag t' + g_boardtypes[j][i] + '">' +
             (g_board[j][i] === ' ' ? '&nbsp;&nbsp;' : g_board[j][i].toUpperCase()) +
             (g_boardpoints[j][i] ? '<sup><small>' + g_boardpoints[j][i] + '</small></sup>' : '') +
@@ -485,7 +489,7 @@ function RedipsUI() {
       for (var j = 0; j < bx; ++j) {
         cellId = self.boardId + j + '_' + i;
         // Populate holds from saved session?
-        if (g_board && g_board[j][i]) {
+        if (g_board[j] && g_board[j][i]) {
           var holds = {
             'letter': g_board[j][i],
             'points': g_boardpoints[j][i]
@@ -934,6 +938,13 @@ function RedipsUI() {
       '</td></tr>';
   }
 
+  self.restart = function() {
+    localStorage.removeItem('session');
+    g_bui = new RedipsUI();
+    init('board');
+    if (g_isMobile) hideGameInfo();
+  };
+
   self.setLetters = function(player, letters) {
     //console.log('setLetters', letters);
     self.racks[player] = letters;
@@ -1013,7 +1024,7 @@ function RedipsUI() {
 
   self.showHighScores = function() {
     alert('Coming soon...');
-  }
+  };
 
   self.showLettersModal = function(bdropCellId) {
     self.bdropCellId = bdropCellId;
