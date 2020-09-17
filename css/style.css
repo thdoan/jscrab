@@ -565,6 +565,7 @@ table.board td .drag,
   text-align: right;
 }
 #score table.gameinfo td:first-child { /* Opponent */
+  width: 57%;
   padding-left: 2%;
   white-space: nowrap;
 }
