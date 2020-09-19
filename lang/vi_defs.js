@@ -931,6 +931,8 @@ var g_defs = {
   'mị': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>mị hoặc</li><li>ủy mị</li></ul>',
   'huy': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>quốc huy</li><li>huy hoàng</li></ul>',
   'đản': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>khánh đản</li><li>đản sinh</li></ul>',
+  'thé': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>the thé</li></ul>',
+  'hý': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>hý họa</li><li>hý kịch</li></ul>',
   'ba': {
     '': [
       {
@@ -1079,6 +1081,13 @@ var g_defs = {
     'verb': [
       {
         'definition': 'to collect; to gather'
+      }
+    ]
+  },
+  'ché': {
+    'noun': [
+      {
+        'definition': 'small jar'
       }
     ]
   },
