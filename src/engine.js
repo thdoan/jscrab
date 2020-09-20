@@ -1185,9 +1185,8 @@ function onPlayerMove() {
     g_bui.removeFromOpponenentRack(letters_used);
 
     // Get letters from pool as number of missing letters
-    var letters_left = g_bui.getOpponentRack();
-    if (DEBUG) console.log('Opponent rack left with: ' + letters_left);
-    var newLetters = takeLetters(letters_left);
+    if (DEBUG) console.log('Opponent rack left with: ' + g_bui.getOpponentRack());
+    var newLetters = takeLetters(g_bui.getOpponentRack());
     if (newLetters === '') {
       // All tiles taken, nothing left in tile pool
       announceWinner();
@@ -1219,10 +1218,9 @@ function onPlayerMove() {
     } else {
       // Swap up to four random tiles
       if (g_letpool.length > 0) {
-        var letters_left = g_bui.getOpponentRack();
-        var tilesToSwap = Math.min(Math.ceil(g_racksize / 2), letters_left.length, g_letpool.length);
+        var tilesToSwap = Math.min(Math.ceil(g_racksize / 2), ostr.length, g_letpool.length);
         // Shuffle rack
-        var _a = letters_left.split('');
+        var _a = ostr.split('');
         var _tmp;
         for (var i = _a.length - 1, j; i > 0; --i) {
           j = Math.floor(Math.random() * (i + 1));
@@ -1230,9 +1228,9 @@ function onPlayerMove() {
           _a[i] = _a[j];
           _a[j] = _tmp;
         }
-        letters_left = _a.join('');
-        var keep = letters_left.slice(tilesToSwap);
-        var swap = letters_left.substr(0, tilesToSwap);
+        ostr = _a.join('');
+        var keep = ostr.slice(tilesToSwap);
+        var swap = ostr.substr(0, tilesToSwap);
         // Put swapped letters back into the bag
         for (var i = 0; i < swap.length; ++i) {
           g_letpool.push(swap.charAt(i));
@@ -1240,7 +1238,7 @@ function onPlayerMove() {
         // Shake the bag
         shufflePool();
         g_bui.setOpponentRack(takeLetters(keep));
-        if (DEBUG) console.log('Opponent swapped: ' + swap + '\nOpponent rack has: ' + g_bui.getOpponentRack());
+        if (DEBUG) console.log('Opponent swapped: ' + swap);
       }
       g_bui.prompt(t('I pass, your turn.'));
       g_bui.makeTilesFixed();
