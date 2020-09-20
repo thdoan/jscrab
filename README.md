@@ -69,7 +69,9 @@ Corrections and comments are welcome by [sending an email](mailto:feedback@vietb
 - Changed position of Pass button
 - Added Shuffle feature
 - Added saved sessions
-- Added high scores feature
+- Added Restart button
+- Enhanced computer AI so it swaps instead of passes
+
 
 ## Dependencies for local build
 

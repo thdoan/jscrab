@@ -1,13 +1,10 @@
-const VER = '1.29';
+const VER = '1.30';
 
 function showWhatsNew() {
   g_bui.prompt(
     '<h3>What\'s New</h3>' +
     '<ul>' +
-    '<li>Added restart button</li>' +
-    '<li>Replaced top button text with icon</li>' +
-    '<li>Fixed not being able to change bonuses layout</li>' +
-    '<li>Fixed game info left column width changes after first move</li>' +
+    '<li>Enhanced computer AI so it swaps instead of passes</li>' +
     '</ul>'
   );
 }

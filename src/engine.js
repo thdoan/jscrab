@@ -33,7 +33,7 @@ var g_passes;                   // Number of consecutive passes
 var g_board_empty;              // First move flag
 var g_opponent_has_joker;       // Optimization flag if computer has joker tile
 
-var g_maxpasses = 2;            // Maximum number of consecutive passes
+var g_maxpasses = 3;            // Maximum number of consecutive passes
 var g_lmults = [1, 2, 3, 1, 1]; // Letter multipliers by index
 var g_wmults = [1, 1, 1, 2, 3]; // Word multipliers by index
 var g_allLettersBonus = 50;     // Bonus when all letters in rack are played
@@ -1206,18 +1206,45 @@ function onPlayerMove() {
     g_passes = 0; // Reset consecutive opponent passes
   } else {
     // GA
-    gtag('event', 'Computer Pass', {
+    gtag('event', 'Computer ' + (g_letpool.length === 0 ? 'Pass' : 'Swap'), {
       'event_category': 'Gameplay - Lvl ' + (g_playlevel + 1),
       'event_label': '[' + g_bui.getOpponentRack() + ']',
       'value': g_letpool.length
     });
 
     ++g_passes; // Increase consecutive opponent passes
+
     if (g_passes >= g_maxpasses) {
       announceWinner();
     } else {
+      // Swap up to four random tiles
+      if (g_letpool.length > 0) {
+        var letters_left = g_bui.getOpponentRack();
+        var tilesToSwap = Math.min(Math.ceil(g_racksize / 2), letters_left.length, g_letpool.length);
+        // Shuffle rack
+        var _a = letters_left.split('');
+        var _tmp;
+        for (var i = _a.length - 1, j; i > 0; --i) {
+          j = Math.floor(Math.random() * (i + 1));
+          _tmp = _a[i];
+          _a[i] = _a[j];
+          _a[j] = _tmp;
+        }
+        letters_left = _a.join('');
+        var keep = letters_left.slice(tilesToSwap);
+        var swap = letters_left.substr(0, tilesToSwap);
+        // Put swapped letters back into the bag
+        for (var i = 0; i < swap.length; ++i) {
+          g_letpool.push(swap.charAt(i));
+        }
+        // Shake the bag
+        shufflePool();
+        g_bui.setOpponentRack(takeLetters(keep));
+        if (DEBUG) console.log('Opponent swapped: ' + swap + '\nOpponent rack has: ' + g_bui.getOpponentRack());
+      }
       g_bui.prompt(t('I pass, your turn.'));
       g_bui.makeTilesFixed();
+      el('pass').disabled = false;
       // Save session
       localStorage['session'] = getSession();
     }
