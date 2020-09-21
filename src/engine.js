@@ -442,19 +442,23 @@ function findBestWord(letters, ax, ay, dirs) {
         threshold = randFloat(95, 100, 16);
         break;
     }
-    if (Math.random() > threshold / 100) continue;
+    if (DEBUG) console.log('Computer has ' + (100 - threshold) + '% chance to skip findBestWord iteration: letters=' + letters.join('') + ', x=' + ax + ', y=' + ay + ', dir=' + dirs[dir]);
+    if (Math.random() > threshold / 100) {
+      if (DEBUG) console.log('findBestWord skipped for the iteration above');
+      continue;
+    }
     var xy = dirs[dir];
     var regex = getRegex(xy, ax, ay, letters.join(''));
-    //console.log('findBestWord', 'ax=' + ax, 'ay=' + ay, 'xy=' + xy, 'regex=' + ((regex && regex.rgx) || null));
+    if (DEBUG && regex && regex.rgx) console.log('Match pattern: ' + regex.rgx);
     if (regex !== null) {
       var word = getBestScore(regex, letters, ax, ay);
       if (word.score > bestscore) {
         bestscore = word.score;
         bestword = word;
+        if (DEBUG) console.log('Best word candidate: ' + word.word + ' (score=' + word.score + ', x=' + word.ax + ', y=' + word.ay + ', dir=' + word.xy + ')');
       }
     }
   }
-  //console.log('Best word:', bestword);
   return bestword;
 }
 
@@ -1238,7 +1242,7 @@ function onPlayerMove() {
         // Shake the bag
         shufflePool();
         g_bui.setOpponentRack(takeLetters(keep));
-        if (DEBUG) console.log('Opponent swapped: ' + swap);
+        if (DEBUG) console.log('Opponent swapped ' + swap + ' for ' + g_bui.getOpponentRack().slice(-1 * tilesToSwap));
       }
       g_bui.prompt(t('I pass, your turn.'));
       g_bui.makeTilesFixed();

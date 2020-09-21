@@ -784,7 +784,7 @@ function RedipsUI() {
     // been determined.
     var newrack = orack;
     var dlet = {};
-    if (DEBUG) console.log('Placements:', placements);
+    //if (DEBUG) console.log('Placements:', placements);
     for (var i = 0; i < placements.length; ++i) {
       var placement = placements[i];
       var l = placement.ltr;
@@ -807,7 +807,7 @@ function RedipsUI() {
       }
     }
 
-    if (DEBUG) console.log('Dictionary of letter arrays:', dlet);
+    //if (DEBUG) console.log('Dictionary of letter arrays:', dlet);
 
     // Go over each letter in the current opponent rack each time a letter
     // exists in the move dictionary (dlet), animate it to its position on
