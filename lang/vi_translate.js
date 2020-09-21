@@ -22,6 +22,7 @@ var translation_map = {
   'Hide computer&rsquo;s rack': 'Giấu khay chữ của máy',
   'High Scores': 'Bảng ghi điểm',
   'I pass, your turn.': 'Tôi bỏ lượt, đến lượt của bạn.',
+  'I swap, your turn.': 'Tôi đổi chữ, đến lượt của bạn.',
   'Increase difficulty': 'Tăng độ khó',
   'It&rsquo;s a tie!': 'Hòa!',
   'Level:': 'Cấp độ:',

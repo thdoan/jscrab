@@ -1221,6 +1221,7 @@ function onPlayerMove() {
       announceWinner();
     } else {
       // Swap up to four random tiles
+      g_bui.makeTilesFixed();
       if (g_letpool.length > 0) {
         var tilesToSwap = Math.min(Math.ceil(g_racksize / 2), ostr.length, g_letpool.length);
         // Shuffle rack
@@ -1242,10 +1243,11 @@ function onPlayerMove() {
         // Shake the bag
         shufflePool();
         g_bui.setOpponentRack(takeLetters(keep));
+        g_bui.prompt(t('I swap, your turn.'));
         if (DEBUG) console.log('Opponent swapped ' + swap + ' for ' + g_bui.getOpponentRack().slice(-1 * tilesToSwap));
+      } else {
+        g_bui.prompt(t('I pass, your turn.'));
       }
-      g_bui.prompt(t('I pass, your turn.'));
-      g_bui.makeTilesFixed();
       el('pass').disabled = false;
       // Save session
       localStorage['session'] = getSession();
