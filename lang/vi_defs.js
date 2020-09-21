@@ -933,6 +933,7 @@ var g_defs = {
   'đản': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>khánh đản</li><li>đản sinh</li></ul>',
   'thé': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>the thé</li></ul>',
   'hý': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>hý họa</li><li>hý kịch</li></ul>',
+  'sã': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>suồng sã</li><li>sã cánh</li></ul>',
   'ba': {
     '': [
       {
