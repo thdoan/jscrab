@@ -889,7 +889,7 @@ function getRegex(dir, ax, ay, rack) {
       }
 
       ++blanks;
-      if (letters === numlets) break;
+      if (letters === numlets - 1) break;
       ++letters;
     } else {
       if (blanks > 0) {
