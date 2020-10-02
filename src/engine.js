@@ -893,20 +893,20 @@ function getRegex(dir, ax, ay, rack) {
       ++letters;
     } else {
       if (blanks > 0) {
+        if (regex !== '_') regex2 += '|' + regex + mwe;
         regex += '(' + letrange;
         if (blanks > 1) {
-          // If there are letters before the anchor position and two
-          // or more free spaces, we can add another match for a
-          // shorter word without the connecting to additional letters
-          // in same line on board. For example,
+          // If there are two or more free spaces, we can add another
+          // match for a shorter word without the connecting to
+          // additional letters in same line on board. For example,
           //
           // ..ad..sing (two blanks after d)
           //
           // should make it possible to find ..adD.sing and also
-          // ..adVIsing, so the search should match _ad([a-z]{1})_  or
+          // ..adVIsing, so the search should match _ad([a-z]{1})_ or
           // _ad([a-z]{2})sing_
-          if (prev !== '') {
-            regex2 = '|' + regex;
+          if (p !== ap + blanks) {
+            regex2 += '|' + regex;
             if (blanks > 2) regex2 += '{1,' + (blanks - 1) + '}';
             regex2 += ')' + mwe;
           }
