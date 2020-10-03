@@ -906,7 +906,7 @@ function getRegex(dir, ax, ay, rack) {
           // ..adVIsing, so the search should match _ad([a-z]{1})_ or
           // _ad([a-z]{2})sing_
           if (p === ap + blanks) {
-            if (blanks > 2 && prev !== '') regex2 += '|' + regex + '{1,' + (blanks - 1) + '})' + mwe;
+            if (prev !== '') regex2 += '|' + regex + (blanks > 2 ? '{1,' + (blanks - 1) + '}' : '') + ')' + mwe;
           } else {
             regex2 += '|' + regex;
             if (blanks > 2) regex2 += '{1,' + (blanks - 1) + '}';
