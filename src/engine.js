@@ -893,7 +893,7 @@ function getRegex(dir, ax, ay, rack) {
       ++letters;
     } else {
       if (blanks > 0) {
-        if (regex !== '_') regex2 += '|' + regex + mwe;
+        if (regex.indexOf('(') > 0) regex2 += '|' + regex + mwe;
         regex += '(' + letrange;
         if (blanks > 1) {
           // If there are two or more free spaces, we can add another
@@ -905,7 +905,9 @@ function getRegex(dir, ax, ay, rack) {
           // should make it possible to find ..adD.sing and also
           // ..adVIsing, so the search should match _ad([a-z]{1})_ or
           // _ad([a-z]{2})sing_
-          if (p !== ap + blanks) {
+          if (p === ap + blanks) {
+            if (blanks > 2 && prev !== '') regex2 += '|' + regex + '{1,' + (blanks - 1) + '})' + mwe;
+          } else {
             regex2 += '|' + regex;
             if (blanks > 2) regex2 += '{1,' + (blanks - 1) + '}';
             regex2 += ')' + mwe;
