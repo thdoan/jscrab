@@ -409,39 +409,7 @@ function findBestWord(letters, ax, ay, dirs) {
   if (!dirs) dirs = (Math.random() < 0.5) ? ['x', 'y'] : ['y', 'x'];
   for (var dir in dirs) {
     // Introduce some randomness so computer is more human
-    var threshold;
-    switch (g_playlevel) {
-      case 0: // Level 1
-        threshold = randFloat(76, 100, 16);
-        break;
-      case 1: // Level 2
-        threshold = randFloat(78, 100, 16);
-        break;
-      case 2: // Level 3
-        threshold = randFloat(80, 100, 16);
-        break;
-      case 3: // Level 4
-        threshold = randFloat(82, 100, 16);
-        break;
-      case 4: // Level 5
-        threshold = randFloat(84, 100, 16);
-        break;
-      case 5: // Level 6
-        threshold = randFloat(86, 100, 16);
-        break;
-      case 6: // Level 7
-        threshold = randFloat(88, 100, 16);
-        break;
-      case 7: // Level 8
-        threshold = randFloat(90, 100, 16);
-        break;
-      case 8: // Level 9
-        threshold = randFloat(92, 100, 16);
-        break;
-      case 9: // Level 10
-        threshold = randFloat(94, 100, 16);
-        break;
-    }
+    var threshold = randFloat(95, 100, 16);
     if (DEBUG) console.log('Computer has ' + (100 - threshold) + '% chance to skip findBestWord iteration: letters=' + letters.join('') + ', x=' + ax + ', y=' + ay + ', dir=' + dirs[dir]);
     if (Math.random() > threshold / 100) {
       if (DEBUG) console.log('findBestWord skipped for the iteration above');
