@@ -1,10 +1,12 @@
-const VER = '1.30';
+const VER = '1.33';
 
 function showWhatsNew() {
   g_bui.prompt(
     '<h3>What\'s New</h3>' +
     '<ul>' +
-    '<li>Enhanced computer AI so it swaps instead of passes</li>' +
+    '<li>Improved computer swapping logic</li>' +
+    '<li>Randomness is now consistent across all levels</li>' +
+    '<li>Fixed computer match pattern algorithm</li>' +
     '</ul>'
   );
 }
