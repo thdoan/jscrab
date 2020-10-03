@@ -1197,13 +1197,22 @@ function onPlayerMove() {
         // Shuffle rack
         var _a = ostr.split('');
         var _tmp;
+        var letpts = [];
         for (var i = _a.length - 1, j; i > 0; --i) {
           j = Math.floor(Math.random() * (i + 1));
           _tmp = _a[i];
           _a[i] = _a[j];
           _a[j] = _tmp;
+          letpts.push([_a[i], g_letscore[_a[i]]]);
         }
-        ostr = _a.join('');
+        // Reorder rack by points to swap letters with most points
+        letpts.sort(function(a, b) {
+          return b[1] - a[1];
+        });
+        letpts = letpts.map(function(v) {
+          return v[0];
+        });
+        ostr = letpts.join('');
         var keep = ostr.slice(tilesToSwap);
         var swap = ostr.substr(0, tilesToSwap);
         // Put swapped letters back into the bag
