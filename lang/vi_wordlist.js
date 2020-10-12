@@ -3535,7 +3535,7 @@ var g_wordmap = {
   'cân bàn': 1,
   'căn bản': 1,
   'cân bằng': 1,
-  'căn b��nh': 1,
+  'căn bệnh': 1,
   'cán bộ': 1,
   'cán cân': 1,
   'cận cảnh': 1,
