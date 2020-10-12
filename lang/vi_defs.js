@@ -1067,6 +1067,13 @@ var g_defs = {
       }
     ]
   },
+  'kỳ yên': {
+    'noun': [
+      {
+        'definition': 'a folk festival in South Vietnam '
+      }
+    ]
+  },
   'chăm bẵm': {
     'verb': [
       {
