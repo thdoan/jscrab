@@ -937,6 +937,7 @@ var g_defs = {
   'lãm': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>triển lãm</li><li>lịch lãm</li></ul>',
   'lăm': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>lăm le</li><li>cà lăm</li></ul>',
   'lảy': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>lảy cò</li></ul>',
+  'chỉn': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>chỉn chu</li></ul>',
   'ba': {
     '': [
       {
@@ -1064,6 +1065,20 @@ var g_defs = {
     'verb': [
       {
         'definition': 'to touch; to interfere with something'
+      }
+    ]
+  },
+  'dĩn': {
+    'noun': [
+      {
+        'definition': 'culicoide, midge'
+      }
+    ]
+  },
+  'chỉn chu': {
+    'adj': [
+      {
+        'definition': 'thoughtful, careful'
       }
     ]
   },
