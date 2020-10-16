@@ -938,6 +938,7 @@ var g_defs = {
   'lăm': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>lăm le</li><li>cà lăm</li></ul>',
   'lảy': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>lảy cò</li></ul>',
   'chỉn': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>chỉn chu</li></ul>',
+  'kít': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>xe cút kít</li></ul>',
   'ba': {
     '': [
       {
@@ -1072,6 +1073,13 @@ var g_defs = {
     'noun': [
       {
         'definition': 'culicoide, midge'
+      }
+    ]
+  },
+  'tởn': {
+    'verb': [
+      {
+        'definition': 'be afraid of, dread, stand in awe of'
       }
     ]
   },
