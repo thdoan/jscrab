@@ -4779,6 +4779,7 @@ var g_wordmap = {
   'chẽn': 1,
   'chẹn': 1,
   'chện': 1,
+  'chệ': 1,
   'chèn bẩy': 1,
   'chen chân': 1,
   'chen chúc': 1,
