@@ -4772,7 +4772,7 @@ var g_wordmap = {
   'chem chép': 1,
   'chèm chẹp': 1,
   'chém giết': 1,
-  'chễm trệ': 1,
+  'chễm chệ': 1,
   'chen': 1,
   'chén': 1,
   'chèn': 1,

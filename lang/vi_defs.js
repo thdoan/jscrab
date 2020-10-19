@@ -53,7 +53,8 @@ var g_defs = {
   'chem': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>chem chép</li></ul>',
   'chèm': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>chèm chẹp</li></ul>',
   'chềm': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>chềm chễm</li></ul>',
-  'chễm': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>chềm chễm</li></ul>',
+  'chễm': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>chềm chễm</li><li>chễm chệ</li></ul>',
+  'chệ': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>chễm chệ</li></ul>',
   'chện': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>chĩnh chện</li></ul>',
   'cheng': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>chập cheng</li><li>cheng cheng</li></ul>',
   'chếnh': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>chếnh choáng</li></ul>',
@@ -1224,6 +1225,16 @@ var g_defs = {
         'definition': 'falseness, falsity',
         'examples': [
           { 'khai man trước tòa': 'to perjure' }
+        ]
+      }
+    ]
+  },
+  'chễm chệ': {
+    'adj': [
+      {
+        'definition': 'imposing; sit in a solemn, haughty manner',
+        'examples': [
+          { 'ngồi xếp bằng chễm chệ giữa giường': 'to sit cross-legged imposingly in the middle of the bed' }
         ]
       }
     ]
