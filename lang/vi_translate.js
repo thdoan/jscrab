@@ -36,6 +36,7 @@ var translation_map = {
   'Play Again': 'Chơi Lại',
   'Play': 'Chơi',
   'Restart': 'Khởi động lại',
+  'Return to Game': 'Trở lại với trò chơi',
   'scored ': 'ghi ',
   'Select the letters you want to swap': 'Chọn những chữ bạn muốn đổi',
   'Show computer&rsquo;s rack': 'Hiện khay chữ của máy',

@@ -157,6 +157,7 @@ function getSession() {
     'board': g_board,
     'boardp': g_boardpoints,
     'boardt': g_boardtypes,
+    'empty': g_board_empty,
     'hcount': g_bui.hcount,
     'history': g_history,
     'layout': g_layout,
@@ -173,7 +174,7 @@ function getSession() {
   };
   return JSON.stringify(oSession);
 }
-function load(sSession) {
+function load(sSession, isHighScore) {
   var oSession = JSON.parse(sSession);
   g_board = oSession['board'];
   g_boardpoints = oSession['boardp'];
@@ -185,11 +186,11 @@ function load(sSession) {
   g_playlevel = oSession['level'] - 1;
   g_bui.level = oSession['level'];
   g_passes = oSession['passes'];
-  g_bui.create('board', g_boardwidth, g_boardheight, g_letscore, g_racksize, g_layout);
+  g_bui.create('board', g_boardwidth, g_boardheight, g_letscore, g_racksize, g_layout, isHighScore);
   g_bui.setOpponentRack(oSession['orack']);
   g_bui.setPlayerRack(oSession['prack']);
   g_matches_cache = {};
-  g_board_empty = false;
+  g_board_empty = oSession['empty'];
   g_opponent_has_joker = oSession['orack'].indexOf('*') > -1;
   var html = '<table>';
   for (var i = 0; i < g_history.length; ++i) {
@@ -205,6 +206,17 @@ function load(sSession) {
   g_pscore = oSession['pscore'];
   g_bui.setPlayerScore(oSession['lpscore'], g_pscore);
   g_bui.setTilesLeft(g_letpool.length);
+  g_bui.makeTilesFixed();
+  if (isHighScore) {
+    g_bui.fixPlayerTiles();
+    hideModal();
+    if (g_isMobile) hideGameInfo();
+  }
+}
+function loadHighScore(nIndex) {
+  if (!localStorage['session']) localStorage['session'] = getSession();
+  g_bui.created = false;
+  load(g_highscores[g_layout + ' ' + g_bui.level][nIndex]['session'], true);
 }
 
 // Main UI logic
@@ -331,7 +343,7 @@ function RedipsUI() {
     }
   };
 
-  self.create = function(iddiv, bx, by, scores, racksize, layout) {
+  self.create = function(iddiv, bx, by, scores, racksize, layout, isHighScore) {
     if (self.created) return;
     self.boardm = g_boardm.init(bx, by, layout);
 
@@ -339,10 +351,11 @@ function RedipsUI() {
     var hr = '<tr class="ruler"><td colspan="2"></td></tr>';
 
     g_cache['html'].miscBtns =
-      '<button id="highscores" class="button secondary disabled" title="' + t('High Scores') + '" onclick="g_bui.showHighScores()"><img src="pics/highscores.svg" alt="' + t('High Scores') + '"></button>' +
+      '<button id="highscores" class="button secondary" title="' + t('High Scores') + '" onclick="g_bui.showHighScores()"><img src="pics/highscores.svg" alt="' + t('High Scores') + '"></button>' +
       '<button id="restart" class="button secondary" title="' + t('Restart') + '" onclick="g_bui.restart();if(g_isMobile)hideGameInfo()"><img src="pics/restart.svg" alt="' + t('Restart') + '"></button>';
 
     // Gameboard
+    var isDisabled = !g_board_empty || isHighScore;
     var html = '<div id="board" class="human-computer"></div>';
     // Game info
     html +=
@@ -356,11 +369,11 @@ function RedipsUI() {
       hr +
       '<tr class="level"><td>' + t('Level:') + '</td><td>' +
       '<span id="level" title="' + t('Computer can score up to ') + g_maxwpoints[g_playlevel] + t(' points per turn') + '">' + (g_playlevel + 1) + '</span>&nbsp;' +
-      '<a class="link up' + (g_board_empty ? '' : ' disabled') + '" title="' + t('Increase difficulty') + '" aria-label="' + t('Increase difficulty') + '" onclick="g_bui.levelUp()">' + arrow + '</a>' +
-      '<a class="link down' + (g_board_empty ? '' : ' disabled') + '" title="' + t('Decrease difficulty') + '" aria-label="' + t('Decrease difficulty') + '" onclick="g_bui.levelDn()">' + arrow + '</a></td></tr>';
+      '<a class="link up' + (isDisabled ? ' disabled' : '') + '" title="' + t('Increase difficulty') + '" aria-label="' + t('Increase difficulty') + '" onclick="g_bui.levelUp()">' + arrow + '</a>' +
+      '<a class="link down' + (isDisabled ? ' disabled' : '') + '" title="' + t('Decrease difficulty') + '" aria-label="' + t('Decrease difficulty') + '" onclick="g_bui.levelDn()">' + arrow + '</a></td></tr>';
 
     var sTileset = g_tilesets.indexOf(g_tileset) > -1 ? g_tileset : t('Default');
-    var sSelTileset = '<select title="' + sTileset + '" onchange="setTileset(this)"><option>' + sTileset + '</option>';
+    var sSelTileset = '<select title="' + sTileset + '" onchange="setTileset(this)"' + (isHighScore ? ' disabled' : '') + '><option>' + sTileset + '</option>';
     if (sTileset !== t('Default')) sSelTileset += '<option value="default">' + t('Default') + '</option>';
     for (var i = 0; i < g_tilesets.length; ++i) {
       if (g_tilesets[i] === sTileset) continue;
@@ -369,7 +382,7 @@ function RedipsUI() {
     sSelTileset += '</select>';
 
     var sLayout = g_layouts.indexOf(g_layout) > -1 ? g_layout : t('Default');
-    var sSelLayout = '<select id="bonuseslayout" title="' + sLayout + '" onchange="setLayout(this)"' + (g_board_empty ? '' : ' disabled') + '><option>' + sLayout + '</option>';
+    var sSelLayout = '<select id="bonuseslayout" title="' + sLayout + '" onchange="setLayout(this)"' + (isDisabled ? ' disabled' : '') + '><option>' + sLayout + '</option>';
     if (sLayout !== t('Default')) sSelLayout += '<option value="default">' + t('Default') + '</option>';
     for (var i = 0; i < g_layouts.length; ++i) {
       if (g_layouts[i] === sLayout) continue;
@@ -470,10 +483,11 @@ function RedipsUI() {
 
     if (g_isMobile) html += '</tr><tr>';
     html += '<td class="mark"' + (g_isMobile ? ' colspan="8"' : '') + '>' +
+      (isHighScore ? '<button class="button secondary wide" onclick="g_bui.created=false;load(localStorage[\'session\'])">' + t('Return to Game') + '</button>' :
       '<button class="button" onclick="onPlayerMoved()">' + t('Play') + '</button>' +
       '<button id="clear" class="button secondary" onclick="onPlayerShuffle()">' + t('Shuffle') + '</button>' +
       '<button class="button secondary" onclick="onPlayerSwap()">' + t('Swap') + '</button>' +
-      '<button id="pass" class="button secondary" onclick="onPlayerMoved(true)">' + t('Pass') + '</button>' +
+      '<button id="pass" class="button secondary" onclick="onPlayerMoved(true)">' + t('Pass') + '</button>') +
       '</td></tr></table></div>';
 
     el(iddiv).innerHTML = html;
@@ -519,7 +533,7 @@ function RedipsUI() {
   };
 
   self.fixPlayerTiles = function() {
-    for (var i = 0; i < self.racks[1].length; ++i) {
+    for (var i = 0; i < g_racksize; ++i) {
       var idp = self.plrRackId + i;
       var divp = el(idp).firstChild;
       if (divp) self.rd.enableDrag(false, divp);
@@ -674,12 +688,10 @@ function RedipsUI() {
 
   self.makeTilesFixed = function() {
     self.rd.enableDrag(false, '#drag div');
-    for (var i = 0; i < self.racks[1].length; ++i) {
-      var idp = self.plrRackId + i;
-      var ido = self.oppRackId + i;
-      var divo = el(ido).firstChild;
+    for (var i = 0; i < g_racksize; ++i) {
+      var divo = el(self.oppRackId + i).firstChild;
       if (divo) self.rd.enableDrag(false, divo);
-      var divp = el(idp).firstChild;
+      var divp = el(self.plrRackId + i).firstChild;
       if (divp) self.rd.enableDrag(true, divp);
     }
   };
@@ -1030,7 +1042,18 @@ function RedipsUI() {
   };
 
   self.showHighScores = function() {
-    alert('High Scores coming soon!');
+    var sHighScoresKey = g_layout + ' ' + g_bui.level;
+    var html = '<table id="highscores"><tr><th>Player</th><th>Score</th></tr>';
+    if (g_highscores[sHighScoresKey]) {
+      for (var i = 0; i < g_highscores[sHighScoresKey].length; ++i) {
+        if (!g_highscores[sHighScoresKey][i]) break;
+        html += '<tr><td>' + g_highscores[sHighScoresKey][i]['player'] +
+          '</td><td><a class="link" onclick="loadHighScore(' + i + ')" tabindex="1">' +
+          g_highscores[sHighScoresKey][i]['score'] + '</a></td></tr>';
+      }
+    }
+    html += '</table>';
+    self.prompt(html);
   };
 
   self.showLettersModal = function(bdropCellId) {

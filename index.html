@@ -79,7 +79,7 @@ window.g_isSupported = Array.prototype.indexOf
     'Yin Yang',
     'Random'
   ];
-  window.g_layout = localStorage['layout'];
+  window.g_layout = localStorage['layout'] || 'default';
   // Render bonus tiles
   var aBonusTiles = [
     ['ST', 'be74d2'], // Inverse of player tile

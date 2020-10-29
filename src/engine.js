@@ -66,6 +66,14 @@ var g_def;
 // Words played
 var g_history;
 
+// High scores
+var g_highscores = localStorage['highscores'] ? JSON.parse(localStorage['highscores']) : {};
+var gCompareScores = function(a, b) {
+  var nA = a ? a.score : -99;
+  var nB = b ? b.score : -99;
+  return (nA > nB) ? -1 : ((nA < nB) ? 1 : 0);
+};
+
 // Cached elements
 var g_cache;
 
@@ -120,9 +128,11 @@ function init(iddiv) {
   g_bui.create(iddiv, g_boardwidth, g_boardheight, g_letscore, g_racksize, localStorage['layout']);
 
   g_bui.setOpponentRack(takeLetters(''));
+  //g_bui.setOpponentRack(takeLetters('bcdghklm'));
   g_bui.setPlayerRack(takeLetters(''));
   //g_bui.setPlayerRack(takeLetters('qẵễỗệộỵv'));
   g_bui.setTilesLeft(g_letpool.length);
+  g_bui.makeTilesFixed();
 }
 
 //------------------------------------------------------------------------------
@@ -167,6 +177,24 @@ function announceWinner() {
   el('pscore').textContent = g_pscore;
   el('score-opponent').textContent = g_oscore;
   el('score-player').textContent = g_pscore;
+
+  // Update high scores table if applicable
+  var sHighScoresKey = g_layout + ' ' + g_bui.level;
+  var sHighScoresSession = getSession();
+  if (!g_highscores[sHighScoresKey]) g_highscores[sHighScoresKey] = [];
+  g_highscores[sHighScoresKey].push({
+    'player': 'Computer',
+    'score': g_oscore,
+    'session': sHighScoresSession
+  });
+  g_highscores[sHighScoresKey].push({
+    'player': 'You',
+    'score': g_pscore,
+    'session': sHighScoresSession
+  });
+  g_highscores[sHighScoresKey].sort(gCompareScores);
+  g_highscores[sHighScoresKey].length = 10;
+  localStorage['highscores'] = JSON.stringify(g_highscores);
 
   // Clear session
   localStorage.removeItem('session');

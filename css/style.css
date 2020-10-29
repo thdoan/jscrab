@@ -55,11 +55,18 @@ body {
 a {
   cursor: pointer;
 }
+a.link {
+  color: #00e;
+  color: -webkit-link;
+}
 a:hover,
-a:focus {
+a:focus,
+a.link:hover,
+a.link:focus {
   color: #b00;
 }
-a:active {
+a:active,
+a.link:active {
   color: #e00;
 }
 a:hover img,
@@ -202,6 +209,10 @@ picture img {
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #ffab23), color-stop(1, #ffec64));
   background: linear-gradient(to bottom, #ffab23 5%, #ffec64 100%);
   background-color: #ffab23;
+}
+
+.button.wide {
+  width: 98% !important;
 }
 
 .buttons {
@@ -459,7 +470,7 @@ table.board td .drag,
   border: 2px solid #cd5c5c; /* indianred */
 }
 
-.human-computer .drag.t1 {
+.human-computer .drag.t1:not(.off) {
   cursor: move;
 }
 
@@ -652,6 +663,21 @@ footer span {
 }
 footer .social {
   float: right;
+}
+
+/*** High Scores ***/
+#highscores {
+  width: 100%;
+  border-collapse: collapse;
+}
+#highscores td,
+#highscores th {
+  border: 1px solid #adadad;
+  padding: 4px;
+}
+#highscores td:last-child,
+#highscores th:last-child {
+  text-align: right;
 }
 
 /*** Modal ***/

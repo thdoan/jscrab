@@ -71,7 +71,7 @@ Corrections and comments are welcome by [sending an email](mailto:feedback@vietb
 - Added saved sessions
 - Added Restart button
 - Enhanced computer AI so it swaps instead of passes
-
+- Added high scores table
 
 ## Dependencies for local build
 

@@ -1,12 +1,12 @@
-const VER = '1.33';
+const VER = '2.00';
 
 function showWhatsNew() {
   g_bui.prompt(
     '<h3>What\'s New</h3>' +
     '<ul>' +
-    '<li>Improved computer swapping logic</li>' +
-    '<li>Randomness is now consistent across all levels</li>' +
-    '<li>Fixed computer match pattern algorithm</li>' +
+    '<li>Added high scores table</li>' +
+    '<li>Fixed ability to drag opponent\'s tile</li>' +
+    '<li>Non-draggable tiles no longer have "move" cursor</li>' +
     '</ul>'
   );
 }

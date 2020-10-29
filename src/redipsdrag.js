@@ -2786,6 +2786,8 @@ REDIPS.drag = (function () {
 				//div[i].style.cursor = cursor;
 				// add enabled property to the DIV element (true or false)
 				div[i].redips.enabled = enabled;
+				// Suppress move cursor if drag is disabled
+				div[i].classList.toggle('off', !enabled);
 			}
 			// attach onscroll event to the DIV element in init phase only if DIV element has overflow other than default value 'visible'
 			// and that means scrollable DIV container
