@@ -213,10 +213,10 @@ function load(sSession, isHighScore) {
     if (g_isMobile) hideGameInfo();
   }
 }
-function loadHighScore(nIndex) {
+function loadHighScore(sKey, nIndex) {
   if (!localStorage['session']) localStorage['session'] = getSession();
   g_bui.created = false;
-  load(g_highscores[g_layout + ' ' + g_bui.level][nIndex]['session'], true);
+  load(g_highscores[sKey][nIndex]['session'], true);
 }
 
 // Main UI logic
@@ -382,7 +382,8 @@ function RedipsUI() {
     sSelTileset += '</select>';
 
     var sLayout = g_layouts.indexOf(g_layout) > -1 ? g_layout : t('Default');
-    var sSelLayout = '<select id="bonuseslayout" title="' + sLayout + '" onchange="setLayout(this)"' + (isDisabled ? ' disabled' : '') + '><option>' + sLayout + '</option>';
+    var sSelLayout = '<select id="bonuseslayout" title="' + sLayout + '" onchange="setLayout(this)"' + (isDisabled ? ' disabled' : '') + '>' +
+      '<option' + (sLayout === t('Default') ? ' value="default"' : '') + '>' + sLayout + '</option>';
     if (sLayout !== t('Default')) sSelLayout += '<option value="default">' + t('Default') + '</option>';
     for (var i = 0; i < g_layouts.length; ++i) {
       if (g_layouts[i] === sLayout) continue;
@@ -951,12 +952,25 @@ function RedipsUI() {
     self.racks[pl] = rack.join('');
   };
 
+  self.renderHighScoreRows = function(sKey) {
+    var html = '';
+    if (g_highscores[sKey]) {
+      for (var i = 0; i < g_highscores[sKey].length; ++i) {
+        if (!g_highscores[sKey][i]) break;
+        html += '<tr><td>' + g_highscores[sKey][i]['player'] +
+          '</td><td><a class="link" title="' + t('View this match') + '" onclick="loadHighScore(\'' + sKey + '\',' + i + ')" tabindex="1">' +
+          g_highscores[sKey][i]['score'] + '</a></td></tr>';
+      }
+    }
+    return html;
+  };
+
   self.renderWordPlayed = function(word, player) {
     return '<tr class="player-' + player + '">' +
       '<td>' + word.toUpperCase() + '</td><td>' +
       '<a class="link" title="' + t('Show definition') + '" aria-label="' + t('Show definition') + '" onclick="g_bui.wordInfo(\'' + word + '\')"><img src="pics/info.svg" width="22" height="22" alt=""></a>' +
       '</td></tr>';
-  }
+  };
 
   self.restart = function() {
     localStorage.removeItem('session');
@@ -1042,18 +1056,17 @@ function RedipsUI() {
   };
 
   self.showHighScores = function() {
-    var sHighScoresKey = g_layout + ' ' + g_bui.level;
-    var html = '<table id="highscores"><tr><th>Player</th><th>Score</th></tr>';
-    if (g_highscores[sHighScoresKey]) {
-      for (var i = 0; i < g_highscores[sHighScoresKey].length; ++i) {
-        if (!g_highscores[sHighScoresKey][i]) break;
-        html += '<tr><td>' + g_highscores[sHighScoresKey][i]['player'] +
-          '</td><td><a class="link" onclick="loadHighScore(' + i + ')" tabindex="1">' +
-          g_highscores[sHighScoresKey][i]['score'] + '</a></td></tr>';
-      }
+    var sLevels = '';
+    for (var i = 1; i < 11; ++i) {
+      sLevels += '<option' + (i == g_bui.level ? ' selected' : '') + '>' + i + '</option>';
     }
-    html += '</table>';
-    self.prompt(html);
+    var elBonusesLayout = el('#bonuseslayout').cloneNode(true);
+    var html = '<table id="highscores"><tr>' +
+      '<td><select id="highscores-level" title="' + t('Select level') + '" onchange="el(\'highscores-data\').innerHTML=g_bui.renderHighScoreRows(el(\'highscores-layout\').value+\' \'+value);setModalHeight()">' + sLevels + '</select></td>' +
+      '<td><select id="highscores-layout" title="' + t('Select bonuses layout') + '" onchange="el(\'highscores-data\').innerHTML=g_bui.renderHighScoreRows(value+\' \'+el(\'highscores-level\').value);setModalHeight()">' + elBonusesLayout.innerHTML + '</select></td></tr>' +
+      '<tr class="highlight"><th>Player</th><th>Score</th></tr><tbody id="highscores-data">' +
+      self.renderHighScoreRows(g_layout + ' ' + g_bui.level) + '</tbody></table>';
+    self.prompt(html, '', 'highscores');
   };
 
   self.showLettersModal = function(bdropCellId) {

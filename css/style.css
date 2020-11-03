@@ -104,6 +104,11 @@ select {
   cursor: pointer;
 }
 
+tr.highlight {
+  background: #fefeba;
+  font-weight: bold;
+}
+
 .centered {
   margin: 0 auto;
 }
@@ -587,10 +592,6 @@ table.board td .drag,
 #score tr {
   height: 21px;
 }
-#score tr.highlight {
-  background: #fefeba;
-  font-weight: bold;
-}
 #score tr.level {
   height: 30px;
 }
@@ -666,6 +667,9 @@ footer .social {
 }
 
 /*** High Scores ***/
+.highscores #modal-content {
+  background: url(../pics/highscores_bg.jpg);
+}
 #highscores {
   width: 100%;
   border-collapse: collapse;
