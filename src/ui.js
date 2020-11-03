@@ -1061,12 +1061,12 @@ function RedipsUI() {
       sLevels += '<option' + (i == g_bui.level ? ' selected' : '') + '>' + i + '</option>';
     }
     var elBonusesLayout = el('#bonuseslayout').cloneNode(true);
-    var html = '<table id="highscores"><tr>' +
+    var html = '<table id="highscores"><tr class="header">' +
       '<td><select id="highscores-level" title="' + t('Select level') + '" onchange="el(\'highscores-data\').innerHTML=g_bui.renderHighScoreRows(el(\'highscores-layout\').value+\' \'+value);setModalHeight()">' + sLevels + '</select></td>' +
       '<td><select id="highscores-layout" title="' + t('Select bonuses layout') + '" onchange="el(\'highscores-data\').innerHTML=g_bui.renderHighScoreRows(value+\' \'+el(\'highscores-level\').value);setModalHeight()">' + elBonusesLayout.innerHTML + '</select></td></tr>' +
       '<tr class="highlight"><th>Player</th><th>Score</th></tr><tbody id="highscores-data">' +
       self.renderHighScoreRows(g_layout + ' ' + g_bui.level) + '</tbody></table>';
-    self.prompt(html, '', 'highscores');
+    self.prompt(html, '', 'highscores wide');
   };
 
   self.showLettersModal = function(bdropCellId) {

@@ -104,6 +104,15 @@ select {
   cursor: pointer;
 }
 
+tr.header {
+  background: #3a3a3a;
+}
+tr.header option {
+  color: #000;
+}
+tr.header select:not(:checked) {
+  color: #fff;
+}
 tr.highlight {
   background: #fefeba;
   font-weight: bold;
