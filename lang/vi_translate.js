@@ -16,7 +16,7 @@ var translation_map = {
   'Dictionary inconsistency detected.': 'Lỗi không đồng nhất với từ điển.',
   'English': 'Tiếng Anh',
   'Feedback?': 'Ý kiến phản hồi?',
-  'first word must be on the star.': 'từ đầu tiên phải đi qua ngôi sao.',
+  'the first word must be on the purple star in the center.': 'từ đầu tiên phải đi qua ngôi sao màu tím ở chính giữa bảng.',
   'for': 'for',
   'Game over. The score is...': 'Trò chơi kết thúc. Số điểm là...',
   'Hide computer&rsquo;s rack': 'Giấu khay chữ của máy',

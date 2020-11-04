@@ -259,7 +259,7 @@ function checkValidPlacement(placement) {
   };
   if (g_board_empty && !onStar) return {
     'played': '',
-    'msg': t('first word must be on the star.')
+    'msg': t('the first word must be on the purple star in the center.')
   };
 
   var mbx = g_board.length;
