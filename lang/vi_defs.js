@@ -235,6 +235,7 @@ var g_defs = {
   'hoay': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>loay hoay</li></ul>',
   'họe': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>hoạnh họe</li></ul>',
   'hoẻn': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>toen hoẻn</li>/ul>',
+  'toen': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>toen hoẻn</li>/ul>',
   'hòi': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>hẹp hòi</li></ul>',
   'hỗm': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>chồm hỗm</li></ul>',
   'hớm': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>hay hớm</li></ul>',
@@ -940,6 +941,7 @@ var g_defs = {
   'lảy': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>lảy cò</li></ul>',
   'chỉn': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>chỉn chu</li></ul>',
   'kít': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>xe cút kít</li></ul>',
+  'mói': '<p>This is part of a compound word. Examples:</p><ul class="list2 example-original"><li>soi mói</li></ul>',
   'ba': {
     '': [
       {
@@ -1067,6 +1069,13 @@ var g_defs = {
     'verb': [
       {
         'definition': 'to touch; to interfere with something'
+      }
+    ]
+  },
+  'soi mói': {
+    'verb': [
+      {
+        'definition': 'to nitpick'
       }
     ]
   },
