@@ -20,7 +20,7 @@ var translation_map = {
   'for': 'for',
   'Game over. The score is...': 'Trò chơi kết thúc. Số điểm là...',
   'Hide computer&rsquo;s rack': 'Giấu khay chữ của máy',
-  'High Scores': 'Bảng ghi điểm',
+  'High Scores': 'Bảng xếp hạng',
   'I pass, your turn.': 'Tôi bỏ lượt, đến lượt của bạn.',
   'I swap, your turn.': 'Tôi đổi chữ, đến lượt của bạn.',
   'Increase difficulty': 'Tăng độ khó',
